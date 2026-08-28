@@ -994,10 +994,24 @@
         };
 
         window.startRecording = async () => {
+            const state = window.appState.recording;
+            document.getElementById('record-error-msg').classList.add('hidden');
+            
             try {
+                if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) {
+                    throw new Error("API Mikrofon diblokir.");
+                }
                 const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
-                const rec = new MediaRecorder(stream);
-                const state = window.appState.recording;
+                
+                // KOMPRESI AUDIO: Menurunkan bitrate agar file sangat kecil (tidak kena limit 1MB Firestore)
+                const options = { mimeType: 'audio/webm;codecs=opus', audioBitsPerSecond: 16000 };
+                let rec;
+                try {
+                    rec = new MediaRecorder(stream, options);
+                } catch (e) {
+                    // Fallback jika browser (seperti Safari lama) tidak mendukung opsi di atas
+                    rec = new MediaRecorder(stream);
+                }
                 
                 state.mediaRecorder = rec;
                 state.chunks = [];
@@ -1008,7 +1022,14 @@
                     state.audioUrl = URL.createObjectURL(blob);
                     document.getElementById('record-audio-player').src = state.audioUrl;
                     stream.getTracks().forEach(t => t.stop());
-                    renderRecordUI();
+                    
+                    // Langsung konversi ke Base64 (Untuk mencegah link rekaman rusak saat dikirim)
+                    const reader = new FileReader();
+                    reader.onloadend = () => {
+                        state.audioBase64 = reader.result;
+                        renderRecordUI();
+                    };
+                    reader.readAsDataURL(blob);
                 };
 
                 rec.start();
@@ -1016,7 +1037,58 @@
                 state.timer = 0;
                 state.interval = setInterval(() => { state.timer++; renderRecordUI(); }, 1000);
                 renderRecordUI();
-            } catch (err) { alert("Gagal akses mikrofon! Pastikan Anda memberi izin pada browser."); console.error(err); }
+            } catch (err) { 
+                console.warn("Mikrofon error/diblokir:", err); 
+                document.getElementById('record-error-msg').classList.remove('hidden');
+            }
+        };
+
+        // Fungsi ajaib: Membuat suara beep buatan jika Mic tidak bisa diakses
+        window.useDummyAudio = async () => {
+            try {
+                const btn = document.getElementById('btn-dummy-audio');
+                btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Sedang Merekam Simulasi...';
+                btn.disabled = true;
+
+                // Menggunakan Web Audio API untuk menciptakan suara tanpa mikrofon
+                const ctx = new (window.AudioContext || window.webkitAudioContext)();
+                const dest = ctx.createMediaStreamDestination();
+                const osc = ctx.createOscillator();
+                osc.type = 'sine';
+                osc.frequency.value = 440; // Nada dasar (A4)
+                osc.connect(dest);
+                osc.start();
+
+                const rec = new MediaRecorder(dest.stream);
+                const chunks = [];
+                rec.ondataavailable = e => chunks.push(e.data);
+                rec.onstop = () => {
+                    const blob = new Blob(chunks, { type: 'audio/webm' });
+                    const state = window.appState.recording;
+                    state.audioBlob = blob;
+                    state.audioUrl = URL.createObjectURL(blob);
+                    document.getElementById('record-audio-player').src = state.audioUrl;
+                    document.getElementById('record-error-msg').classList.add('hidden');
+                    
+                    btn.innerHTML = '<i class="fas fa-magic"></i> Buat Rekaman Simulasi (2 Detik)';
+                    btn.disabled = false;
+                    
+                    const reader = new FileReader();
+                    reader.onloadend = () => {
+                        state.audioBase64 = reader.result;
+                        renderRecordUI();
+                    };
+                    reader.readAsDataURL(blob);
+                };
+
+                rec.start();
+                setTimeout(() => {
+                    osc.stop();
+                    rec.stop();
+                }, 2000); // Otomatis berhenti dalam 2 detik
+            } catch (e) {
+                alert("Simulasi audio gagal. Silakan gunakan tab Unggah File.");
+            }
         };
 
         window.stopRecording = () => {
@@ -1037,6 +1109,7 @@
             state.timer = 0;
             state.chunks = [];
             clearInterval(state.interval);
+            document.getElementById('record-error-msg').classList.add('hidden');
             renderRecordUI();
         };
 
@@ -1082,10 +1155,9 @@
             btnSubmit.disabled = true;
 
             try {
-                // MENGUBAH AUDIO MENJADI BASE64 AGAR AMAN DISIMPAN DI DATABASE (Anti Error URL lokal)
+                // MENGUBAH AUDIO MENJADI BASE64
                 let finalAudioData = state.audioBase64;
                 
-                // Jika dari hasil rekam langsung, kita perlu konversi Blob-nya ke Base64
                 if (!finalAudioData && state.audioBlob) {
                     finalAudioData = await new Promise((resolve) => {
                         const reader = new FileReader();
@@ -1094,27 +1166,37 @@
                     });
                 }
 
-                // TODO PENTING: Untuk versi nyata, JANGAN simpan Base64 ke dalam dokumen Firestore (rawan penuh limit 1MB).
-                // Unggah 'state.audioBlob' atau 'file' ke Firebase Storage, lalu simpan TAUTAN (URL) nya saja ke Firestore.
-                // const storageRef = ref(storage, 'audio/' + Date.now());
-                // await uploadBytes(storageRef, state.audioBlob);
-                // finalAudioUrl = await getDownloadURL(storageRef);
+                // CEK LIMIT FIRESTORE 1MB
+                // Panjang karakter Base64 x 0.75 = Perkiraan ukuran dalam Bytes
+                const approximateSizeInBytes = finalAudioData.length * 0.75;
+                if (approximateSizeInBytes > 900000) { // Jika lebih dari 900KB (Mendekati limit 1MB)
+                    throw new Error("Ukuran rekaman terlalu besar (melebihi 900KB). Karena ini versi demo tanpa Storage, mohon rekam dengan durasi lebih singkat (maksimal 10-15 detik) atau gunakan unggah file berukuran kecil.");
+                }
 
+                // SIMPAN KE FIRESTORE
                 await window.setDoc(window.doc(window.db, `${window.BASE_PATH}/submissions`, `sub_${Date.now()}`), {
                     santriId: window.appState.currentUser.id,
                     title: `Setoran Hafalan - ${new Date().toLocaleDateString('id-ID')}`,
                     submissionData: {
-                        audioUrl: finalAudioData, // Data berupa Text Base64 utuh
+                        audioUrl: finalAudioData, // Data berupa Text Base64
                         notesFromSantri: document.getElementById('record-notes').value,
                     },
                     assessment: { status: 'pending' },
-                    createdAt: Date.now() // using JS timestamp for easier sorting logic here
+                    createdAt: Date.now()
                 });
 
                 closeRecordModal();
                 window.setSantriTab('riwayat');
             } catch (err) {
-                alert("Kesalahan jaringan/database: " + err.message);
+                // Tampilkan pesan error yang SPESIFIK
+                console.error("Firebase Error: ", err);
+                let pesanError = err.message;
+                if (err.code === 'permission-denied') {
+                    pesanError = "Akses ditolak oleh database. Pastikan Rules Firestore sudah benar dan Anonymous Auth Firebase telah AKTIF.";
+                } else if (err.code === 'resource-exhausted') {
+                    pesanError = "Gagal mengirim: Ukuran file/rekaman terlalu besar melebihi kapasitas dokumen Firebase (Limit 1MB).";
+                }
+                alert("GAGAL MENGIRIM SETORAN:\n\n" + pesanError);
             } finally {
                 btnSubmit.innerHTML = originalText;
                 btnSubmit.disabled = false;
