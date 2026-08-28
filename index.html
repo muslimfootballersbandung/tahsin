@@ -267,22 +267,29 @@
             <div id="modal-record" class="hidden fixed inset-0 bg-black/60 backdrop-blur-sm z-50 flex items-center justify-center p-4">
                 <div class="bg-white rounded-3xl p-6 md:p-8 w-full max-w-md shadow-2xl">
                     <div class="flex justify-between items-center mb-6">
-                        <h3 class="text-xl font-bold text-slate-800">Rekam Setoran Baru</h3>
+                        <h3 class="text-xl font-bold text-slate-800">Kirim Setoran Baru</h3>
                         <button onclick="closeRecordModal()" class="p-2 text-slate-400 hover:bg-slate-100 rounded-full"><i class="fas fa-times"></i></button>
                     </div>
 
-                    <div class="flex flex-col items-center justify-center py-8 bg-slate-50 rounded-2xl border-2 border-dashed border-slate-200 mb-6 relative overflow-hidden">
+                    <!-- Audio Input Tabs -->
+                    <div class="flex bg-slate-100 p-1 rounded-xl mb-6">
+                        <button id="tab-record" type="button" onclick="switchAudioMode('record')" class="flex-1 py-2 text-sm font-bold bg-white shadow-sm rounded-lg text-emerald-700 transition-all">Rekam Langsung</button>
+                        <button id="tab-upload" type="button" onclick="switchAudioMode('upload')" class="flex-1 py-2 text-sm font-bold text-slate-500 rounded-lg hover:text-emerald-700 transition-all">Unggah File</button>
+                    </div>
+
+                    <!-- Record UI -->
+                    <div id="ui-record" class="flex flex-col items-center justify-center py-8 bg-slate-50 rounded-2xl border-2 border-dashed border-slate-200 mb-6 relative overflow-hidden">
                         <div id="record-pulse" class="hidden absolute inset-0 bg-rose-500/10 animate-pulse"></div>
                         <div id="record-timer" class="text-3xl font-mono text-slate-700 mb-6 z-10">00:00</div>
                         
                         <div id="record-controls-pre" class="flex gap-4 z-10">
-                            <button id="btn-start-record" onclick="startRecording()" class="flex flex-col items-center gap-2 group">
+                            <button id="btn-start-record" type="button" onclick="startRecording()" class="flex flex-col items-center gap-2 group">
                                 <div class="w-16 h-16 bg-rose-100 text-rose-600 rounded-full flex items-center justify-center group-hover:bg-rose-200 transition-all shadow-sm">
                                     <i class="fas fa-microphone text-2xl"></i>
                                 </div>
                                 <span class="text-sm font-medium text-slate-600">Mulai Rekam</span>
                             </button>
-                            <button id="btn-stop-record" onclick="stopRecording()" class="hidden flex flex-col items-center gap-2 group">
+                            <button id="btn-stop-record" type="button" onclick="stopRecording()" class="hidden flex flex-col items-center gap-2 group">
                                 <div class="w-16 h-16 bg-rose-600 text-white rounded-full flex items-center justify-center group-hover:bg-rose-700 transition-all shadow-md animate-bounce">
                                     <i class="fas fa-square text-xl"></i>
                                 </div>
@@ -292,14 +299,34 @@
                         
                         <div id="record-controls-post" class="hidden w-full px-6 flex flex-col items-center z-10">
                             <audio id="record-audio-player" controls class="w-full mb-4"></audio>
-                            <button onclick="resetRecording()" class="text-sm text-rose-600 font-medium hover:underline">Hapus & Ulangi Rekaman</button>
+                            <button onclick="resetRecording()" type="button" class="text-sm text-rose-600 font-medium hover:underline">Hapus & Ulangi Rekaman</button>
+                        </div>
+                    </div>
+
+                    <!-- Upload UI -->
+                    <div id="ui-upload" class="hidden flex flex-col items-center justify-center py-8 bg-slate-50 rounded-2xl border-2 border-dashed border-slate-200 mb-6 relative">
+                        <div id="upload-controls-pre" class="w-full flex flex-col items-center">
+                            <input type="file" id="audio-upload" accept="audio/*" class="hidden" onchange="handleAudioUpload(event)">
+                            <label for="audio-upload" class="cursor-pointer flex flex-col items-center gap-3 w-full">
+                                <div class="w-16 h-16 bg-blue-100 text-blue-600 rounded-full flex items-center justify-center hover:bg-blue-200 transition-all shadow-sm">
+                                    <i class="fas fa-cloud-upload-alt text-2xl"></i>
+                                </div>
+                                <span class="text-sm font-medium text-slate-600" id="upload-text">Pilih File Audio (Max: 800KB)</span>
+                            </label>
+                            <p class="text-xs text-slate-400 mt-2 text-center px-4">Format didukung: .mp3, .wav, .m4a.<br/>Karena ini demo, ukuran dibatasi agar muat di database.</p>
+                        </div>
+
+                        <div id="upload-controls-post" class="hidden w-full px-6 flex flex-col items-center z-10">
+                            <p id="upload-filename" class="text-xs font-bold text-slate-500 mb-2 truncate w-full text-center"></p>
+                            <audio id="upload-audio-player" controls class="w-full mb-4"></audio>
+                            <button onclick="clearAudioUpload()" type="button" class="text-sm text-rose-600 font-medium hover:underline">Hapus & Ganti File</button>
                         </div>
                     </div>
 
                     <form id="form-record">
                         <div class="mb-6">
                             <label class="block text-sm font-medium text-slate-700 mb-2">Catatan untuk Musyrif (Opsional)</label>
-                            <textarea id="record-notes" placeholder="Misal: Ustadz, mohon koreksi..." class="w-full border border-slate-300 rounded-xl p-3 focus:ring-2 focus:ring-emerald-500 outline-none resize-none h-24 text-sm"></textarea>
+                            <textarea id="record-notes" placeholder="Misal: Ustadz, mohon koreksi nada di baris kedua..." class="w-full border border-slate-300 rounded-xl p-3 focus:ring-2 focus:ring-emerald-500 outline-none resize-none h-24 text-sm"></textarea>
                         </div>
                         <button type="submit" id="btn-submit-record" disabled class="w-full py-3.5 rounded-xl font-bold flex items-center justify-center gap-2 transition-all bg-slate-200 text-slate-400 cursor-not-allowed">
                             <i class="fas fa-paper-plane"></i> Kirim Setoran Sekarang
@@ -363,11 +390,13 @@
             santriTab: 'dashboard',
             isFullscreen: false,
             recording: {
+                mode: 'record', // 'record' or 'upload'
                 isRecording: false,
                 mediaRecorder: null,
                 chunks: [],
                 audioBlob: null,
                 audioUrl: null,
+                audioBase64: null, // Digunakan untuk menyimpan ke database dengan aman
                 timer: 0,
                 interval: null
             }
@@ -882,7 +911,7 @@
 
         // --- Audio Recording Logic ---
         window.openRecordModal = () => {
-            window.resetRecording();
+            window.switchAudioMode('record');
             document.getElementById('record-notes').value = '';
             openModal('modal-record');
         };
@@ -891,35 +920,77 @@
             closeModal('modal-record');
         };
 
+        window.switchAudioMode = (mode) => {
+            const state = window.appState.recording;
+            state.mode = mode;
+            window.resetRecording();
+            window.clearAudioUpload();
+
+            if (mode === 'record') {
+                document.getElementById('tab-record').className = 'flex-1 py-2 text-sm font-bold bg-white shadow-sm rounded-lg text-emerald-700 transition-all';
+                document.getElementById('tab-upload').className = 'flex-1 py-2 text-sm font-bold text-slate-500 rounded-lg hover:text-emerald-700 transition-all';
+                document.getElementById('ui-record').classList.remove('hidden');
+                document.getElementById('ui-upload').classList.add('hidden');
+            } else {
+                document.getElementById('tab-upload').className = 'flex-1 py-2 text-sm font-bold bg-white shadow-sm rounded-lg text-blue-700 transition-all';
+                document.getElementById('tab-record').className = 'flex-1 py-2 text-sm font-bold text-slate-500 rounded-lg hover:text-emerald-700 transition-all';
+                document.getElementById('ui-upload').classList.remove('hidden');
+                document.getElementById('ui-record').classList.add('hidden');
+            }
+        };
+
         const formatTime = (sec) => `${Math.floor(sec/60).toString().padStart(2,'0')}:${(sec%60).toString().padStart(2,'0')}`;
+        
         const renderRecordUI = () => {
             const state = window.appState.recording;
-            document.getElementById('record-timer').innerText = formatTime(state.timer);
-            
-            if(state.audioUrl) {
-                document.getElementById('record-controls-pre').classList.add('hidden');
-                document.getElementById('record-controls-post').classList.remove('hidden');
-                document.getElementById('record-pulse').classList.add('hidden');
-                document.getElementById('btn-submit-record').disabled = false;
-                document.getElementById('btn-submit-record').classList.replace('bg-slate-200', 'bg-emerald-600');
-                document.getElementById('btn-submit-record').classList.replace('text-slate-400', 'text-white');
-            } else {
-                document.getElementById('record-controls-pre').classList.remove('hidden');
-                document.getElementById('record-controls-post').classList.add('hidden');
-                document.getElementById('btn-submit-record').disabled = true;
-                document.getElementById('btn-submit-record').classList.replace('bg-emerald-600', 'bg-slate-200');
-                document.getElementById('btn-submit-record').classList.replace('text-white', 'text-slate-400');
-                
-                if(state.isRecording) {
-                    document.getElementById('btn-start-record').classList.add('hidden');
-                    document.getElementById('btn-stop-record').classList.remove('hidden');
-                    document.getElementById('record-pulse').classList.remove('hidden');
-                } else {
-                    document.getElementById('btn-start-record').classList.remove('hidden');
-                    document.getElementById('btn-stop-record').classList.add('hidden');
+            const btnSubmit = document.getElementById('btn-submit-record');
+
+            if (state.mode === 'record') {
+                document.getElementById('record-timer').innerText = formatTime(state.timer);
+                if(state.audioUrl) {
+                    document.getElementById('record-controls-pre').classList.add('hidden');
+                    document.getElementById('record-controls-post').classList.remove('hidden');
                     document.getElementById('record-pulse').classList.add('hidden');
+                    enableSubmitButton(btnSubmit);
+                } else {
+                    document.getElementById('record-controls-pre').classList.remove('hidden');
+                    document.getElementById('record-controls-post').classList.add('hidden');
+                    disableSubmitButton(btnSubmit);
+                    
+                    if(state.isRecording) {
+                        document.getElementById('btn-start-record').classList.add('hidden');
+                        document.getElementById('btn-stop-record').classList.remove('hidden');
+                        document.getElementById('record-pulse').classList.remove('hidden');
+                    } else {
+                        document.getElementById('btn-start-record').classList.remove('hidden');
+                        document.getElementById('btn-stop-record').classList.add('hidden');
+                        document.getElementById('record-pulse').classList.add('hidden');
+                    }
+                }
+            } else {
+                // Upload Mode UI
+                if (state.audioUrl) {
+                    document.getElementById('upload-controls-pre').classList.add('hidden');
+                    document.getElementById('upload-controls-post').classList.remove('hidden');
+                    enableSubmitButton(btnSubmit);
+                } else {
+                    document.getElementById('upload-controls-pre').classList.remove('hidden');
+                    document.getElementById('upload-controls-post').classList.add('hidden');
+                    disableSubmitButton(btnSubmit);
                 }
             }
+        };
+
+        const enableSubmitButton = (btn) => {
+            btn.disabled = false;
+            btn.classList.replace('bg-slate-200', 'bg-emerald-600');
+            btn.classList.replace('text-slate-400', 'text-white');
+        };
+
+        const disableSubmitButton = (btn) => {
+            btn.disabled = true;
+            btn.classList.replace('bg-emerald-600', 'bg-slate-200');
+            btn.classList.replace('text-white', 'text-slate-400');
         };
 
         window.startRecording = async () => {
@@ -945,7 +1016,7 @@
                 state.timer = 0;
                 state.interval = setInterval(() => { state.timer++; renderRecordUI(); }, 1000);
                 renderRecordUI();
-            } catch (err) { alert("Gagal akses mikrofon!"); console.error(err); }
+            } catch (err) { alert("Gagal akses mikrofon! Pastikan Anda memberi izin pada browser."); console.error(err); }
         };
 
         window.stopRecording = () => {
@@ -962,9 +1033,41 @@
             const state = window.appState.recording;
             state.audioBlob = null;
             state.audioUrl = null;
+            state.audioBase64 = null;
             state.timer = 0;
             state.chunks = [];
             clearInterval(state.interval);
+            renderRecordUI();
+        };
+
+        window.handleAudioUpload = (event) => {
+            const file = event.target.files[0];
+            if (!file) return;
+
+            // Batasi ukuran (800KB) karena kita menyimpan Base64 langsung ke Firestore Database (Batas Firestore: 1MB)
+            if (file.size > 800 * 1024) {
+                alert("Ukuran file terlalu besar! Maksimal 800KB untuk demo ini. Cobalah kompres file audio Anda.");
+                event.target.value = '';
+                return;
+            }
+
+            const state = window.appState.recording;
+            document.getElementById('upload-filename').innerText = file.name;
+            
+            const reader = new FileReader();
+            reader.onload = (e) => {
+                state.audioBase64 = e.target.result; // Data URL (Base64)
+                state.audioUrl = e.target.result; // Audio player bisa memutar data URL
+                document.getElementById('upload-audio-player').src = state.audioUrl;
+                renderRecordUI();
+            };
+            reader.readAsDataURL(file);
+        };
+
+        window.clearAudioUpload = () => {
+            document.getElementById('audio-upload').value = '';
+            window.appState.recording.audioBase64 = null;
+            window.appState.recording.audioUrl = null;
             renderRecordUI();
         };
 
@@ -973,22 +1076,49 @@
             const state = window.appState.recording;
             if (!state.audioUrl) return;
 
-            // TODO: Firebase Storage Upload implementation goes here
-            const finalAudioUrl = state.audioUrl; 
+            const btnSubmit = document.getElementById('btn-submit-record');
+            const originalText = btnSubmit.innerHTML;
+            btnSubmit.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Mengirim...';
+            btnSubmit.disabled = true;
 
-            await window.setDoc(window.doc(window.db, `${window.BASE_PATH}/submissions`, `sub_${Date.now()}`), {
-                santriId: window.appState.currentUser.id,
-                title: `Setoran Hafalan - ${new Date().toLocaleDateString('id-ID')}`,
-                submissionData: {
-                    audioUrl: finalAudioUrl,
-                    notesFromSantri: document.getElementById('record-notes').value,
-                },
-                assessment: { status: 'pending' },
-                createdAt: Date.now() // using JS timestamp for easier sorting logic here
-            });
+            try {
+                // MENGUBAH AUDIO MENJADI BASE64 AGAR AMAN DISIMPAN DI DATABASE (Anti Error URL lokal)
+                let finalAudioData = state.audioBase64;
+                
+                // Jika dari hasil rekam langsung, kita perlu konversi Blob-nya ke Base64
+                if (!finalAudioData && state.audioBlob) {
+                    finalAudioData = await new Promise((resolve) => {
+                        const reader = new FileReader();
+                        reader.onloadend = () => resolve(reader.result);
+                        reader.readAsDataURL(state.audioBlob);
+                    });
+                }
 
-            closeRecordModal();
-            window.setSantriTab('riwayat');
+                // TODO PENTING: Untuk versi nyata, JANGAN simpan Base64 ke dalam dokumen Firestore (rawan penuh limit 1MB).
+                // Unggah 'state.audioBlob' atau 'file' ke Firebase Storage, lalu simpan TAUTAN (URL) nya saja ke Firestore.
+                // const storageRef = ref(storage, 'audio/' + Date.now());
+                // await uploadBytes(storageRef, state.audioBlob);
+                // finalAudioUrl = await getDownloadURL(storageRef);
+
+                await window.setDoc(window.doc(window.db, `${window.BASE_PATH}/submissions`, `sub_${Date.now()}`), {
+                    santriId: window.appState.currentUser.id,
+                    title: `Setoran Hafalan - ${new Date().toLocaleDateString('id-ID')}`,
+                    submissionData: {
+                        audioUrl: finalAudioData, // Data berupa Text Base64 utuh
+                        notesFromSantri: document.getElementById('record-notes').value,
+                    },
+                    assessment: { status: 'pending' },
+                    createdAt: Date.now() // using JS timestamp for easier sorting logic here
+                });
+
+                closeRecordModal();
+                window.setSantriTab('riwayat');
+            } catch (err) {
+                alert("Kesalahan jaringan/database: " + err.message);
+            } finally {
+                btnSubmit.innerHTML = originalText;
+                btnSubmit.disabled = false;
+            }
         });
     </script>
 </body>
