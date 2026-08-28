@@ -1,0 +1,995 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TAHSIN Muslim Footballers Bandung</title>
+    
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    
+    <style>
+        body { font-family: 'Inter', sans-serif; }
+        .bg-pattern { background-image: url('https://www.transparenttextures.com/patterns/arabesque.png'); }
+        /* Hide scrollbar for cleaner UI but keep functionality */
+        ::-webkit-scrollbar { width: 6px; }
+        ::-webkit-scrollbar-track { background: transparent; }
+        ::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 4px; }
+        ::-webkit-scrollbar-thumb:hover { background: #94a3b8; }
+    </style>
+</head>
+<body class="bg-slate-50 text-slate-800">
+
+    <div id="app-container">
+        <!-- Loading Screen -->
+        <div id="loading-screen" class="min-h-screen flex flex-col items-center justify-center bg-slate-50 text-emerald-600 font-bold z-50 fixed inset-0">
+            <i class="fas fa-circle-notch fa-spin text-4xl mb-4"></i>
+            <p>Memuat Sistem...</p>
+        </div>
+
+        <!-- Login View -->
+        <div id="login-view" class="hidden min-h-screen bg-slate-50 flex-col justify-center py-12 px-4 sm:px-6 lg:px-8 bg-cover bg-center bg-pattern">
+            <div class="sm:mx-auto sm:w-full sm:max-w-md">
+                <div class="w-20 h-20 mx-auto bg-emerald-600 rounded-2xl flex items-center justify-center shadow-lg transform rotate-3">
+                    <i class="fas fa-book-open text-white text-3xl -rotate-3"></i>
+                </div>
+                <h2 class="mt-6 text-center text-3xl font-extrabold text-emerald-900">TAHSIN Muslim Footballers Bandung</h2>
+                <p class="mt-2 text-center text-sm text-slate-600">Masuk untuk melanjutkan pembelajaran</p>
+            </div>
+
+            <div class="mt-8 sm:mx-auto sm:w-full sm:max-w-md">
+                <div class="bg-white py-8 px-4 shadow-xl shadow-emerald-900/10 sm:rounded-2xl sm:px-10 border border-slate-100">
+                    <div class="flex justify-end mb-4">
+                        <button onclick="toggleFullscreen()" class="text-slate-400 hover:text-emerald-600 transition-colors flex items-center gap-1 text-xs font-medium">
+                            <i id="fullscreen-icon-login" class="fas fa-expand"></i> Tampilan Penuh
+                        </button>
+                    </div>
+                    <form id="login-form" class="space-y-6">
+                        <div>
+                            <label class="block text-sm font-medium text-slate-700">Email Akun</label>
+                            <input type="email" id="login-email" required class="mt-1 block w-full border border-slate-300 rounded-xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-emerald-500" placeholder="contoh@tahsin.com">
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-slate-700">Password</label>
+                            <input type="password" id="login-password" required class="mt-1 block w-full border border-slate-300 rounded-xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-emerald-500" placeholder="••••••••">
+                        </div>
+                        <p id="login-error" class="text-rose-500 text-sm hidden"></p>
+                        <button type="submit" class="w-full flex justify-center py-3 px-4 border border-transparent rounded-xl shadow-sm text-sm font-bold text-white bg-emerald-600 hover:bg-emerald-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-emerald-500">
+                            Masuk
+                        </button>
+                    </form>
+                    <div class="mt-6 border-t border-slate-200 pt-4">
+                        <p class="text-xs text-slate-500 text-center mb-2">Akun Demo (Klik untuk mengisi):</p>
+                        <div class="grid grid-cols-2 gap-2 text-xs">
+                            <button onclick="fillLogin('musyrif@tahsin.com', 'password123')" class="p-2 bg-emerald-50 text-emerald-700 rounded-lg text-center hover:bg-emerald-100 font-medium">Admin / Musyrif</button>
+                            <button onclick="fillLogin('santri@tahsin.com', 'password123')" class="p-2 bg-emerald-50 text-emerald-700 rounded-lg text-center hover:bg-emerald-100 font-medium">Santri</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Admin View -->
+        <div id="admin-view" class="hidden min-h-screen font-sans">
+            <header class="bg-emerald-700 text-white shadow-md sticky top-0 z-30">
+                <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 flex justify-between items-center">
+                    <div class="flex items-center gap-3">
+                        <div class="bg-white/20 p-2 rounded-xl backdrop-blur-sm"><i class="fas fa-shield-alt text-xl"></i></div>
+                        <div>
+                            <h1 class="text-xl font-bold tracking-tight">TAHSIN MFB</h1>
+                            <p class="text-emerald-200 text-xs font-medium">Portal Musyrif / Admin</p>
+                        </div>
+                    </div>
+                    <div class="flex items-center gap-4">
+                        <button onclick="toggleFullscreen()" class="p-2 hover:bg-emerald-600 rounded-full transition-colors hidden sm:flex items-center gap-2" title="Layar Penuh">
+                            <i id="fullscreen-icon-admin" class="fas fa-expand"></i>
+                        </button>
+                        <span id="admin-welcome-text" class="hidden sm:inline text-sm font-medium bg-emerald-800/50 px-3 py-1.5 rounded-full"></span>
+                        <button onclick="handleLogout()" class="p-2 hover:bg-emerald-600 rounded-full transition-colors flex items-center gap-2"><i class="fas fa-sign-out-alt"></i></button>
+                    </div>
+                </div>
+                <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex gap-6 mt-2">
+                    <button onclick="setAdminTab('setoran')" id="admin-tab-setoran" class="admin-tab pb-3 px-2 text-sm font-bold border-b-4 border-white text-white transition-colors">Setoran Masuk</button>
+                    <button onclick="setAdminTab('santri')" id="admin-tab-santri" class="admin-tab pb-3 px-2 text-sm font-bold border-b-4 border-transparent text-emerald-200 hover:text-white transition-colors">Manajemen Santri</button>
+                    <button onclick="setAdminTab('materi')" id="admin-tab-materi" class="admin-tab pb-3 px-2 text-sm font-bold border-b-4 border-transparent text-emerald-200 hover:text-white transition-colors">Manajemen Materi</button>
+                </div>
+            </header>
+            <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8" id="admin-content-area">
+                <!-- Content injected here via JS -->
+            </main>
+        </div>
+
+        <!-- Santri View -->
+        <div id="santri-view" class="hidden min-h-screen flex">
+            <!-- Sidebar -->
+            <aside class="w-64 bg-white border-r border-slate-200 hidden md:flex flex-col sticky top-0 h-screen">
+                <div class="p-6 border-b border-slate-100">
+                    <h1 class="text-xl font-black text-emerald-700 leading-tight">TAHSIN<br/><span class="text-sm font-medium text-slate-500">Muslim Footballers Bandung</span></h1>
+                </div>
+                <nav class="flex-1 p-4 space-y-2">
+                    <button onclick="setSantriTab('dashboard')" id="santri-tab-dashboard" class="santri-tab w-full flex items-center gap-3 px-4 py-3 rounded-xl font-medium bg-emerald-50 text-emerald-700 transition-colors"><i class="fas fa-user w-5 text-center"></i> Dashboard</button>
+                    <button onclick="setSantriTab('materi')" id="santri-tab-materi" class="santri-tab w-full flex items-center gap-3 px-4 py-3 rounded-xl font-medium text-slate-600 hover:bg-slate-50 transition-colors"><i class="fas fa-book-open w-5 text-center"></i> Materi Saya</button>
+                    <button onclick="setSantriTab('riwayat')" id="santri-tab-riwayat" class="santri-tab w-full flex items-center gap-3 px-4 py-3 rounded-xl font-medium text-slate-600 hover:bg-slate-50 transition-colors"><i class="fas fa-clock w-5 text-center"></i> Riwayat Setoran</button>
+                </nav>
+                <div class="p-4 border-t border-slate-100">
+                    <button onclick="handleLogout()" class="w-full flex items-center gap-3 px-4 py-3 text-rose-600 hover:bg-rose-50 rounded-xl font-medium transition-colors"><i class="fas fa-sign-out-alt w-5 text-center"></i> Keluar</button>
+                </div>
+            </aside>
+
+            <main class="flex-1">
+                <!-- Mobile Header -->
+                <div class="md:hidden bg-white border-b border-slate-200 p-4 flex justify-between items-center sticky top-0 z-20">
+                    <h1 class="font-bold text-emerald-700">TAHSIN MFB</h1>
+                    <div class="flex gap-2 text-slate-600">
+                        <button onclick="toggleFullscreen()" class="p-2"><i id="fullscreen-icon-santri-mobile" class="fas fa-expand"></i></button>
+                        <button onclick="setSantriTab('dashboard')" class="p-2"><i class="fas fa-user"></i></button>
+                        <button onclick="setSantriTab('materi')" class="p-2"><i class="fas fa-book-open"></i></button>
+                        <button onclick="setSantriTab('riwayat')" class="p-2"><i class="fas fa-clock"></i></button>
+                        <button onclick="handleLogout()" class="p-2 text-rose-600"><i class="fas fa-sign-out-alt"></i></button>
+                    </div>
+                </div>
+                <div class="p-4 sm:p-8 max-w-5xl mx-auto" id="santri-content-area">
+                    <!-- Content injected here via JS -->
+                </div>
+            </main>
+        </div>
+
+        <!-- All Modals are placed here (hidden by default) -->
+        <div id="modals-container">
+            <!-- Modal Edit/Add Santri -->
+            <div id="modal-santri-form" class="hidden fixed inset-0 bg-black/50 backdrop-blur-sm z-50 flex items-center justify-center p-4">
+                <div class="bg-white rounded-3xl p-6 w-full max-w-md shadow-2xl">
+                    <div class="flex justify-between items-center mb-6">
+                        <h4 id="modal-santri-title" class="text-xl font-bold text-slate-800">Santri Form</h4>
+                        <button onclick="closeModal('modal-santri-form')" class="p-2 text-slate-400 hover:bg-slate-100 rounded-full"><i class="fas fa-times"></i></button>
+                    </div>
+                    <form id="form-santri" class="space-y-4">
+                        <input type="hidden" id="santri-id">
+                        <div>
+                            <label class="block text-sm font-medium text-slate-700 mb-1">Nama Lengkap</label>
+                            <input type="text" id="santri-name" required class="w-full border border-slate-300 rounded-xl p-3 focus:ring-2 focus:ring-emerald-500 outline-none" />
+                        </div>
+                        <div id="santri-auth-fields">
+                            <div>
+                                <label class="block text-sm font-medium text-slate-700 mb-1">Email Login</label>
+                                <input type="email" id="santri-email" required class="w-full border border-slate-300 rounded-xl p-3 focus:ring-2 focus:ring-emerald-500 outline-none" />
+                            </div>
+                            <div class="mt-4">
+                                <label class="block text-sm font-medium text-slate-700 mb-1">Password</label>
+                                <input type="text" id="santri-password" required minlength="6" class="w-full border border-slate-300 rounded-xl p-3 focus:ring-2 focus:ring-emerald-500 outline-none" />
+                            </div>
+                        </div>
+                        <div class="grid grid-cols-2 gap-4">
+                            <div>
+                                <label class="block text-sm font-medium text-slate-700 mb-1">Level / Jilid</label>
+                                <input type="text" id="santri-level" required class="w-full border border-slate-300 rounded-xl p-3 focus:ring-2 focus:ring-emerald-500 outline-none" />
+                            </div>
+                            <div>
+                                <label class="block text-sm font-medium text-slate-700 mb-1">Total Hafalan</label>
+                                <input type="number" id="santri-hafalan" required class="w-full border border-slate-300 rounded-xl p-3 focus:ring-2 focus:ring-emerald-500 outline-none" />
+                            </div>
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-slate-700 mb-1">Persentase Progres (0-100)</label>
+                            <input type="number" id="santri-progress" min="0" max="100" required class="w-full border border-slate-300 rounded-xl p-3 focus:ring-2 focus:ring-emerald-500 outline-none" />
+                        </div>
+                        <button type="submit" class="w-full bg-emerald-600 hover:bg-emerald-700 text-white py-3 rounded-xl font-bold mt-4">Simpan Data Santri</button>
+                    </form>
+                </div>
+            </div>
+
+            <!-- Modal Add/Edit Module -->
+            <div id="modal-module-form" class="hidden fixed inset-0 bg-black/50 backdrop-blur-sm z-50 flex items-center justify-center p-4">
+                <div class="bg-white rounded-3xl p-6 w-full max-w-2xl shadow-2xl max-h-[90vh] overflow-y-auto">
+                    <div class="flex justify-between items-center mb-6">
+                        <h4 id="modal-module-title" class="text-xl font-bold text-slate-800">Form Materi</h4>
+                        <button onclick="closeModal('modal-module-form')" class="p-2 text-slate-400 hover:bg-slate-100 rounded-full"><i class="fas fa-times"></i></button>
+                    </div>
+                    <form id="form-module" class="space-y-4">
+                        <input type="hidden" id="module-id">
+                        <div class="grid grid-cols-2 gap-4">
+                            <div class="col-span-2 md:col-span-1">
+                                <label class="block text-sm font-medium text-slate-700 mb-1">Judul Materi</label>
+                                <input type="text" id="module-title" required class="w-full border border-slate-300 rounded-xl p-3 focus:ring-2 focus:ring-emerald-500 outline-none" />
+                            </div>
+                            <div class="col-span-2 md:col-span-1">
+                                <label class="block text-sm font-medium text-slate-700 mb-1">Level / Target</label>
+                                <input type="text" id="module-level" placeholder="Misal: Jilid 1" required class="w-full border border-slate-300 rounded-xl p-3 focus:ring-2 focus:ring-emerald-500 outline-none" />
+                            </div>
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-slate-700 mb-1">Deskripsi Singkat</label>
+                            <input type="text" id="module-desc" required class="w-full border border-slate-300 rounded-xl p-3 focus:ring-2 focus:ring-emerald-500 outline-none" />
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-slate-700 mb-1">Konten Lengkap</label>
+                            <textarea id="module-content" required class="w-full border border-slate-300 rounded-xl p-3 focus:ring-2 focus:ring-emerald-500 outline-none h-40 resize-y"></textarea>
+                        </div>
+                        <div class="bg-slate-50 p-4 border border-slate-200 rounded-xl">
+                            <label class="block text-sm font-medium text-slate-700 mb-1">Lampirkan File (Opsional)</label>
+                            <input type="file" id="module-file" accept="image/*,.pdf" class="w-full text-sm text-slate-500 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-emerald-50 file:text-emerald-700 hover:file:bg-emerald-100" />
+                            <p id="module-file-status" class="text-xs text-emerald-600 mt-2 font-medium hidden">✓ File tersimpan. Unggah baru untuk mengganti.</p>
+                            <!-- Hidden inputs to keep track of existing file url and type -->
+                            <input type="hidden" id="module-existing-url">
+                            <input type="hidden" id="module-existing-type">
+                        </div>
+                        <div class="flex justify-end pt-4 border-t border-slate-100">
+                            <button type="submit" class="bg-emerald-600 hover:bg-emerald-700 text-white px-8 py-3 rounded-xl font-bold">Simpan Materi</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+
+            <!-- Modal Evaluasi Setoran -->
+            <div id="modal-eval-form" class="hidden fixed inset-0 bg-black/50 backdrop-blur-sm z-50 flex items-center justify-center p-4">
+                <div class="bg-white rounded-3xl p-6 w-full max-w-lg shadow-2xl">
+                    <div class="flex justify-between items-center mb-6 border-b border-slate-100 pb-4">
+                        <div>
+                            <h3 class="text-xl font-bold text-slate-800">Evaluasi Setoran</h3>
+                            <p id="eval-title" class="text-sm text-slate-500"></p>
+                        </div>
+                        <button onclick="closeModal('modal-eval-form')" class="p-2 text-slate-400 hover:bg-slate-100 rounded-full"><i class="fas fa-times"></i></button>
+                    </div>
+                    <div id="eval-audio-container" class="mb-6 bg-slate-50 p-4 rounded-xl border border-slate-200 hidden">
+                        <p class="text-xs font-bold text-slate-500 uppercase tracking-wider mb-2">Putar Rekaman Santri:</p>
+                        <audio id="eval-audio-player" controls class="w-full h-10"></audio>
+                    </div>
+                    <form id="form-eval" class="space-y-4">
+                        <input type="hidden" id="eval-sub-id">
+                        <div class="grid grid-cols-2 gap-4">
+                            <div>
+                                <label class="block text-sm font-medium text-slate-700 mb-1">Status Penilaian</label>
+                                <select id="eval-status" class="w-full border border-slate-300 rounded-xl p-3 focus:ring-2 focus:ring-emerald-500 outline-none font-medium">
+                                    <option value="pending">Menunggu</option>
+                                    <option value="approved">Diterima / Lulus</option>
+                                    <option value="revision_needed">Perlu Perbaikan</option>
+                                </select>
+                            </div>
+                            <div>
+                                <label class="block text-sm font-medium text-slate-700 mb-1">Nilai (Opsional 0-100)</label>
+                                <input type="number" id="eval-score" min="0" max="100" class="w-full border border-slate-300 rounded-xl p-3 focus:ring-2 focus:ring-emerald-500 outline-none" />
+                            </div>
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-slate-700 mb-1">Catatan / Feedback</label>
+                            <textarea id="eval-feedback" required class="w-full border border-slate-300 rounded-xl p-3 focus:ring-2 focus:ring-emerald-500 outline-none h-28 resize-none"></textarea>
+                        </div>
+                        <div class="flex justify-end gap-3 pt-4 border-t border-slate-100 mt-6">
+                            <button type="button" onclick="closeModal('modal-eval-form')" class="px-5 py-2.5 text-slate-600 bg-slate-100 hover:bg-slate-200 rounded-xl font-medium">Batal</button>
+                            <button type="submit" class="flex items-center gap-2 bg-emerald-600 hover:bg-emerald-700 text-white px-6 py-2.5 rounded-xl font-semibold"><i class="fas fa-paper-plane"></i> Simpan Penilaian</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+
+            <!-- Modal Rekam Suara (Santri) -->
+            <div id="modal-record" class="hidden fixed inset-0 bg-black/60 backdrop-blur-sm z-50 flex items-center justify-center p-4">
+                <div class="bg-white rounded-3xl p-6 md:p-8 w-full max-w-md shadow-2xl">
+                    <div class="flex justify-between items-center mb-6">
+                        <h3 class="text-xl font-bold text-slate-800">Rekam Setoran Baru</h3>
+                        <button onclick="closeRecordModal()" class="p-2 text-slate-400 hover:bg-slate-100 rounded-full"><i class="fas fa-times"></i></button>
+                    </div>
+
+                    <div class="flex flex-col items-center justify-center py-8 bg-slate-50 rounded-2xl border-2 border-dashed border-slate-200 mb-6 relative overflow-hidden">
+                        <div id="record-pulse" class="hidden absolute inset-0 bg-rose-500/10 animate-pulse"></div>
+                        <div id="record-timer" class="text-3xl font-mono text-slate-700 mb-6 z-10">00:00</div>
+                        
+                        <div id="record-controls-pre" class="flex gap-4 z-10">
+                            <button id="btn-start-record" onclick="startRecording()" class="flex flex-col items-center gap-2 group">
+                                <div class="w-16 h-16 bg-rose-100 text-rose-600 rounded-full flex items-center justify-center group-hover:bg-rose-200 transition-all shadow-sm">
+                                    <i class="fas fa-microphone text-2xl"></i>
+                                </div>
+                                <span class="text-sm font-medium text-slate-600">Mulai Rekam</span>
+                            </button>
+                            <button id="btn-stop-record" onclick="stopRecording()" class="hidden flex flex-col items-center gap-2 group">
+                                <div class="w-16 h-16 bg-rose-600 text-white rounded-full flex items-center justify-center group-hover:bg-rose-700 transition-all shadow-md animate-bounce">
+                                    <i class="fas fa-square text-xl"></i>
+                                </div>
+                                <span class="text-sm font-medium text-slate-600">Berhenti</span>
+                            </button>
+                        </div>
+                        
+                        <div id="record-controls-post" class="hidden w-full px-6 flex flex-col items-center z-10">
+                            <audio id="record-audio-player" controls class="w-full mb-4"></audio>
+                            <button onclick="resetRecording()" class="text-sm text-rose-600 font-medium hover:underline">Hapus & Ulangi Rekaman</button>
+                        </div>
+                    </div>
+
+                    <form id="form-record">
+                        <div class="mb-6">
+                            <label class="block text-sm font-medium text-slate-700 mb-2">Catatan untuk Musyrif (Opsional)</label>
+                            <textarea id="record-notes" placeholder="Misal: Ustadz, mohon koreksi..." class="w-full border border-slate-300 rounded-xl p-3 focus:ring-2 focus:ring-emerald-500 outline-none resize-none h-24 text-sm"></textarea>
+                        </div>
+                        <button type="submit" id="btn-submit-record" disabled class="w-full py-3.5 rounded-xl font-bold flex items-center justify-center gap-2 transition-all bg-slate-200 text-slate-400 cursor-not-allowed">
+                            <i class="fas fa-paper-plane"></i> Kirim Setoran Sekarang
+                        </button>
+                    </form>
+                </div>
+            </div>
+
+            <!-- Modal Baca Materi -->
+            <div id="modal-read-module" class="hidden fixed inset-0 bg-black/50 backdrop-blur-sm z-50 flex items-center justify-center p-4 sm:p-6">
+                <div class="bg-white rounded-3xl w-full max-w-4xl max-h-[95vh] flex flex-col shadow-2xl overflow-hidden">
+                    <div class="flex justify-between items-center p-6 border-b border-slate-100 bg-slate-50">
+                        <div>
+                            <span id="read-module-level" class="text-xs font-bold text-emerald-600 uppercase tracking-wider"></span>
+                            <h3 id="read-module-title" class="text-2xl font-bold text-slate-800 mt-1"></h3>
+                        </div>
+                        <button onclick="closeModal('modal-read-module')" class="p-2 text-slate-500 hover:bg-slate-200 bg-slate-100 rounded-full"><i class="fas fa-times text-xl"></i></button>
+                    </div>
+                    <div class="p-6 sm:p-8 overflow-y-auto flex-1">
+                        <div id="read-module-content" class="prose max-w-none text-slate-700 whitespace-pre-wrap leading-relaxed"></div>
+                        
+                        <div id="read-module-attachment-container" class="hidden mt-8 pt-8 border-t border-slate-200">
+                            <h4 class="font-bold text-slate-800 mb-4 flex items-center gap-2"><i class="fas fa-file-alt text-emerald-600"></i> Lampiran Materi</h4>
+                            <div id="read-module-attachment-area"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
+        import { getFirestore, collection, onSnapshot, doc, setDoc, updateDoc, deleteDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
+        import { getAuth, signInAnonymously, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
+
+        const firebaseConfig = {
+            apiKey: "AIzaSyBx_IaccYpCHrBwMAGm2hNHwiByyjsk_tw",
+            authDomain: "tahsin-e9d67.firebaseapp.com",
+            projectId: "tahsin-e9d67",
+            storageBucket: "tahsin-e9d67.firebasestorage.app",
+            messagingSenderId: "579708376137",
+            appId: "1:579708376137:web:27127cbe76aa6b26c65b98"
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const db = getFirestore(app);
+        const auth = getAuth(app);
+        
+        // Use default app ID if deployed outside canvas
+        const appId = typeof __app_id !== 'undefined' ? __app_id : 'default-tahsin-app';
+        const BASE_PATH = `artifacts/${appId}/public/data`;
+
+        // Global State
+        window.appState = {
+            currentUser: null,
+            profiles: [],
+            modules: [],
+            submissions: [],
+            adminTab: 'setoran',
+            santriTab: 'dashboard',
+            isFullscreen: false,
+            recording: {
+                isRecording: false,
+                mediaRecorder: null,
+                chunks: [],
+                audioBlob: null,
+                audioUrl: null,
+                timer: 0,
+                interval: null
+            }
+        };
+
+        // Initialize App
+        onAuthStateChanged(auth, (user) => {
+            if (user) {
+                // Listeners
+                onSnapshot(collection(db, `${BASE_PATH}/profiles`), (snapshot) => {
+                    window.appState.profiles = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+                    if (window.appState.profiles.length === 0) seedInitialData();
+                    updateUI();
+                });
+
+                onSnapshot(collection(db, `${BASE_PATH}/modules`), (snapshot) => {
+                    window.appState.modules = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+                    updateUI();
+                });
+
+                onSnapshot(collection(db, `${BASE_PATH}/submissions`), (snapshot) => {
+                    window.appState.submissions = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+                    document.getElementById('loading-screen').classList.add('hidden');
+                    updateUI();
+                });
+            } else {
+                signInAnonymously(auth).catch(console.error);
+            }
+        });
+
+        async function seedInitialData() {
+            await setDoc(doc(db, `${BASE_PATH}/profiles`, "admin_1"), {
+                role: 'admin', email: 'musyrif@tahsin.com', password: 'password123',
+                displayName: 'Ustadz Ahmad (Musyrif)'
+            });
+            await setDoc(doc(db, `${BASE_PATH}/profiles`, "santri_1"), {
+                role: 'santri', email: 'santri@tahsin.com', password: 'password123',
+                displayName: 'Budi Santoso', currentLevel: 'Jilid 2', totalHafalan: 12, progressPercentage: 45
+            });
+        }
+
+        // Expose Firebase functions for inline HTML calls
+        window.db = db;
+        window.doc = doc;
+        window.setDoc = setDoc;
+        window.updateDoc = updateDoc;
+        window.deleteDoc = deleteDoc;
+        window.serverTimestamp = serverTimestamp;
+        window.BASE_PATH = BASE_PATH;
+
+        // UI Routing Update
+        function updateUI() {
+            const { currentUser, adminTab, santriTab } = window.appState;
+            
+            if (!currentUser) {
+                document.getElementById('login-view').classList.remove('hidden');
+                document.getElementById('login-view').classList.add('flex');
+                document.getElementById('admin-view').classList.add('hidden');
+                document.getElementById('santri-view').classList.add('hidden');
+                return;
+            }
+
+            document.getElementById('login-view').classList.add('hidden');
+            document.getElementById('login-view').classList.remove('flex');
+
+            if (currentUser.role === 'admin') {
+                document.getElementById('admin-view').classList.remove('hidden');
+                document.getElementById('santri-view').classList.add('hidden');
+                document.getElementById('admin-welcome-text').innerText = `Ahlan, ${currentUser.displayName}`;
+                
+                // Update Admin Tabs
+                document.querySelectorAll('.admin-tab').forEach(el => {
+                    el.classList.remove('border-white', 'text-white');
+                    el.classList.add('border-transparent', 'text-emerald-200');
+                });
+                const activeAdminTab = document.getElementById(`admin-tab-${adminTab}`);
+                if(activeAdminTab) {
+                    activeAdminTab.classList.remove('border-transparent', 'text-emerald-200');
+                    activeAdminTab.classList.add('border-white', 'text-white');
+                }
+
+                renderAdminContent();
+            } else {
+                document.getElementById('admin-view').classList.add('hidden');
+                document.getElementById('santri-view').classList.remove('hidden');
+                
+                // Update Santri Tabs
+                document.querySelectorAll('.santri-tab').forEach(el => {
+                    el.classList.remove('bg-emerald-50', 'text-emerald-700');
+                    el.classList.add('text-slate-600');
+                });
+                const activeSantriTab = document.getElementById(`santri-tab-${santriTab}`);
+                if(activeSantriTab) {
+                    activeSantriTab.classList.remove('text-slate-600');
+                    activeSantriTab.classList.add('bg-emerald-50', 'text-emerald-700');
+                }
+
+                renderSantriContent();
+            }
+        }
+        window.updateUI = updateUI; // expose to window for form submits
+    </script>
+
+    <script>
+        // Utilities
+        window.fillLogin = (email, password) => {
+            document.getElementById('login-email').value = email;
+            document.getElementById('login-password').value = password;
+        };
+
+        window.toggleFullscreen = () => {
+            if (!document.fullscreenElement) {
+                document.documentElement.requestFullscreen().catch(err => console.error(err));
+                window.appState.isFullscreen = true;
+            } else {
+                if (document.exitFullscreen) document.exitFullscreen();
+                window.appState.isFullscreen = false;
+            }
+            const cls = window.appState.isFullscreen ? 'fa-compress' : 'fa-expand';
+            document.getElementById('fullscreen-icon-login').className = `fas ${cls}`;
+            document.getElementById('fullscreen-icon-admin').className = `fas ${cls}`;
+            document.getElementById('fullscreen-icon-santri-mobile').className = `fas ${cls}`;
+        };
+
+        window.closeModal = (id) => document.getElementById(id).classList.add('hidden');
+        window.openModal = (id) => document.getElementById(id).classList.remove('hidden');
+
+        // Navigation
+        window.setAdminTab = (tab) => { window.appState.adminTab = tab; window.updateUI(); };
+        window.setSantriTab = (tab) => { window.appState.santriTab = tab; window.updateUI(); };
+
+        // Login Logic
+        document.getElementById('login-form').addEventListener('submit', (e) => {
+            e.preventDefault();
+            const email = document.getElementById('login-email').value;
+            const pw = document.getElementById('login-password').value;
+            const user = window.appState.profiles.find(p => p.email === email && p.password === pw);
+            
+            if (user) {
+                window.appState.currentUser = user;
+                document.getElementById('login-error').classList.add('hidden');
+                window.updateUI();
+            } else {
+                document.getElementById('login-error').innerText = "Email atau password salah!";
+                document.getElementById('login-error').classList.remove('hidden');
+            }
+        });
+
+        window.handleLogout = () => {
+            window.appState.currentUser = null;
+            document.getElementById('login-email').value = '';
+            document.getElementById('login-password').value = '';
+            window.updateUI();
+        };
+
+        // Render Admin Content
+        function renderAdminContent() {
+            const area = document.getElementById('admin-content-area');
+            const tab = window.appState.adminTab;
+
+            if (tab === 'setoran') {
+                const subs = [...window.appState.submissions].sort((a, b) => b.createdAt - a.createdAt);
+                let listHtml = subs.length > 0 ? subs.map(sub => {
+                    const student = window.appState.profiles.find(p => p.id === sub.santriId);
+                    const isEvaluated = sub.assessment?.status && sub.assessment.status !== 'pending';
+                    return `
+                        <li class="p-6 transition-colors ${isEvaluated ? 'bg-slate-50/50' : 'hover:bg-slate-50'} border-b border-slate-100 last:border-0">
+                            <div class="flex flex-col md:flex-row md:items-center justify-between gap-4">
+                                <div>
+                                    <div class="flex items-center gap-3 mb-1">
+                                        <h4 class="font-bold text-slate-800 text-lg">${student?.displayName || 'Tidak Dikenal'}</h4>
+                                        <span class="text-xs px-2.5 py-1 rounded-full font-bold ${isEvaluated ? 'bg-emerald-100 text-emerald-700' : 'bg-amber-100 text-amber-700'}">
+                                            ${isEvaluated ? 'Sudah Dinilai' : 'Perlu Penilaian'}
+                                        </span>
+                                    </div>
+                                    <p class="text-slate-500 text-sm">${sub.title}</p>
+                                    ${sub.submissionData?.audioUrl ? `<div class="mt-3 bg-slate-100 p-2 rounded-xl inline-block"><audio controls src="${sub.submissionData.audioUrl}" class="h-8 max-w-full"></audio></div>` : ''}
+                                </div>
+                                <button onclick="openEvalModal('${sub.id}')" class="px-5 py-2.5 rounded-xl font-semibold flex items-center gap-2 transition-all shadow-sm ${isEvaluated ? 'bg-white border border-slate-200 text-slate-700 hover:bg-slate-50' : 'bg-emerald-600 text-white hover:bg-emerald-700 shadow-emerald-600/20'}">
+                                    <i class="fas fa-check-circle"></i> ${isEvaluated ? 'Lihat / Edit Nilai' : 'Beri Nilai'}
+                                </button>
+                            </div>
+                        </li>`;
+                }).join('') : `<div class="p-12 text-center text-slate-500"><i class="fas fa-check-circle text-5xl text-slate-300 mb-3 block"></i><p class="font-medium text-lg">Tidak ada setoran masuk</p></div>`;
+
+                area.innerHTML = `
+                    <div class="bg-white rounded-2xl shadow-sm border border-slate-200 overflow-hidden">
+                        <div class="p-6 border-b border-slate-100"><h3 class="text-xl font-bold text-slate-800 flex items-center gap-2"><i class="fas fa-microphone text-emerald-600"></i> Antrean Setoran</h3></div>
+                        <ul class="divide-y divide-slate-100">${listHtml}</ul>
+                    </div>`;
+            } else if (tab === 'santri') {
+                const santris = window.appState.profiles.filter(p => p.role === 'santri');
+                const rowsHtml = santris.map(s => `
+                    <tr class="border-b border-slate-100 hover:bg-slate-50">
+                        <td class="p-4 font-medium text-slate-800">${s.displayName} <br/><span class="text-xs text-slate-400 font-normal">${s.email}</span></td>
+                        <td class="p-4 text-emerald-600 font-medium">${s.currentLevel}</td>
+                        <td class="p-4 text-slate-600">${s.totalHafalan} Surat</td>
+                        <td class="p-4">
+                            <div class="flex items-center gap-3">
+                                <div class="w-24 h-2 bg-slate-200 rounded-full overflow-hidden"><div class="h-full bg-emerald-500" style="width: ${s.progressPercentage}%"></div></div>
+                                <span class="text-sm font-medium text-slate-600">${s.progressPercentage}%</span>
+                            </div>
+                        </td>
+                        <td class="p-4 text-right">
+                            <button onclick="openSantriModal('${s.id}')" class="p-2 text-blue-600 bg-blue-50 hover:bg-blue-100 rounded-lg"><i class="fas fa-edit"></i></button>
+                        </td>
+                    </tr>`).join('');
+
+                area.innerHTML = `
+                    <div class="bg-white rounded-2xl shadow-sm border border-slate-200 p-6">
+                        <div class="flex justify-between items-center mb-6">
+                            <h3 class="text-xl font-bold text-slate-800 flex items-center gap-2"><i class="fas fa-users text-emerald-600"></i> Data Santri</h3>
+                            <button onclick="openSantriModal()" class="flex items-center gap-2 bg-emerald-100 text-emerald-700 hover:bg-emerald-200 px-4 py-2 rounded-xl font-medium"><i class="fas fa-user-plus"></i> Tambah Santri</button>
+                        </div>
+                        <div class="overflow-x-auto">
+                            <table class="w-full text-left border-collapse">
+                                <thead><tr class="bg-slate-50 text-slate-500 border-b border-slate-200"><th class="p-4">Nama</th><th class="p-4">Level</th><th class="p-4">Hafalan</th><th class="p-4">Progres</th><th class="p-4 text-right">Aksi</th></tr></thead>
+                                <tbody>${rowsHtml}</tbody>
+                            </table>
+                        </div>
+                    </div>`;
+            } else if (tab === 'materi') {
+                const mods = window.appState.modules;
+                const cardsHtml = mods.length > 0 ? mods.map(m => `
+                    <div class="border border-slate-200 rounded-xl p-4 flex flex-col justify-between bg-slate-50">
+                        <div>
+                            <span class="text-xs font-bold text-emerald-700 bg-emerald-100 px-2 py-1 rounded-md mb-2 inline-block">${m.level}</span>
+                            <h4 class="font-bold text-lg text-slate-800 mb-1">${m.title}</h4>
+                            <p class="text-sm text-slate-600 line-clamp-2">${m.description}</p>
+                            ${m.fileUrl ? `<span class="mt-2 text-xs font-medium text-blue-600 flex items-center gap-1"><i class="fas fa-file"></i> Lampiran</span>` : ''}
+                        </div>
+                        <div class="flex justify-end gap-2 mt-4 pt-4 border-t border-slate-200">
+                            <button onclick="openModuleModal('${m.id}')" class="p-2 text-blue-600 bg-blue-100 hover:bg-blue-200 rounded-lg"><i class="fas fa-edit"></i></button>
+                            <button onclick="deleteModule('${m.id}')" class="p-2 text-rose-600 bg-rose-100 hover:bg-rose-200 rounded-lg"><i class="fas fa-trash-alt"></i></button>
+                        </div>
+                    </div>`).join('') : '<div class="col-span-2 text-center py-10 text-slate-500 border border-dashed rounded-xl">Belum ada materi.</div>';
+
+                area.innerHTML = `
+                    <div class="bg-white rounded-2xl shadow-sm border border-slate-200 p-6">
+                        <div class="flex justify-between items-center mb-6">
+                            <h3 class="text-xl font-bold text-slate-800 flex items-center gap-2"><i class="fas fa-book-open text-emerald-600"></i> Manajemen Materi</h3>
+                            <button onclick="openModuleModal()" class="flex items-center gap-2 bg-emerald-600 text-white hover:bg-emerald-700 px-4 py-2 rounded-xl font-medium"><i class="fas fa-plus"></i> Tambah Materi</button>
+                        </div>
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">${cardsHtml}</div>
+                    </div>`;
+            }
+        }
+
+        // Render Santri Content
+        function renderSantriContent() {
+            const area = document.getElementById('santri-content-area');
+            const tab = window.appState.santriTab;
+            const user = window.appState.currentUser;
+
+            if (tab === 'dashboard') {
+                area.innerHTML = `
+                    <div class="space-y-6">
+                        <div class="bg-gradient-to-r from-emerald-600 to-teal-600 rounded-3xl p-8 text-white shadow-lg relative overflow-hidden">
+                            <i class="fas fa-book-open absolute top-0 right-0 opacity-10 text-[16rem] transform translate-x-1/4 -translate-y-1/4"></i>
+                            <div class="relative z-10 flex flex-col md:flex-row md:items-center justify-between gap-6">
+                                <div>
+                                    <h2 class="text-3xl font-bold mb-2">Ahlan wa Sahlan, ${user.displayName}</h2>
+                                    <p class="text-emerald-100 text-lg">Semoga istiqomah memperbaiki bacaan Al-Qur'an.</p>
+                                    <div class="mt-6 flex flex-wrap gap-3">
+                                        <span class="bg-black/20 backdrop-blur-md px-4 py-2 rounded-xl text-sm font-semibold flex items-center gap-2"><i class="fas fa-book-open"></i> Level: ${user.currentLevel || 'Dasar'}</span>
+                                        <span class="bg-black/20 backdrop-blur-md px-4 py-2 rounded-xl text-sm font-semibold flex items-center gap-2"><i class="fas fa-check-circle"></i> Hafalan: ${user.totalHafalan || 0} Surat</span>
+                                    </div>
+                                </div>
+                                <div class="bg-white/10 backdrop-blur-md p-6 rounded-2xl border border-white/20 text-center w-full md:w-48">
+                                    <div class="text-4xl font-black mb-1">${user.progressPercentage || 0}%</div>
+                                    <div class="text-emerald-100 text-sm font-medium">Progres Belajar</div>
+                                    <div class="w-full bg-black/30 h-1.5 rounded-full mt-3 overflow-hidden">
+                                        <div class="bg-white h-full rounded-full" style="width: ${user.progressPercentage || 0}%"></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="flex flex-col sm:flex-row gap-4">
+                            <button onclick="openRecordModal()" class="flex-1 bg-white hover:bg-emerald-50 border-2 border-emerald-100 hover:border-emerald-300 transition-all p-6 rounded-2xl flex flex-col items-center justify-center gap-3 group shadow-sm">
+                                <div class="bg-emerald-100 text-emerald-600 p-4 rounded-full group-hover:scale-110 group-hover:bg-emerald-600 group-hover:text-white transition-all"><i class="fas fa-microphone text-2xl"></i></div>
+                                <span class="font-bold text-slate-800 text-lg group-hover:text-emerald-700">Rekam Setoran Baru</span>
+                            </button>
+                            <button onclick="setSantriTab('materi')" class="flex-1 bg-white hover:bg-emerald-50 border-2 border-slate-100 hover:border-emerald-300 transition-all p-6 rounded-2xl flex flex-col items-center justify-center gap-3 group shadow-sm">
+                                <div class="bg-slate-100 text-slate-600 p-4 rounded-full group-hover:scale-110 group-hover:bg-emerald-600 group-hover:text-white transition-all"><i class="fas fa-book-open text-2xl"></i></div>
+                                <span class="font-bold text-slate-800 text-lg group-hover:text-emerald-700">Lanjutkan Belajar</span>
+                            </button>
+                        </div>
+                    </div>`;
+            } else if (tab === 'materi') {
+                const mods = window.appState.modules;
+                const cardsHtml = mods.length > 0 ? mods.map(m => `
+                    <div class="bg-white rounded-2xl p-6 shadow-sm border border-slate-100 hover:shadow-md transition-shadow group flex flex-col h-full">
+                        <div class="mb-4">
+                            <span class="inline-block px-3 py-1 bg-emerald-100 text-emerald-800 text-xs font-bold rounded-full mb-3">${m.level}</span>
+                            <h3 class="font-bold text-lg text-slate-800 mb-2 group-hover:text-emerald-600">${m.title}</h3>
+                            <p class="text-slate-500 text-sm line-clamp-2">${m.description}</p>
+                        </div>
+                        <div class="mt-auto pt-4 border-t border-slate-100 flex items-center justify-between">
+                            <span class="text-xs text-slate-400 flex items-center gap-1"><i class="fas fa-clock"></i> Modul Aktif</span>
+                            <button onclick="readModule('${m.id}')" class="text-emerald-600 font-semibold text-sm flex items-center gap-1 hover:text-emerald-700">Pelajari <i class="fas fa-play text-xs"></i></button>
+                        </div>
+                    </div>`).join('') : '<div class="col-span-full text-center py-12 bg-white rounded-2xl border border-dashed text-slate-500">Belum ada materi.</div>';
+
+                area.innerHTML = `
+                    <div class="space-y-6">
+                        <h2 class="text-2xl font-bold text-slate-800 flex items-center gap-2"><i class="fas fa-book-open text-emerald-600"></i> Modul Pembelajaran</h2>
+                        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">${cardsHtml}</div>
+                    </div>`;
+            } else if (tab === 'riwayat') {
+                const subs = window.appState.submissions.filter(s => s.santriId === user.id).sort((a, b) => b.createdAt - a.createdAt);
+                const listHtml = subs.length > 0 ? subs.map(sub => {
+                    const isEvaluated = sub.assessment?.status && sub.assessment.status !== 'pending';
+                    const isAppr = sub.assessment?.status === 'approved';
+                    const badgeClass = isEvaluated ? (isAppr ? 'bg-emerald-100 text-emerald-700' : 'bg-rose-100 text-rose-700') : 'bg-amber-100 text-amber-700';
+                    const icon = isEvaluated ? (isAppr ? '<i class="fas fa-check-circle"></i>' : '<i class="fas fa-times-circle"></i>') : '<i class="fas fa-clock"></i>';
+                    const text = isEvaluated ? (isAppr ? 'Diterima' : 'Perlu Perbaikan') : 'Menunggu Penilaian';
+                    
+                    return `
+                        <li class="p-6 border-b border-slate-100 last:border-0">
+                            <div class="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-4">
+                                <div>
+                                    <h4 class="font-bold text-slate-800 text-lg mb-1">${sub.title}</h4>
+                                    <p class="text-sm text-slate-500 flex items-center gap-1.5"><i class="fas fa-clock"></i> ${new Date(sub.createdAt).toLocaleString('id-ID')}</p>
+                                </div>
+                                <span class="inline-flex px-3 py-1.5 rounded-full text-sm font-bold items-center gap-1.5 w-max ${badgeClass}">${icon} ${text}</span>
+                            </div>
+                            ${sub.submissionData?.audioUrl ? `<audio controls src="${sub.submissionData.audioUrl}" class="h-8 w-full mt-2"></audio>` : ''}
+                            ${sub.submissionData?.notesFromSantri ? `<div class="mt-4 bg-slate-50 border-l-4 border-emerald-400 p-3 rounded-r-xl"><p class="text-sm text-slate-700 italic">Catatan Anda: "${sub.submissionData.notesFromSantri}"</p></div>` : ''}
+                            ${isEvaluated ? `
+                                <div class="mt-4 bg-emerald-50 border border-emerald-100 p-4 rounded-xl">
+                                    <div class="flex items-center gap-3 mb-2">
+                                        <h5 class="font-bold text-emerald-800 flex items-center gap-1.5"><i class="fas fa-shield-alt"></i> Feedback Musyrif</h5>
+                                        ${sub.assessment.score ? `<span class="text-xs font-bold text-emerald-700 bg-white border border-emerald-200 px-2.5 py-1 rounded-full shadow-sm">Nilai: ${sub.assessment.score}</span>` : ''}
+                                    </div>
+                                    <p class="text-sm text-emerald-900 whitespace-pre-wrap">${sub.assessment.feedback || '-'}</p>
+                                </div>
+                            ` : ''}
+                        </li>`;
+                }).join('') : `<div class="text-center py-12 text-slate-500"><i class="fas fa-file-audio text-5xl text-slate-300 mb-3 block"></i>Belum ada riwayat setoran.</div>`;
+
+                area.innerHTML = `
+                    <div class="space-y-6">
+                        <h2 class="text-2xl font-bold text-slate-800 flex items-center gap-2"><i class="fas fa-clock text-emerald-600"></i> Riwayat Setoran</h2>
+                        <div class="bg-white rounded-2xl shadow-sm border border-slate-100 overflow-hidden"><ul class="divide-y divide-slate-100">${listHtml}</ul></div>
+                    </div>`;
+            }
+        }
+
+        // --- Modals Logic ---
+
+        // Santri Form
+        window.openSantriModal = (id = null) => {
+            const form = document.getElementById('form-santri');
+            form.reset();
+            document.getElementById('santri-id').value = id || '';
+            document.getElementById('modal-santri-title').innerText = id ? 'Edit Data Santri' : 'Tambah Santri Baru';
+            
+            if (id) {
+                const s = window.appState.profiles.find(p => p.id === id);
+                document.getElementById('santri-name').value = s.displayName;
+                document.getElementById('santri-level').value = s.currentLevel;
+                document.getElementById('santri-hafalan').value = s.totalHafalan;
+                document.getElementById('santri-progress').value = s.progressPercentage;
+                document.getElementById('santri-auth-fields').classList.add('hidden');
+                document.getElementById('santri-email').required = false;
+                document.getElementById('santri-password').required = false;
+            } else {
+                document.getElementById('santri-auth-fields').classList.remove('hidden');
+                document.getElementById('santri-email').required = true;
+                document.getElementById('santri-password').required = true;
+            }
+            openModal('modal-santri-form');
+        };
+
+        document.getElementById('form-santri').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const id = document.getElementById('santri-id').value;
+            const data = {
+                displayName: document.getElementById('santri-name').value,
+                currentLevel: document.getElementById('santri-level').value,
+                totalHafalan: parseInt(document.getElementById('santri-hafalan').value),
+                progressPercentage: parseInt(document.getElementById('santri-progress').value)
+            };
+
+            if (id) {
+                await window.updateDoc(window.doc(window.db, `${window.BASE_PATH}/profiles`, id), data);
+            } else {
+                data.role = 'santri';
+                data.email = document.getElementById('santri-email').value;
+                data.password = document.getElementById('santri-password').value;
+                await window.setDoc(window.doc(window.db, `${window.BASE_PATH}/profiles`, `santri_${Date.now()}`), data);
+            }
+            closeModal('modal-santri-form');
+        });
+
+        // Module Form
+        window.openModuleModal = (id = null) => {
+            const form = document.getElementById('form-module');
+            form.reset();
+            document.getElementById('module-id').value = id || '';
+            document.getElementById('modal-module-title').innerText = id ? 'Edit Materi' : 'Tambah Materi Baru';
+            document.getElementById('module-file-status').classList.add('hidden');
+            
+            if (id) {
+                const m = window.appState.modules.find(x => x.id === id);
+                document.getElementById('module-title').value = m.title;
+                document.getElementById('module-level').value = m.level;
+                document.getElementById('module-desc').value = m.description;
+                document.getElementById('module-content').value = m.content;
+                document.getElementById('module-existing-url').value = m.fileUrl || '';
+                document.getElementById('module-existing-type').value = m.fileType || '';
+                if(m.fileUrl) document.getElementById('module-file-status').classList.remove('hidden');
+            }
+            openModal('modal-module-form');
+        };
+
+        document.getElementById('form-module').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const id = document.getElementById('module-id').value;
+            const fileInput = document.getElementById('module-file');
+            
+            let fileUrl = document.getElementById('module-existing-url').value;
+            let fileType = document.getElementById('module-existing-type').value;
+
+            if (fileInput.files.length > 0) {
+                // TODO: Firebase Storage Upload Simulation
+                const file = fileInput.files[0];
+                fileUrl = URL.createObjectURL(file);
+                fileType = file.type;
+            }
+
+            const data = {
+                title: document.getElementById('module-title').value,
+                level: document.getElementById('module-level').value,
+                description: document.getElementById('module-desc').value,
+                content: document.getElementById('module-content').value,
+                fileUrl: fileUrl,
+                fileType: fileType,
+                updatedAt: window.serverTimestamp()
+            };
+
+            if (id) {
+                await window.updateDoc(window.doc(window.db, `${window.BASE_PATH}/modules`, id), data);
+            } else {
+                data.createdAt = window.serverTimestamp();
+                await window.setDoc(window.doc(window.db, `${window.BASE_PATH}/modules`, `module_${Date.now()}`), data);
+            }
+            closeModal('modal-module-form');
+        });
+
+        window.deleteModule = async (id) => {
+            if(confirm('Yakin hapus materi ini?')) {
+                await window.deleteDoc(window.doc(window.db, `${window.BASE_PATH}/modules`, id));
+            }
+        };
+
+        // Evaluation Form
+        window.openEvalModal = (id) => {
+            const sub = window.appState.submissions.find(s => s.id === id);
+            document.getElementById('eval-sub-id').value = id;
+            document.getElementById('eval-title').innerText = sub.title;
+            
+            if(sub.submissionData?.audioUrl) {
+                document.getElementById('eval-audio-container').classList.remove('hidden');
+                document.getElementById('eval-audio-player').src = sub.submissionData.audioUrl;
+            } else {
+                document.getElementById('eval-audio-container').classList.add('hidden');
+            }
+
+            document.getElementById('eval-status').value = sub.assessment?.status === 'pending' ? 'approved' : (sub.assessment?.status || 'approved');
+            document.getElementById('eval-score').value = sub.assessment?.score || '';
+            document.getElementById('eval-feedback').value = sub.assessment?.feedback || '';
+            openModal('modal-eval-form');
+        };
+
+        document.getElementById('form-eval').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const id = document.getElementById('eval-sub-id').value;
+            await window.updateDoc(window.doc(window.db, `${window.BASE_PATH}/submissions`, id), {
+                assessment: {
+                    status: document.getElementById('eval-status').value,
+                    score: document.getElementById('eval-score').value,
+                    feedback: document.getElementById('eval-feedback').value,
+                    reviewedAt: window.serverTimestamp()
+                }
+            });
+            closeModal('modal-eval-form');
+        });
+
+        // Read Module (Santri)
+        window.readModule = (id) => {
+            const mod = window.appState.modules.find(m => m.id === id);
+            document.getElementById('read-module-level').innerText = mod.level;
+            document.getElementById('read-module-title').innerText = mod.title;
+            document.getElementById('read-module-content').innerText = mod.content; // textContent for safety, though innerText parses newlines
+            
+            const attachContainer = document.getElementById('read-module-attachment-container');
+            const attachArea = document.getElementById('read-module-attachment-area');
+            
+            if (mod.fileUrl) {
+                attachContainer.classList.remove('hidden');
+                if (mod.fileType?.includes('image')) {
+                    attachArea.innerHTML = `<img src="${mod.fileUrl}" alt="Lampiran" class="max-w-full h-auto rounded-xl shadow-md border border-slate-200">`;
+                } else {
+                    attachArea.innerHTML = `<iframe src="${mod.fileUrl}" class="w-full h-[600px] rounded-xl shadow-inner border border-slate-200 bg-slate-50"></iframe>`;
+                }
+            } else {
+                attachContainer.classList.add('hidden');
+            }
+            openModal('modal-read-module');
+        };
+
+        // --- Audio Recording Logic ---
+        window.openRecordModal = () => {
+            window.resetRecording();
+            document.getElementById('record-notes').value = '';
+            openModal('modal-record');
+        };
+        window.closeRecordModal = () => {
+            window.stopRecording();
+            closeModal('modal-record');
+        };
+
+        const formatTime = (sec) => `${Math.floor(sec/60).toString().padStart(2,'0')}:${(sec%60).toString().padStart(2,'0')}`;
+        const renderRecordUI = () => {
+            const state = window.appState.recording;
+            document.getElementById('record-timer').innerText = formatTime(state.timer);
+            
+            if(state.audioUrl) {
+                document.getElementById('record-controls-pre').classList.add('hidden');
+                document.getElementById('record-controls-post').classList.remove('hidden');
+                document.getElementById('record-pulse').classList.add('hidden');
+                document.getElementById('btn-submit-record').disabled = false;
+                document.getElementById('btn-submit-record').classList.replace('bg-slate-200', 'bg-emerald-600');
+                document.getElementById('btn-submit-record').classList.replace('text-slate-400', 'text-white');
+            } else {
+                document.getElementById('record-controls-pre').classList.remove('hidden');
+                document.getElementById('record-controls-post').classList.add('hidden');
+                document.getElementById('btn-submit-record').disabled = true;
+                document.getElementById('btn-submit-record').classList.replace('bg-emerald-600', 'bg-slate-200');
+                document.getElementById('btn-submit-record').classList.replace('text-white', 'text-slate-400');
+                
+                if(state.isRecording) {
+                    document.getElementById('btn-start-record').classList.add('hidden');
+                    document.getElementById('btn-stop-record').classList.remove('hidden');
+                    document.getElementById('record-pulse').classList.remove('hidden');
+                } else {
+                    document.getElementById('btn-start-record').classList.remove('hidden');
+                    document.getElementById('btn-stop-record').classList.add('hidden');
+                    document.getElementById('record-pulse').classList.add('hidden');
+                }
+            }
+        };
+
+        window.startRecording = async () => {
+            try {
+                const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+                const rec = new MediaRecorder(stream);
+                const state = window.appState.recording;
+                
+                state.mediaRecorder = rec;
+                state.chunks = [];
+                rec.ondataavailable = e => { if (e.data.size > 0) state.chunks.push(e.data); };
+                rec.onstop = () => {
+                    const blob = new Blob(state.chunks, { type: 'audio/webm' });
+                    state.audioBlob = blob;
+                    state.audioUrl = URL.createObjectURL(blob);
+                    document.getElementById('record-audio-player').src = state.audioUrl;
+                    stream.getTracks().forEach(t => t.stop());
+                    renderRecordUI();
+                };
+
+                rec.start();
+                state.isRecording = true;
+                state.timer = 0;
+                state.interval = setInterval(() => { state.timer++; renderRecordUI(); }, 1000);
+                renderRecordUI();
+            } catch (err) { alert("Gagal akses mikrofon!"); console.error(err); }
+        };
+
+        window.stopRecording = () => {
+            const state = window.appState.recording;
+            if (state.mediaRecorder && state.isRecording) {
+                state.mediaRecorder.stop();
+                state.isRecording = false;
+                clearInterval(state.interval);
+                renderRecordUI();
+            }
+        };
+
+        window.resetRecording = () => {
+            const state = window.appState.recording;
+            state.audioBlob = null;
+            state.audioUrl = null;
+            state.timer = 0;
+            state.chunks = [];
+            clearInterval(state.interval);
+            renderRecordUI();
+        };
+
+        document.getElementById('form-record').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const state = window.appState.recording;
+            if (!state.audioUrl) return;
+
+            // TODO: Firebase Storage Upload implementation goes here
+            const finalAudioUrl = state.audioUrl; 
+
+            await window.setDoc(window.doc(window.db, `${window.BASE_PATH}/submissions`, `sub_${Date.now()}`), {
+                santriId: window.appState.currentUser.id,
+                title: `Setoran Hafalan - ${new Date().toLocaleDateString('id-ID')}`,
+                submissionData: {
+                    audioUrl: finalAudioUrl,
+                    notesFromSantri: document.getElementById('record-notes').value,
+                },
+                assessment: { status: 'pending' },
+                createdAt: Date.now() // using JS timestamp for easier sorting logic here
+            });
+
+            closeRecordModal();
+            window.setSantriTab('riwayat');
+        });
+    </script>
+</body>
+</html>
