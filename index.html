@@ -995,7 +995,8 @@
 
         window.startRecording = async () => {
             const state = window.appState.recording;
-            document.getElementById('record-error-msg').classList.add('hidden');
+            const errEl = document.getElementById('record-error-msg');
+            if (errEl) errEl.classList.add('hidden');
             
             try {
                 if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) {
@@ -1039,7 +1040,7 @@
                 renderRecordUI();
             } catch (err) { 
                 console.warn("Mikrofon error/diblokir:", err); 
-                document.getElementById('record-error-msg').classList.remove('hidden');
+                if (errEl) errEl.classList.remove('hidden');
             }
         };
 
@@ -1109,7 +1110,8 @@
             state.timer = 0;
             state.chunks = [];
             clearInterval(state.interval);
-            document.getElementById('record-error-msg').classList.add('hidden');
+            const errorMsgEl = document.getElementById('record-error-msg');
+            if (errorMsgEl) errorMsgEl.classList.add('hidden');
             renderRecordUI();
         };
 
