@@ -4,372 +4,365 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>TAHSIN Muslim Footballers Bandung</title>
-    
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
-    
     <style>
-        body { font-family: 'Inter', sans-serif; }
-        .bg-pattern { background-image: url('https://www.transparenttextures.com/patterns/arabesque.png'); }
-        ::-webkit-scrollbar { width: 6px; }
-        ::-webkit-scrollbar-track { background: transparent; }
-        ::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 4px; }
-        ::-webkit-scrollbar-thumb:hover { background: #94a3b8; }
+        body { font-family: 'Inter', sans-serif; background-color: #f8fafc; }
+        .glass-card { background: rgba(255, 255, 255, 0.95); backdrop-filter: blur(10px); }
+        .hide-scroll::-webkit-scrollbar { display: none; }
+        .hide-scroll { -ms-overflow-style: none; scrollbar-width: none; }
     </style>
 </head>
-<body class="bg-slate-50 text-slate-800">
+<body class="text-slate-800 antialiased h-screen flex flex-col overflow-hidden">
 
-    <div id="app-container">
-        <div id="loading-screen" class="min-h-screen flex flex-col items-center justify-center bg-slate-50 text-emerald-600 font-bold z-[100] fixed inset-0">
-            <i class="fas fa-circle-notch fa-spin text-4xl mb-4"></i>
-            <p>Memuat Sistem...</p>
-        </div>
-
-        <div id="login-view" class="hidden min-h-screen bg-slate-50 flex-col justify-center py-12 px-4 sm:px-6 lg:px-8 bg-cover bg-center bg-pattern">
-            <div class="sm:mx-auto sm:w-full sm:max-w-md">
-                <div class="w-20 h-20 mx-auto bg-emerald-600 rounded-2xl flex items-center justify-center shadow-lg transform rotate-3">
-                    <i class="fas fa-book-open text-white text-3xl -rotate-3"></i>
-                </div>
-                <h2 class="mt-6 text-center text-3xl font-extrabold text-emerald-900">TAHSIN Muslim Footballers Bandung</h2>
-                <p class="mt-2 text-center text-sm text-slate-600">Sistem Manajemen Pembelajaran</p>
+    <div id="auth-view" class="h-full flex flex-col justify-center py-12 px-4 sm:px-6 lg:px-8 bg-cover bg-center overflow-y-auto" style="background-image: url('https://www.transparenttextures.com/patterns/arabesque.png'); background-color: #f8fafc;">
+        <div class="sm:mx-auto sm:w-full sm:max-w-md z-10">
+            <div class="w-20 h-20 mx-auto bg-emerald-600 rounded-2xl flex items-center justify-center shadow-lg transform rotate-3">
+                <i class="fa-solid fa-book-quran text-4xl text-white -rotate-3"></i>
             </div>
-
-            <div class="mt-8 sm:mx-auto sm:w-full sm:max-w-md">
-                <div class="bg-white py-8 px-4 shadow-xl shadow-emerald-900/10 sm:rounded-2xl sm:px-10 border border-slate-100">
-                    <div class="flex justify-end mb-4">
-                        <button onclick="toggleFullscreen()" class="text-slate-400 hover:text-emerald-600 transition-colors flex items-center gap-1 text-xs font-medium">
-                            <i id="fullscreen-icon-login" class="fas fa-expand"></i> Tampilan Penuh
-                        </button>
-                    </div>
-                    
-                    <!-- Form Login -->
-                    <form id="login-form" class="space-y-6">
-                        <h3 class="text-xl font-bold text-center text-slate-800 border-b pb-2">Masuk Akun</h3>
-                        <div>
-                            <label class="block text-sm font-medium text-slate-700">Email Akun</label>
-                            <input type="email" id="login-email" required class="mt-1 block w-full border border-slate-300 rounded-xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-emerald-500" placeholder="contoh@tahsin.com">
-                        </div>
-                        <div>
-                            <label class="block text-sm font-medium text-slate-700">Password</label>
-                            <input type="password" id="login-password" required class="mt-1 block w-full border border-slate-300 rounded-xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-emerald-500" placeholder="••••••••">
-                        </div>
-                        <p id="login-error" class="text-rose-500 text-sm hidden"></p>
-                        <button type="submit" class="w-full flex justify-center py-3 px-4 border border-transparent rounded-xl shadow-sm text-sm font-bold text-white bg-emerald-600 hover:bg-emerald-700">
-                            Masuk
-                        </button>
-                        <p class="text-center text-sm text-slate-600 mt-4">Belum punya akun? <a href="#" onclick="toggleAuthForm('register')" class="text-emerald-600 font-bold hover:underline">Daftar Santri Baru</a></p>
-                        
-                        <div class="mt-6 border-t border-slate-200 pt-4">
-                            <p class="text-xs text-slate-500 text-center mb-2">Akun Demo (Klik untuk mengisi):</p>
-                            <div class="grid grid-cols-2 gap-2 text-xs">
-                                <button type="button" onclick="fillLogin('musyrif@tahsin.com', 'password123')" class="p-2 bg-emerald-50 text-emerald-700 rounded-lg text-center hover:bg-emerald-100 font-medium">Admin / Musyrif</button>
-                                <button type="button" onclick="fillLogin('santri@tahsin.com', 'password123')" class="p-2 bg-emerald-50 text-emerald-700 rounded-lg text-center hover:bg-emerald-100 font-medium">Santri</button>
-                            </div>
-                        </div>
-                    </form>
-
-                    <!-- Form Daftar -->
-                    <form id="register-form" class="space-y-6 hidden">
-                        <h3 class="text-xl font-bold text-center text-slate-800 border-b pb-2">Daftar Santri Baru</h3>
-                        <div>
-                            <label class="block text-sm font-medium text-slate-700">Nama Lengkap</label>
-                            <input type="text" id="reg-name" required class="mt-1 block w-full border border-slate-300 rounded-xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-emerald-500" placeholder="Nama Anda">
-                        </div>
-                        <div>
-                            <label class="block text-sm font-medium text-slate-700">Email</label>
-                            <input type="email" id="reg-email" required class="mt-1 block w-full border border-slate-300 rounded-xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-emerald-500" placeholder="contoh@tahsin.com">
-                        </div>
-                        <div>
-                            <label class="block text-sm font-medium text-slate-700">Buat Password</label>
-                            <input type="password" id="reg-password" required minlength="6" class="mt-1 block w-full border border-slate-300 rounded-xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-emerald-500" placeholder="Minimal 6 karakter">
-                        </div>
-                        <button type="submit" id="btn-submit-reg" class="w-full flex justify-center py-3 px-4 border border-transparent rounded-xl shadow-sm text-sm font-bold text-white bg-blue-600 hover:bg-blue-700">
-                            Daftar Sekarang
-                        </button>
-                        <p class="text-center text-sm text-slate-600 mt-4">Sudah punya akun? <a href="#" onclick="toggleAuthForm('login')" class="text-emerald-600 font-bold hover:underline">Masuk di sini</a></p>
-                    </form>
-                </div>
-            </div>
+            <h2 class="mt-6 text-center text-3xl font-extrabold text-emerald-900 leading-tight">TAHSIN<br><span class="text-xl font-bold text-slate-600">Muslim Footballers Bandung</span></h2>
         </div>
 
-        <div id="admin-view" class="hidden min-h-screen bg-slate-50 flex-col">
-            <header class="bg-emerald-700 text-white shadow-md sticky top-0 z-30">
-                <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 flex justify-between items-center">
-                    <div class="flex items-center gap-3">
-                        <div class="bg-white/20 p-2 rounded-xl backdrop-blur-sm"><i class="fas fa-shield-alt text-xl"></i></div>
-                        <div>
-                            <h1 class="text-xl font-bold tracking-tight">TAHSIN MFB</h1>
-                            <p class="text-emerald-200 text-xs font-medium">Portal Musyrif / Admin</p>
-                        </div>
+        <div class="mt-8 sm:mx-auto sm:w-full sm:max-w-md z-10">
+            <div class="glass-card py-8 px-4 shadow-xl shadow-emerald-900/10 sm:rounded-3xl sm:px-10 border border-white/50">
+                
+                <!-- Form Login -->
+                <form id="login-form" class="space-y-6" onsubmit="window.handleLogin(event)">
+                    <h3 class="text-xl font-bold text-center text-slate-800 border-b pb-2">Masuk ke Akun</h3>
+                    <div id="login-error" class="hidden bg-rose-50 text-rose-600 p-3 rounded-xl text-sm font-medium border border-rose-200"></div>
+                    <div>
+                        <label class="block text-sm font-medium text-slate-700 mb-1">Email</label>
+                        <input type="email" id="login-email" required class="w-full border border-slate-300 rounded-xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-emerald-500" placeholder="contoh@tahsin.com">
                     </div>
-                    <div class="flex items-center gap-4">
-                        <button onclick="toggleFullscreen()" class="p-2 hover:bg-emerald-600 rounded-full hidden sm:flex items-center gap-2" title="Layar Penuh"><i id="fullscreen-icon-admin" class="fas fa-expand"></i></button>
-                        <span id="admin-welcome-text" class="hidden sm:inline text-sm font-medium bg-emerald-800/50 px-3 py-1.5 rounded-full"></span>
-                        <button onclick="openProfileModal()" class="p-2 hover:bg-emerald-600 rounded-full transition-colors" title="Pengaturan Profil"><i class="fas fa-cog"></i></button>
-                        <button onclick="handleLogout()" class="p-2 hover:bg-emerald-600 rounded-full flex items-center gap-2"><i class="fas fa-sign-out-alt"></i> <span class="sr-only sm:not-sr-only sm:text-sm">Keluar</span></button>
+                    <div>
+                        <label class="block text-sm font-medium text-slate-700 mb-1">Password</label>
+                        <input type="password" id="login-password" required class="w-full border border-slate-300 rounded-xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-emerald-500" placeholder="••••••••">
                     </div>
-                </div>
-                <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex gap-6 mt-2 overflow-x-auto">
-                    <button id="admin-tab-setoran" onclick="setAdminTab('setoran')" class="admin-tab pb-3 px-2 text-sm font-bold border-b-4 transition-colors whitespace-nowrap">Setoran Masuk</button>
-                    <button id="admin-tab-santri" onclick="setAdminTab('santri')" class="admin-tab pb-3 px-2 text-sm font-bold border-b-4 transition-colors whitespace-nowrap">Manajemen Santri</button>
-                    <button id="admin-tab-materi" onclick="setAdminTab('materi')" class="admin-tab pb-3 px-2 text-sm font-bold border-b-4 transition-colors whitespace-nowrap">Manajemen Materi</button>
-                </div>
-            </header>
-            <main id="admin-content-area" class="flex-1 p-4 sm:p-6 lg:p-8 max-w-7xl mx-auto w-full"></main>
-        </div>
-
-        <div id="santri-view" class="hidden min-h-screen bg-slate-50 flex">
-            <!-- Sidebar Santri (Desktop) -->
-            <aside class="w-64 bg-white border-r border-slate-200 hidden md:flex flex-col sticky top-0 h-screen">
-                <div class="p-6 border-b border-slate-100">
-                    <h1 class="text-xl font-black text-emerald-700 leading-tight">TAHSIN<br/><span class="text-sm font-medium text-slate-500">MFB</span></h1>
-                </div>
-                <nav class="flex-1 p-4 space-y-2">
-                    <button id="santri-tab-dashboard" onclick="setSantriTab('dashboard')" class="santri-tab w-full flex items-center gap-3 px-4 py-3 rounded-xl font-medium transition-colors"><i class="fas fa-user"></i> Dashboard</button>
-                    <button id="santri-tab-materi" onclick="setSantriTab('materi')" class="santri-tab w-full flex items-center gap-3 px-4 py-3 rounded-xl font-medium transition-colors"><i class="fas fa-book-open"></i> Materi Saya</button>
-                    <button id="santri-tab-riwayat" onclick="setSantriTab('riwayat')" class="santri-tab w-full flex items-center gap-3 px-4 py-3 rounded-xl font-medium transition-colors"><i class="fas fa-clock"></i> Riwayat Setoran</button>
-                    <button onclick="openProfileModal()" class="w-full flex items-center gap-3 px-4 py-3 rounded-xl font-medium text-slate-600 hover:bg-slate-50 transition-colors"><i class="fas fa-cog"></i> Pengaturan Profil</button>
-                </nav>
-                <div class="p-4 border-t border-slate-100">
-                    <button onclick="handleLogout()" class="w-full flex items-center gap-3 px-4 py-3 text-rose-600 hover:bg-rose-50 rounded-xl font-medium transition-colors"><i class="fas fa-sign-out-alt"></i> Keluar</button>
-                </div>
-            </aside>
-
-            <!-- Main Content Santri -->
-            <main class="flex-1 flex flex-col min-w-0">
-                <!-- Header Mobile Santri -->
-                <div class="md:hidden bg-white border-b border-slate-200 p-4 flex justify-between items-center sticky top-0 z-20">
-                    <h1 class="font-bold text-emerald-700">TAHSIN MFB</h1>
-                    <div class="flex gap-2">
-                        <button onclick="toggleFullscreen()" class="p-2 text-slate-600"><i id="fullscreen-icon-santri-mobile" class="fas fa-expand"></i></button>
-                        <button onclick="setSantriTab('dashboard')" class="p-2 text-slate-600"><i class="fas fa-user"></i></button>
-                        <button onclick="setSantriTab('materi')" class="p-2 text-slate-600"><i class="fas fa-book-open"></i></button>
-                        <button onclick="setSantriTab('riwayat')" class="p-2 text-slate-600"><i class="fas fa-clock"></i></button>
-                        <button onclick="openProfileModal()" class="p-2 text-slate-600"><i class="fas fa-cog"></i></button>
-                        <button onclick="handleLogout()" class="p-2 text-rose-600"><i class="fas fa-sign-out-alt"></i></button>
-                    </div>
-                </div>
-                <div id="santri-content-area" class="p-4 sm:p-8 max-w-5xl mx-auto w-full flex-1"></div>
-            </main>
-        </div>
-
-        
-        <!-- Modal Profil -->
-        <div id="modal-profile" class="hidden fixed inset-0 bg-black/50 backdrop-blur-sm z-50 flex items-center justify-center p-4">
-            <div class="bg-white rounded-3xl p-6 w-full max-w-2xl shadow-2xl max-h-[90vh] overflow-y-auto">
-                <div class="flex justify-between items-center mb-6">
-                    <h3 class="text-xl font-bold text-slate-800">Pengaturan Identitas Profil</h3>
-                    <button onclick="closeModal('modal-profile')" class="p-2 text-slate-400 hover:bg-slate-100 rounded-full"><i class="fas fa-times"></i></button>
-                </div>
-                <form id="form-profile" class="space-y-4">
-                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                        <div>
-                            <label class="block text-sm font-medium text-slate-700 mb-1">Nama Lengkap</label>
-                            <input type="text" id="profile-name" required class="w-full border border-slate-300 rounded-xl p-3 focus:ring-2 focus:ring-emerald-500 outline-none" />
-                        </div>
-                        <div>
-                            <label class="block text-sm font-medium text-slate-700 mb-1">Email Login</label>
-                            <input type="email" id="profile-email" disabled class="w-full border border-slate-200 bg-slate-50 text-slate-500 rounded-xl p-3 outline-none" />
-                        </div>
-                        <div>
-                            <label class="block text-sm font-medium text-slate-700 mb-1">Tempat Lahir</label>
-                            <input type="text" id="profile-tempat-lahir" class="w-full border border-slate-300 rounded-xl p-3 focus:ring-2 focus:ring-emerald-500 outline-none" placeholder="Contoh: Bandung" />
-                        </div>
-                        <div>
-                            <label class="block text-sm font-medium text-slate-700 mb-1">Tanggal Lahir</label>
-                            <input type="date" id="profile-tanggal-lahir" class="w-full border border-slate-300 rounded-xl p-3 focus:ring-2 focus:ring-emerald-500 outline-none" />
-                        </div>
-                        <div>
-                            <label class="block text-sm font-medium text-slate-700 mb-1">Jenis Kelamin</label>
-                            <select id="profile-jk" class="w-full border border-slate-300 rounded-xl p-3 focus:ring-2 focus:ring-emerald-500 outline-none">
-                                <option value="">-- Pilih --</option>
-                                <option value="Laki-laki">Ikhwan (Laki-laki)</option>
-                                <option value="Perempuan">Akhawat (Perempuan)</option>
-                            </select>
-                        </div>
-                        <div>
-                            <label class="block text-sm font-medium text-slate-700 mb-1">No. WhatsApp / HP</label>
-                            <input type="tel" id="profile-hp" class="w-full border border-slate-300 rounded-xl p-3 focus:ring-2 focus:ring-emerald-500 outline-none" placeholder="081234567890" />
-                        </div>
-                        <div class="md:col-span-2">
-                            <label class="block text-sm font-medium text-slate-700 mb-1">Alamat Lengkap (Domisili)</label>
-                            <textarea id="profile-alamat" class="w-full border border-slate-300 rounded-xl p-3 focus:ring-2 focus:ring-emerald-500 outline-none h-20 resize-none"></textarea>
-                        </div>
-                        <div class="md:col-span-2 mt-2 border-t pt-4 border-slate-100">
-                            <label class="block text-sm font-medium text-slate-700 mb-1">Ubah Password Akun</label>
-                            <input type="text" id="profile-password" required minlength="6" class="w-full border border-slate-300 rounded-xl p-3 focus:ring-2 focus:ring-emerald-500 outline-none" />
-                        </div>
-                    </div>
-                    <div class="flex justify-end pt-4 mt-6">
-                        <button type="submit" id="btn-submit-profile" class="bg-emerald-600 hover:bg-emerald-700 text-white px-8 py-3 rounded-xl font-bold flex items-center gap-2">
-                            <i class="fas fa-save"></i> Simpan
-                        </button>
-                    </div>
+                    <button type="submit" class="w-full flex justify-center py-3 px-4 border border-transparent rounded-xl shadow-sm text-sm font-bold text-white bg-emerald-600 hover:bg-emerald-700 transition-colors">
+                        Masuk
+                    </button>
+                    <p class="text-center text-sm text-slate-600 mt-4">Belum punya akun? <a href="#" onclick="window.toggleAuthForm('register')" class="text-emerald-600 font-bold hover:underline">Daftar Akun Baru</a></p>
                 </form>
+
+                <!-- Form Register -->
+                <form id="register-form" class="space-y-4 hidden" onsubmit="window.handleRegister(event)">
+                    <h3 class="text-xl font-bold text-center text-slate-800 border-b pb-2">Daftar Akun Baru</h3>
+                    <div id="reg-error" class="hidden bg-rose-50 text-rose-600 p-3 rounded-xl text-sm font-medium border border-rose-200"></div>
+                    
+                    <div>
+                        <label class="block text-sm font-medium text-slate-700 mb-1">Mendaftar Sebagai</label>
+                        <select id="reg-role" onchange="window.toggleSecretCode()" class="w-full border border-slate-300 rounded-xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-emerald-500 bg-white font-medium text-slate-700">
+                            <option value="santri">Santri (Siswa)</option>
+                            <option value="admin">Musyrif (Guru / Admin)</option>
+                        </select>
+                    </div>
+
+                    <div id="secret-code-container" class="hidden bg-rose-50 p-4 rounded-xl border border-rose-200">
+                        <label class="block text-sm font-bold text-rose-700 mb-1"><i class="fa-solid fa-lock"></i> Kode Rahasia Ustadz</label>
+                        <input type="text" id="reg-secret" class="w-full border border-rose-300 rounded-xl px-4 py-2 focus:outline-none focus:ring-2 focus:ring-rose-500" placeholder="Masukkan kode dari yayasan">
+                        <p class="text-xs text-rose-600 mt-1">*Wajib diisi untuk mendaftar sebagai Admin</p>
+                    </div>
+
+                    <div>
+                        <label class="block text-sm font-medium text-slate-700 mb-1">Nama Lengkap</label>
+                        <input type="text" id="reg-name" required class="w-full border border-slate-300 rounded-xl px-4 py-2 focus:outline-none focus:ring-2 focus:ring-emerald-500">
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-slate-700 mb-1">Email Aktif</label>
+                        <input type="email" id="reg-email" required class="w-full border border-slate-300 rounded-xl px-4 py-2 focus:outline-none focus:ring-2 focus:ring-emerald-500">
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-slate-700 mb-1">Password Baru</label>
+                        <input type="password" id="reg-password" required minlength="6" class="w-full border border-slate-300 rounded-xl px-4 py-2 focus:outline-none focus:ring-2 focus:ring-emerald-500" placeholder="Minimal 6 karakter">
+                    </div>
+                    <button type="submit" class="w-full flex justify-center py-3 px-4 border border-transparent rounded-xl shadow-sm text-sm font-bold text-white bg-emerald-600 hover:bg-emerald-700 transition-colors mt-2">
+                        Daftar Sekarang
+                    </button>
+                    <p class="text-center text-sm text-slate-600 mt-2">Sudah punya akun? <a href="#" onclick="window.toggleAuthForm('login')" class="text-emerald-600 font-bold hover:underline">Masuk di sini</a></p>
+                </form>
+
             </div>
         </div>
+    </div>
 
+    <div id="admin-view" class="hidden h-full flex flex-col bg-slate-50">
+        <header class="bg-emerald-700 text-white shadow-md z-30 flex-none">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 flex justify-between items-center">
+                <div class="flex items-center gap-3">
+                    <div class="bg-white/20 p-2 rounded-xl backdrop-blur-sm"><i class="fa-solid fa-shield-halved text-xl"></i></div>
+                    <div>
+                        <h1 class="text-xl font-bold tracking-tight hidden sm:block">TAHSIN Muslim Footballers Bandung</h1>
+                        <h1 class="text-lg font-bold tracking-tight sm:hidden">TAHSIN MFB</h1>
+                        <p class="text-emerald-200 text-xs font-medium">Portal Musyrif / Admin</p>
+                    </div>
+                </div>
+                <div class="flex items-center gap-2 sm:gap-4">
+                    <button onclick="window.toggleFullscreen()" class="p-2 hover:bg-emerald-600 rounded-full transition-colors hidden sm:flex items-center gap-2 text-sm">
+                        <i class="fa-solid fa-expand"></i>
+                    </button>
+                    <button onclick="window.openProfileModal()" class="p-2 hover:bg-emerald-600 rounded-full transition-colors flex items-center gap-2">
+                        <i class="fa-solid fa-gear text-lg"></i> <span class="hidden sm:inline text-sm">Profil</span>
+                    </button>
+                    <button onclick="window.handleLogout()" class="p-2 hover:bg-rose-600 rounded-full transition-colors flex items-center gap-2">
+                        <i class="fa-solid fa-right-from-bracket text-lg"></i> <span class="hidden sm:inline text-sm">Keluar</span>
+                    </button>
+                </div>
+            </div>
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex gap-6 mt-2 overflow-x-auto hide-scroll">
+                <button onclick="window.setAdminTab('setoran')" id="tab-admin-setoran" class="pb-3 px-2 text-sm font-bold border-b-4 border-white text-white whitespace-nowrap">Setoran Masuk</button>
+                <button onclick="window.setAdminTab('santri')" id="tab-admin-santri" class="pb-3 px-2 text-sm font-bold border-b-4 border-transparent text-emerald-200 hover:text-white whitespace-nowrap">Manajemen Santri</button>
+                <button onclick="window.setAdminTab('materi')" id="tab-admin-materi" class="pb-3 px-2 text-sm font-bold border-b-4 border-transparent text-emerald-200 hover:text-white whitespace-nowrap">Manajemen Materi</button>
+            </div>
+        </header>
+        <main id="admin-content" class="flex-1 overflow-y-auto p-4 sm:p-8 max-w-7xl mx-auto w-full"></main>
+    </div>
+
+    <div id="santri-view" class="hidden h-full flex bg-slate-50 overflow-hidden">
+        <!-- Sidebar Desktop -->
+        <aside class="w-64 bg-white border-r border-slate-200 hidden md:flex flex-col z-20 flex-none">
+            <div class="p-6 border-b border-slate-100">
+                <h1 class="text-xl font-black text-emerald-700 leading-tight">TAHSIN<br><span class="text-xs font-medium text-slate-500">Muslim Footballers Bandung</span></h1>
+            </div>
+            <nav class="flex-1 p-4 space-y-2 overflow-y-auto">
+                <button onclick="window.setSantriTab('dashboard')" id="tab-santri-dashboard" class="w-full flex items-center gap-3 px-4 py-3 rounded-xl font-bold bg-emerald-50 text-emerald-700 transition-colors"><i class="fa-solid fa-user w-5 text-center"></i> Dashboard</button>
+                <button onclick="window.setSantriTab('materi')" id="tab-santri-materi" class="w-full flex items-center gap-3 px-4 py-3 rounded-xl font-medium text-slate-600 hover:bg-slate-50 transition-colors"><i class="fa-solid fa-book-open w-5 text-center"></i> Materi Saya</button>
+                <button onclick="window.setSantriTab('riwayat')" id="tab-santri-riwayat" class="w-full flex items-center gap-3 px-4 py-3 rounded-xl font-medium text-slate-600 hover:bg-slate-50 transition-colors"><i class="fa-solid fa-clock-rotate-left w-5 text-center"></i> Riwayat Setoran</button>
+                <div class="border-t border-slate-100 my-2 pt-2"></div>
+                <button onclick="window.openProfileModal()" class="w-full flex items-center gap-3 px-4 py-3 rounded-xl font-medium text-slate-600 hover:bg-slate-50 transition-colors"><i class="fa-solid fa-gear w-5 text-center"></i> Pengaturan Profil</button>
+            </nav>
+            <div class="p-4 border-t border-slate-100">
+                <button onclick="window.handleLogout()" class="w-full flex items-center gap-3 px-4 py-3 text-rose-600 hover:bg-rose-50 rounded-xl font-medium transition-colors"><i class="fa-solid fa-right-from-bracket w-5 text-center"></i> Keluar</button>
+            </div>
+        </aside>
+
+        <!-- Main Content Santri -->
+        <div class="flex-1 flex flex-col min-w-0">
+            <!-- Header Mobile -->
+            <div class="md:hidden bg-white border-b border-slate-200 p-4 flex justify-between items-center z-20 flex-none shadow-sm">
+                <h1 class="font-bold text-emerald-700 truncate mr-2">TAHSIN MFB</h1>
+                <div class="flex gap-1 overflow-x-auto hide-scroll">
+                    <button onclick="window.setSantriTab('dashboard')" class="p-2 text-emerald-600 bg-emerald-50 rounded-lg"><i class="fa-solid fa-user"></i></button>
+                    <button onclick="window.setSantriTab('materi')" class="p-2 text-slate-600 hover:bg-slate-50 rounded-lg"><i class="fa-solid fa-book-open"></i></button>
+                    <button onclick="window.setSantriTab('riwayat')" class="p-2 text-slate-600 hover:bg-slate-50 rounded-lg"><i class="fa-solid fa-clock-rotate-left"></i></button>
+                    <button onclick="window.openProfileModal()" class="p-2 text-slate-600 hover:bg-slate-50 rounded-lg"><i class="fa-solid fa-gear"></i></button>
+                    <button onclick="window.handleLogout()" class="p-2 text-rose-600 hover:bg-rose-50 rounded-lg"><i class="fa-solid fa-right-from-bracket"></i></button>
+                </div>
+            </div>
+            
+            <main id="santri-content" class="flex-1 overflow-y-auto p-4 sm:p-8 w-full"></main>
+        </div>
+    </div>
+
+    <div id="modals">
+        
         <!-- Modal Form Santri (Admin) -->
-        <div id="modal-santri-form" class="hidden fixed inset-0 bg-black/50 backdrop-blur-sm z-50 flex items-center justify-center p-4">
+        <div id="santri-modal" class="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 hidden items-center justify-center p-4">
             <div class="bg-white rounded-3xl p-6 w-full max-w-md shadow-2xl max-h-[90vh] overflow-y-auto">
                 <div class="flex justify-between items-center mb-6">
-                    <h4 id="modal-santri-title" class="text-xl font-bold text-slate-800">Form Santri</h4>
-                    <button onclick="closeModal('modal-santri-form')" class="p-2 text-slate-400 hover:bg-slate-100 rounded-full"><i class="fas fa-times"></i></button>
+                    <h4 id="santri-modal-title" class="text-xl font-bold text-slate-800">Data Santri</h4>
+                    <button onclick="window.closeModal('santri-modal')" class="p-2 text-slate-400 hover:bg-slate-100 rounded-full"><i class="fa-solid fa-xmark text-xl"></i></button>
                 </div>
-                <form id="form-santri" class="space-y-4">
+                <form id="form-santri" class="space-y-4" onsubmit="window.saveSantri(event)">
                     <input type="hidden" id="santri-id">
                     <div>
                         <label class="block text-sm font-medium text-slate-700 mb-1">Nama Lengkap</label>
-                        <input type="text" id="santri-name" required class="w-full border border-slate-300 rounded-xl p-3 focus:ring-2 focus:ring-emerald-500 outline-none" />
+                        <input type="text" id="santri-name" required class="w-full border border-slate-300 rounded-xl p-3 focus:ring-2 focus:ring-emerald-500 outline-none">
                     </div>
-                    <div id="santri-auth-fields" class="space-y-4">
-                        <div>
-                            <label class="block text-sm font-medium text-slate-700 mb-1">Email Login</label>
-                            <input type="email" id="santri-email" class="w-full border border-slate-300 rounded-xl p-3 focus:ring-2 focus:ring-emerald-500 outline-none" />
-                        </div>
-                        <div>
-                            <label class="block text-sm font-medium text-slate-700 mb-1">Password</label>
-                            <input type="text" id="santri-password" minlength="6" class="w-full border border-slate-300 rounded-xl p-3 focus:ring-2 focus:ring-emerald-500 outline-none" />
-                        </div>
-                    </div>
-                    <div class="grid grid-cols-2 gap-4 pt-4 border-t border-slate-100">
+                    <div class="grid grid-cols-2 gap-4">
                         <div>
                             <label class="block text-sm font-medium text-slate-700 mb-1">Level / Jilid</label>
-                            <input type="text" id="santri-level" value="Jilid 1" required class="w-full border border-slate-300 rounded-xl p-3 focus:ring-2 focus:ring-emerald-500 outline-none" />
+                            <input type="text" id="santri-level" placeholder="Jilid 1" class="w-full border border-slate-300 rounded-xl p-3 focus:ring-2 focus:ring-emerald-500 outline-none">
                         </div>
                         <div>
-                            <label class="block text-sm font-medium text-slate-700 mb-1">Total Hafalan</label>
-                            <input type="number" id="santri-hafalan" value="0" required class="w-full border border-slate-300 rounded-xl p-3 focus:ring-2 focus:ring-emerald-500 outline-none" />
+                            <label class="block text-sm font-medium text-slate-700 mb-1">Hafalan (Surat)</label>
+                            <input type="number" id="santri-hafalan" value="0" min="0" class="w-full border border-slate-300 rounded-xl p-3 focus:ring-2 focus:ring-emerald-500 outline-none">
                         </div>
                     </div>
                     <div>
-                        <label class="block text-sm font-medium text-slate-700 mb-1">Progres (%)</label>
-                        <input type="number" id="santri-progress" value="0" min="0" max="100" required class="w-full border border-slate-300 rounded-xl p-3 focus:ring-2 focus:ring-emerald-500 outline-none" />
+                        <label class="block text-sm font-medium text-slate-700 mb-1">Persentase Progres (0-100)</label>
+                        <input type="number" id="santri-progress" value="0" min="0" max="100" class="w-full border border-slate-300 rounded-xl p-3 focus:ring-2 focus:ring-emerald-500 outline-none">
                     </div>
-                    <button type="submit" class="w-full bg-emerald-600 hover:bg-emerald-700 text-white py-3 rounded-xl font-bold mt-4">Simpan Data</button>
+                    <button type="submit" class="w-full bg-emerald-600 hover:bg-emerald-700 text-white py-3 rounded-xl font-bold mt-2 transition-colors">Simpan Data</button>
                 </form>
             </div>
         </div>
 
         <!-- Modal Form Materi (Admin) -->
-        <div id="modal-module-form" class="hidden fixed inset-0 bg-black/50 backdrop-blur-sm z-50 flex items-center justify-center p-4">
-            <div class="bg-white rounded-3xl p-6 w-full max-w-2xl shadow-2xl max-h-[90vh] overflow-y-auto">
+        <div id="module-modal" class="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 hidden items-center justify-center p-4">
+            <div class="bg-white rounded-3xl p-6 w-full max-w-2xl shadow-2xl max-h-[95vh] overflow-y-auto">
                 <div class="flex justify-between items-center mb-6">
-                    <h4 id="modal-module-title" class="text-xl font-bold text-slate-800">Form Materi</h4>
-                    <button onclick="closeModal('modal-module-form')" class="p-2 text-slate-400 hover:bg-slate-100 rounded-full"><i class="fas fa-times"></i></button>
+                    <h4 id="module-modal-title" class="text-xl font-bold text-slate-800">Materi</h4>
+                    <button onclick="window.closeModal('module-modal')" class="p-2 text-slate-400 hover:bg-slate-100 rounded-full"><i class="fa-solid fa-xmark text-xl"></i></button>
                 </div>
-                <form id="form-module" class="space-y-4">
+                <form id="form-module" class="space-y-4" onsubmit="window.saveModule(event)">
                     <input type="hidden" id="module-id">
-                    <input type="hidden" id="module-existing-url">
-                    <input type="hidden" id="module-existing-type">
                     <div class="grid grid-cols-2 gap-4">
                         <div class="col-span-2 md:col-span-1">
                             <label class="block text-sm font-medium text-slate-700 mb-1">Judul Materi</label>
-                            <input type="text" id="module-title" required class="w-full border border-slate-300 rounded-xl p-3 outline-none" />
+                            <input type="text" id="module-title" required class="w-full border border-slate-300 rounded-xl p-3 focus:ring-2 focus:ring-emerald-500 outline-none">
                         </div>
                         <div class="col-span-2 md:col-span-1">
-                            <label class="block text-sm font-medium text-slate-700 mb-1">Level / Target</label>
-                            <input type="text" id="module-level" required class="w-full border border-slate-300 rounded-xl p-3 outline-none" />
+                            <label class="block text-sm font-medium text-slate-700 mb-1">Target / Level</label>
+                            <input type="text" id="module-level" required placeholder="Misal: Jilid 1" class="w-full border border-slate-300 rounded-xl p-3 focus:ring-2 focus:ring-emerald-500 outline-none">
                         </div>
                     </div>
                     <div>
                         <label class="block text-sm font-medium text-slate-700 mb-1">Deskripsi Singkat</label>
-                        <input type="text" id="module-desc" required class="w-full border border-slate-300 rounded-xl p-3 outline-none" />
+                        <input type="text" id="module-desc" required class="w-full border border-slate-300 rounded-xl p-3 focus:ring-2 focus:ring-emerald-500 outline-none">
                     </div>
                     <div>
                         <label class="block text-sm font-medium text-slate-700 mb-1">Konten Lengkap</label>
-                        <textarea id="module-content" required class="w-full border border-slate-300 rounded-xl p-3 h-32 outline-none"></textarea>
+                        <textarea id="module-content" required class="w-full border border-slate-300 rounded-xl p-3 focus:ring-2 focus:ring-emerald-500 outline-none h-32 resize-y" placeholder="Ketik materi detail di sini..."></textarea>
                     </div>
-                    <div class="bg-slate-50 p-4 border border-slate-200 rounded-xl">
-                        <label class="block text-sm font-medium text-slate-700 mb-1">Lampirkan File (Opsional)</label>
-                        <input type="file" id="module-file" accept="image/*,.pdf" class="w-full text-sm text-slate-500 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:bg-emerald-50 file:text-emerald-700" />
-                        <p id="module-file-status" class="text-xs text-emerald-600 mt-2 font-medium hidden">✓ File lama tersimpan.</p>
+                    <div>
+                        <label class="block text-sm font-medium text-slate-700 mb-1">URL Lampiran (Opsional)</label>
+                        <input type="url" id="module-file" class="w-full border border-slate-300 rounded-xl p-3 focus:ring-2 focus:ring-emerald-500 outline-none text-sm" placeholder="Masukkan Link Gambar / PDF Eksternal">
                     </div>
-                    <button type="submit" class="w-full bg-emerald-600 text-white py-3 rounded-xl font-bold">Simpan Materi</button>
+                    <button type="submit" class="w-full bg-emerald-600 hover:bg-emerald-700 text-white py-3 rounded-xl font-bold mt-4 transition-colors">Simpan Materi</button>
                 </form>
             </div>
         </div>
 
-        <!-- Modal Evaluasi (Admin) -->
-        <div id="modal-eval-form" class="hidden fixed inset-0 bg-black/50 backdrop-blur-sm z-50 flex items-center justify-center p-4">
+        <!-- Modal Evaluasi Setoran (Admin) -->
+        <div id="evaluate-modal" class="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 hidden items-center justify-center p-4">
             <div class="bg-white rounded-3xl p-6 w-full max-w-lg shadow-2xl">
-                <div class="flex justify-between items-center mb-6">
-                    <h4 class="text-xl font-bold text-slate-800">Beri Penilaian</h4>
-                    <button onclick="closeModal('modal-eval-form')" class="p-2 text-slate-400 hover:bg-slate-100 rounded-full"><i class="fas fa-times"></i></button>
+                <div class="flex justify-between items-center mb-4 border-b border-slate-100 pb-4">
+                    <div>
+                        <h3 class="text-xl font-bold text-slate-800">Evaluasi Setoran</h3>
+                        <p id="eval-title" class="text-sm text-slate-500 font-medium"></p>
+                    </div>
+                    <button onclick="window.closeModal('evaluate-modal')" class="p-2 text-slate-400 hover:bg-slate-100 rounded-full"><i class="fa-solid fa-xmark text-xl"></i></button>
                 </div>
-                <p id="eval-title" class="text-sm font-medium text-slate-600 mb-4 bg-slate-50 p-3 rounded-xl"></p>
-                <form id="form-eval" class="space-y-4">
-                    <input type="hidden" id="eval-sub-id">
+                <form id="form-evaluate" class="space-y-4" onsubmit="window.submitEvaluation(event)">
+                    <input type="hidden" id="eval-id">
                     <div class="grid grid-cols-2 gap-4">
                         <div>
-                            <label class="block text-sm font-medium text-slate-700 mb-1">Status</label>
-                            <select id="eval-status" class="w-full border border-slate-300 rounded-xl p-3 outline-none">
-                                <option value="approved">Diterima</option>
+                            <label class="block text-sm font-medium text-slate-700 mb-1">Keputusan</label>
+                            <select id="eval-status" class="w-full border border-slate-300 rounded-xl p-3 focus:ring-2 focus:ring-emerald-500 outline-none font-medium text-slate-700">
+                                <option value="pending">Menunggu (Reset)</option>
+                                <option value="approved">Diterima / Lulus</option>
                                 <option value="revision_needed">Perlu Perbaikan</option>
-                                <option value="pending">Menunggu</option>
                             </select>
                         </div>
                         <div>
                             <label class="block text-sm font-medium text-slate-700 mb-1">Nilai (0-100)</label>
-                            <input type="number" id="eval-score" min="0" max="100" class="w-full border border-slate-300 rounded-xl p-3 outline-none" />
+                            <input type="number" id="eval-score" min="0" max="100" class="w-full border border-slate-300 rounded-xl p-3 focus:ring-2 focus:ring-emerald-500 outline-none">
                         </div>
                     </div>
                     <div>
-                        <label class="block text-sm font-medium text-slate-700 mb-1">Feedback / Catatan</label>
-                        <textarea id="eval-feedback" required class="w-full border border-slate-300 rounded-xl p-3 h-24 outline-none"></textarea>
+                        <label class="block text-sm font-medium text-slate-700 mb-1">Feedback Musyrif</label>
+                        <textarea id="eval-feedback" required placeholder="Tuliskan koreksi atau apresiasi..." class="w-full border border-slate-300 rounded-xl p-3 focus:ring-2 focus:ring-emerald-500 outline-none h-28 resize-none"></textarea>
                     </div>
-                    <button type="submit" class="w-full bg-emerald-600 text-white py-3 rounded-xl font-bold flex items-center justify-center gap-2"><i class="fas fa-paper-plane"></i> Simpan Penilaian</button>
+                    <button type="submit" class="w-full bg-emerald-600 hover:bg-emerald-700 text-white py-3 rounded-xl font-bold flex justify-center items-center gap-2 transition-colors">
+                        <i class="fa-solid fa-paper-plane"></i> Simpan Penilaian
+                    </button>
+                </form>
+            </div>
+        </div>
+
+        <!-- Modal Rekam Setoran via WhatsApp (Santri) -->
+        <div id="record-modal" class="fixed inset-0 bg-black/60 backdrop-blur-sm z-50 hidden items-center justify-center p-4">
+            <div class="bg-white rounded-3xl p-6 md:p-8 w-full max-w-md shadow-2xl">
+                <div class="flex justify-between items-center mb-6">
+                    <h3 class="text-xl font-bold text-slate-800">Setor Hafalan Baru</h3>
+                    <button onclick="window.closeModal('record-modal')" class="p-2 text-slate-400 hover:bg-slate-100 rounded-full transition-colors"><i class="fa-solid fa-xmark text-xl"></i></button>
+                </div>
+                
+                <div class="bg-green-50 border border-green-200 rounded-2xl p-5 mb-6 text-center">
+                    <div class="w-16 h-16 bg-green-500 text-white rounded-full flex items-center justify-center mx-auto mb-3 shadow-lg shadow-green-500/30">
+                        <i class="fa-brands fa-whatsapp text-3xl"></i>
+                    </div>
+                    <h4 class="font-bold text-green-800 mb-1">Setoran via WhatsApp</h4>
+                    <p class="text-xs text-green-700 leading-relaxed">
+                        Anda akan diarahkan ke WhatsApp untuk mengirim rekaman suara secara langsung kepada Ustadz agar kualitas suara maksimal.
+                    </p>
+                </div>
+
+                <form id="form-record" onsubmit="window.submitWhatsAppRecord(event)">
+                    <div class="mb-4">
+                        <label class="block text-sm font-medium text-slate-700 mb-1">Judul Setoran / Surat</label>
+                        <input type="text" id="record-title" required placeholder="Misal: Hafalan Surah Al-Mulk ayat 1-5" class="w-full border border-slate-300 rounded-xl p-3 focus:ring-2 focus:ring-green-500 outline-none">
+                    </div>
+                    <div class="mb-6">
+                        <label class="block text-sm font-medium text-slate-700 mb-1">Pesan Tambahan (Opsional)</label>
+                        <textarea id="record-notes" placeholder="Misal: Ustadz, mohon koreksi tajwid saya..." class="w-full border border-slate-300 rounded-xl p-3 focus:ring-2 focus:ring-green-500 outline-none resize-none h-20 text-sm"></textarea>
+                    </div>
+                    <button type="submit" class="w-full py-3.5 rounded-xl font-bold flex items-center justify-center gap-2 transition-all bg-green-500 text-white hover:bg-green-600 shadow-lg shadow-green-500/30">
+                        <i class="fa-solid fa-arrow-up-right-from-square"></i> Lanjut ke WhatsApp
+                    </button>
                 </form>
             </div>
         </div>
 
         <!-- Modal Baca Materi (Santri) -->
-        <div id="modal-read-module" class="hidden fixed inset-0 bg-black/50 backdrop-blur-sm z-50 flex items-center justify-center p-4">
+        <div id="learning-modal" class="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 hidden items-center justify-center p-4 sm:p-6">
             <div class="bg-white rounded-3xl w-full max-w-4xl max-h-[95vh] flex flex-col shadow-2xl overflow-hidden">
-                <div class="flex justify-between items-center p-6 border-b border-slate-100 bg-slate-50">
+                <div class="flex justify-between items-center p-6 border-b border-slate-100 bg-slate-50 flex-none">
                     <div>
-                        <span id="read-module-level" class="text-xs font-bold text-emerald-600 uppercase tracking-wider"></span>
-                        <h3 id="read-module-title" class="text-2xl font-bold text-slate-800"></h3>
+                        <span id="learn-level" class="text-xs font-bold text-emerald-600 uppercase tracking-wider bg-emerald-100 px-2 py-1 rounded"></span>
+                        <h3 id="learn-title" class="text-2xl font-bold text-slate-800 mt-2"></h3>
                     </div>
-                    <button onclick="closeModal('modal-read-module')" class="p-2 text-slate-500 bg-slate-200 rounded-full"><i class="fas fa-times"></i></button>
+                    <button onclick="window.closeModal('learning-modal')" class="p-2 text-slate-500 hover:bg-slate-200 bg-slate-100 rounded-full transition-colors"><i class="fa-solid fa-xmark text-xl"></i></button>
                 </div>
-                <div class="p-6 overflow-y-auto flex-1">
-                    <div id="read-module-content" class="text-slate-700 whitespace-pre-wrap leading-relaxed"></div>
-                    <div id="read-module-attachment-container" class="mt-8 pt-8 border-t border-slate-200 hidden">
-                        <h4 class="font-bold text-slate-800 mb-4 flex items-center gap-2"><i class="fas fa-file-alt text-emerald-600"></i> Lampiran Materi</h4>
-                        <div id="read-module-attachment-area"></div>
+                <div class="p-6 sm:p-8 overflow-y-auto flex-1 relative">
+                    <p id="learn-content" class="text-slate-700 whitespace-pre-wrap leading-relaxed text-lg"></p>
+                    <div id="learn-attachment-container" class="mt-8 pt-8 border-t border-slate-200 hidden">
+                        <h4 class="font-bold text-slate-800 mb-4 flex items-center gap-2"><i class="fa-solid fa-paperclip text-emerald-600"></i> Lampiran Materi</h4>
+                        <img id="learn-image" src="" alt="Lampiran Materi" class="max-w-full h-auto rounded-xl shadow-md border border-slate-200 hidden mx-auto">
+                        <iframe id="learn-pdf" src="" class="w-full h-[600px] rounded-xl shadow-inner border border-slate-200 bg-slate-50 hidden"></iframe>
+                        <a id="learn-link" href="#" target="_blank" class="hidden inline-flex items-center gap-2 text-blue-600 hover:underline bg-blue-50 px-4 py-2 rounded-lg font-medium"><i class="fa-solid fa-up-right-from-square"></i> Buka Lampiran di Tab Baru</a>
                     </div>
                 </div>
             </div>
         </div>
 
-        <!-- Modal Form Setoran WA (Santri) -->
-        <div id="modal-record" class="hidden fixed inset-0 bg-black/50 backdrop-blur-sm z-50 flex items-center justify-center p-4">
-            <div class="bg-white rounded-3xl p-6 md:p-8 w-full max-w-md shadow-2xl">
+        <!-- Modal Pengaturan Profil (Santri & Admin) -->
+        <div id="profile-modal" class="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 hidden items-center justify-center p-4">
+            <div class="bg-white rounded-3xl p-6 w-full max-w-md shadow-2xl max-h-[90vh] overflow-y-auto">
                 <div class="flex justify-between items-center mb-6">
-                    <h3 class="text-xl font-bold text-slate-800 flex items-center gap-2"><i class="fab fa-whatsapp text-emerald-500 text-2xl"></i> Setor via WA</h3>
-                    <button onclick="closeModal('modal-record')" class="p-2 text-slate-400 hover:bg-slate-100 rounded-full"><i class="fas fa-times"></i></button>
+                    <h4 class="text-xl font-bold text-slate-800"><i class="fa-solid fa-user-pen text-emerald-600 mr-2"></i> Pengaturan Profil</h4>
+                    <button onclick="window.closeModal('profile-modal')" class="p-2 text-slate-400 hover:bg-slate-100 rounded-full"><i class="fa-solid fa-xmark text-xl"></i></button>
                 </div>
                 
-                <div class="bg-emerald-50 border border-emerald-100 p-4 rounded-xl mb-6">
-                    <p class="text-sm text-emerald-800">
-                        <strong>Cara Setoran:</strong><br/>
-                        Isi judul materi di bawah ini, lalu klik tombol hijau. Aplikasi akan otomatis membuka WhatsApp Ustadz. Silakan rekam *Voice Note* (VN) hafalan Anda di WhatsApp!
-                    </p>
-                </div>
-
-                <form id="form-record">
-                    <div class="mb-4">
-                        <label class="block text-sm font-medium text-slate-700 mb-1">Judul Materi Setoran</label>
-                        <input type="text" id="record-title" required placeholder="Contoh: Setoran Surah Al-Kahfi 1-10" class="w-full border border-slate-300 rounded-xl p-3 focus:ring-2 focus:ring-emerald-500 outline-none">
+                <form id="form-profile" class="space-y-4" onsubmit="window.saveProfile(event)">
+                    <div>
+                        <label class="block text-xs font-bold text-slate-500 uppercase tracking-wider mb-1">Email (Akun Login)</label>
+                        <input type="text" id="prof-email" disabled class="w-full border border-slate-200 bg-slate-50 rounded-xl p-3 text-slate-500 outline-none cursor-not-allowed">
                     </div>
-                    <div class="mb-6">
-                        <label class="block text-sm font-medium text-slate-700 mb-1">Catatan Tambahan (Opsional)</label>
-                        <textarea id="record-notes" placeholder="Pesan untuk Ustadz..." class="w-full border border-slate-300 rounded-xl p-3 focus:ring-2 focus:ring-emerald-500 outline-none resize-none h-20 text-sm"></textarea>
+                    <div>
+                        <label class="block text-xs font-bold text-slate-500 uppercase tracking-wider mb-1">Nama Lengkap</label>
+                        <input type="text" id="prof-name" required class="w-full border border-slate-300 rounded-xl p-3 focus:ring-2 focus:ring-emerald-500 outline-none text-slate-800">
                     </div>
-                    <button type="submit" id="btn-submit-record" class="w-full py-3.5 rounded-xl font-bold flex items-center justify-center gap-2 bg-emerald-600 text-white hover:bg-emerald-700 shadow-lg shadow-emerald-600/30 transition-all">
-                        <i class="fab fa-whatsapp text-lg"></i> Lanjut ke WhatsApp
+                    <div class="grid grid-cols-2 gap-4">
+                        <div>
+                            <label class="block text-xs font-bold text-slate-500 uppercase tracking-wider mb-1">No. WhatsApp/HP</label>
+                            <input type="text" id="prof-phone" placeholder="08..." class="w-full border border-slate-300 rounded-xl p-3 focus:ring-2 focus:ring-emerald-500 outline-none text-slate-800">
+                        </div>
+                        <div>
+                            <label class="block text-xs font-bold text-slate-500 uppercase tracking-wider mb-1">Jenis Kelamin</label>
+                            <select id="prof-gender" class="w-full border border-slate-300 rounded-xl p-3 focus:ring-2 focus:ring-emerald-500 outline-none text-slate-800 bg-white">
+                                <option value="">Pilih...</option>
+                                <option value="L">Laki-laki</option>
+                                <option value="P">Perempuan</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div>
+                        <label class="block text-xs font-bold text-slate-500 uppercase tracking-wider mb-1">Tempat, Tanggal Lahir</label>
+                        <input type="text" id="prof-ttl" placeholder="Bandung, 17 Agustus 2000" class="w-full border border-slate-300 rounded-xl p-3 focus:ring-2 focus:ring-emerald-500 outline-none text-slate-800">
+                    </div>
+                    <div>
+                        <label class="block text-xs font-bold text-slate-500 uppercase tracking-wider mb-1">Alamat Domisili</label>
+                        <textarea id="prof-address" rows="2" placeholder="Nama jalan, kota..." class="w-full border border-slate-300 rounded-xl p-3 focus:ring-2 focus:ring-emerald-500 outline-none text-slate-800 resize-none"></textarea>
+                    </div>
+                    <div class="pt-2 border-t border-slate-100">
+                        <label class="block text-xs font-bold text-slate-500 uppercase tracking-wider mb-1">Password Baru (Opsional)</label>
+                        <input type="text" id="prof-password" placeholder="Biarkan kosong jika tidak ingin diubah" class="w-full border border-slate-300 rounded-xl p-3 focus:ring-2 focus:ring-emerald-500 outline-none text-slate-800">
+                    </div>
+                    
+                    <button type="submit" class="w-full bg-emerald-600 hover:bg-emerald-700 text-white py-3.5 rounded-xl font-bold mt-4 transition-colors shadow-md">
+                        Simpan Perubahan Profil
                     </button>
                 </form>
             </div>
@@ -378,13 +371,12 @@
     </div>
 
     <script type="module">
-        import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
-        import { getFirestore, collection, onSnapshot, doc, setDoc, updateDoc, deleteDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
-        import { getAuth, signInAnonymously, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
+        import { getFirestore, collection, onSnapshot, doc, setDoc, updateDoc, deleteDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+        import { getAuth, signInAnonymously } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
 
-        // Konfigurasi Firebase Anda
         const firebaseConfig = {
-            apiKey: "AIzaSyBx_IaccYpCHrBwMAGm2hNHwiByyjsk_tw",
+            apiKey: "AIzaSyBx_IaccYpCHrBwMAGm2hNHwiByyjsk_tw", 
             authDomain: "tahsin-e9d67.firebaseapp.com",
             projectId: "tahsin-e9d67",
             storageBucket: "tahsin-e9d67.firebasestorage.app",
@@ -395,120 +387,21 @@
         const app = initializeApp(firebaseConfig);
         const db = getFirestore(app);
         const auth = getAuth(app);
-        
-        const appId = typeof __app_id !== 'undefined' ? __app_id : 'tahsin-mfb';
-        const BASE_PATH = `artifacts/${appId}/public/data`;
+        const BASE_PATH = "artifacts/tahsin_lms/public/data";
 
-        window.appState = {
-            currentUser: null,
-            profiles: [],
-            modules: [],
-            submissions: [],
-            adminTab: 'setoran',
-            santriTab: 'dashboard',
-            isFullscreen: false
-        };
+        // State Aplikasi
+        let currentUser = null;
+        let usersData = [];
+        let modulesData = [];
+        let submissionsData = [];
+        let adminTab = 'setoran';
+        let santriTab = 'dashboard';
 
-        // Buka koneksi Firebase setelah Anon Login berhasil
-        onAuthStateChanged(auth, (user) => {
-            if (user) {
-                onSnapshot(collection(db, `${BASE_PATH}/profiles`), (snapshot) => {
-                    window.appState.profiles = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
-                    if (window.appState.profiles.length === 0) seedInitialData();
-                    updateUI();
-                });
-
-                onSnapshot(collection(db, `${BASE_PATH}/modules`), (snapshot) => {
-                    window.appState.modules = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
-                    updateUI();
-                });
-
-                onSnapshot(collection(db, `${BASE_PATH}/submissions`), (snapshot) => {
-                    window.appState.submissions = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
-                    const ls = document.getElementById('loading-screen');
-                    if(ls) ls.classList.add('hidden');
-                    updateUI();
-                });
-            } else {
-                signInAnonymously(auth).catch(err => {
-                    console.error("Auth Failed:", err);
-                    alert("Gagal koneksi ke database. Pastikan Login Anonim aktif di Firebase.");
-                });
-            }
-        });
-
-        async function seedInitialData() {
-            await setDoc(doc(db, `${BASE_PATH}/profiles`, "admin_1"), {
-                role: 'admin', email: 'musyrif@tahsin.com', password: 'password123',
-                displayName: 'Ustadz Ahmad (Musyrif)', isApproved: true
-            });
-            await setDoc(doc(db, `${BASE_PATH}/profiles`, "santri_1"), {
-                role: 'santri', email: 'santri@tahsin.com', password: 'password123',
-                displayName: 'Budi Santoso', currentLevel: 'Jilid 2', totalHafalan: 12, progressPercentage: 45, isApproved: true
-            });
-        }
-
-        window.db = db;
-        window.doc = doc;
-        window.setDoc = setDoc;
-        window.updateDoc = updateDoc;
-        window.deleteDoc = deleteDoc;
-        window.serverTimestamp = serverTimestamp;
-        window.BASE_PATH = BASE_PATH;
-
-        function updateUI() {
-            const state = window.appState;
-            const loginV = document.getElementById('login-view');
-            const adminV = document.getElementById('admin-view');
-            const santriV = document.getElementById('santri-view');
-
-            if (!state.currentUser) {
-                if(loginV) { loginV.classList.remove('hidden'); loginV.classList.add('flex'); }
-                if(adminV) adminV.classList.add('hidden');
-                if(santriV) santriV.classList.add('hidden');
-                return;
-            }
-
-            if(loginV) { loginV.classList.add('hidden'); loginV.classList.remove('flex'); }
-
-            if (state.currentUser.role === 'admin') {
-                if(adminV) adminV.classList.remove('hidden');
-                if(santriV) santriV.classList.add('hidden');
-                
-                const wText = document.getElementById('admin-welcome-text');
-                if(wText) wText.innerText = `Ahlan, ${state.currentUser.displayName}`;
-                
-                document.querySelectorAll('.admin-tab').forEach(el => {
-                    el.classList.remove('border-white', 'text-white');
-                    el.classList.add('border-transparent', 'text-emerald-200');
-                });
-                const activeT = document.getElementById(`admin-tab-${state.adminTab}`);
-                if(activeT) { activeT.classList.remove('border-transparent', 'text-emerald-200'); activeT.classList.add('border-white', 'text-white'); }
-                
-                renderAdminContent();
-            } else {
-                if(adminV) adminV.classList.add('hidden');
-                if(santriV) santriV.classList.remove('hidden');
-                
-                document.querySelectorAll('.santri-tab').forEach(el => {
-                    el.classList.remove('bg-emerald-50', 'text-emerald-700');
-                    el.classList.add('text-slate-600');
-                });
-                const activeT = document.getElementById(`santri-tab-${state.santriTab}`);
-                if(activeT) { activeT.classList.remove('text-slate-600'); activeT.classList.add('bg-emerald-50', 'text-emerald-700'); }
-                
-                renderSantriContent();
-            }
-        }
-        window.updateUI = updateUI;
-    </script>
-
-    <script>
-        // Utilities
-        window.fillLogin = (email, password) => {
-            document.getElementById('login-email').value = email;
-            document.getElementById('login-password').value = password;
-        };
+        const authView = document.getElementById('auth-view');
+        const adminView = document.getElementById('admin-view');
+        const santriView = document.getElementById('santri-view');
+        const adminContent = document.getElementById('admin-content');
+        const santriContent = document.getElementById('santri-content');
 
         window.toggleAuthForm = (type) => {
             if(type === 'register') {
@@ -520,308 +413,383 @@
             }
         };
 
+        window.toggleSecretCode = () => {
+            const role = document.getElementById('reg-role').value;
+            const container = document.getElementById('secret-code-container');
+            if(role === 'admin') container.classList.remove('hidden');
+            else container.classList.add('hidden');
+        };
+
+        window.closeModal = (id) => document.getElementById(id).classList.add('hidden');
+        window.openModal = (id) => document.getElementById(id).classList.remove('hidden');
+
         window.toggleFullscreen = () => {
             try {
-                if (!document.fullscreenElement) {
-                    if (document.fullscreenEnabled) {
-                        const promise = document.documentElement.requestFullscreen();
-                        if (promise) promise.catch(err => console.warn("Layar penuh dicegah:", err));
-                        window.appState.isFullscreen = true;
-                    }
-                } else {
-                    if (document.exitFullscreen) {
-                        document.exitFullscreen().catch(err => console.warn(err));
-                        window.appState.isFullscreen = false;
-                    }
-                }
-                const cls = window.appState.isFullscreen ? 'fa-compress' : 'fa-expand';
-                ['fullscreen-icon-login', 'fullscreen-icon-admin', 'fullscreen-icon-santri-mobile'].forEach(id => {
-                    const el = document.getElementById(id);
-                    if (el) el.className = `fas ${cls}`;
-                });
-            } catch (err) { console.warn("Fullscreen API Error:", err); }
+                if (!document.fullscreenElement) document.documentElement.requestFullscreen().catch(()=>{});
+                else if (document.exitFullscreen) document.exitFullscreen();
+            } catch(e) {}
         };
 
-        window.closeModal = (id) => { const m = document.getElementById(id); if(m) m.classList.add('hidden'); };
-        window.openModal = (id) => { const m = document.getElementById(id); if(m) m.classList.remove('hidden'); };
+        function initDataListeners() {
+            onSnapshot(collection(db, `${BASE_PATH}/users`), (snap) => {
+                usersData = snap.docs.map(doc => ({id: doc.id, ...doc.data()}));
+                if(usersData.length === 0) seedInitialData();
+                else if(currentUser) {
+                    const freshUser = usersData.find(u => u.id === currentUser.id);
+                    if(freshUser) { currentUser = freshUser; updateUI(); }
+                }
+            });
+            onSnapshot(collection(db, `${BASE_PATH}/modules`), (snap) => {
+                modulesData = snap.docs.map(doc => ({id: doc.id, ...doc.data()}));
+                if(currentUser) updateUI();
+            });
+            onSnapshot(collection(db, `${BASE_PATH}/submissions`), (snap) => {
+                submissionsData = snap.docs.map(doc => ({id: doc.id, ...doc.data()}));
+                if(currentUser) updateUI();
+            });
+        }
 
-        window.setAdminTab = (tab) => { window.appState.adminTab = tab; window.updateUI(); };
-        window.setSantriTab = (tab) => { window.appState.santriTab = tab; window.updateUI(); };
+        async function seedInitialData() {
+            await setDoc(doc(db, `${BASE_PATH}/users`, "admin_1"), {
+                role: 'admin', email: 'musyrif@tahsin.com', password: 'password123',
+                displayName: 'Ustadz Ahmad (Musyrif)', isApproved: true, createdAt: Date.now()
+            });
+        }
 
-        // Authentication Logic
-        document.getElementById('login-form')?.addEventListener('submit', (e) => {
+        // Login anonim di background agar Firebase Rules (request.auth != null) mengizinkan akses data
+        signInAnonymously(auth).then(() => {
+            initDataListeners();
+        }).catch((error) => {
+            console.error("Gagal Autentikasi Anonim Firebase:", error);
+            alert("Koneksi ke database diblokir. Pastikan 'Anonymous Login' aktif di Firebase Auth.");
+        });
+
+        window.handleLogin = (e) => {
             e.preventDefault();
             const email = document.getElementById('login-email').value;
-            const pw = document.getElementById('login-password').value;
-            const errEl = document.getElementById('login-error');
+            const pass = document.getElementById('login-password').value;
+            const errDiv = document.getElementById('login-error');
             
-            const user = window.appState.profiles.find(p => p.email === email && p.password === pw);
-            
-            if (user) {
-                if (user.role === 'santri' && user.isApproved === false) {
-                    errEl.innerText = "Akun Anda sedang menunggu ACC dari Musyrif.";
-                    errEl.classList.remove('hidden');
+            const user = usersData.find(u => u.email === email && u.password === pass);
+            if(user) {
+                if(user.role === 'santri' && user.isApproved === false) {
+                    errDiv.innerHTML = "Akun Anda sedang <b>Menunggu ACC</b> dari Musyrif. Silakan hubungi Ustadz.";
+                    errDiv.classList.remove('hidden');
                 } else {
-                    window.appState.currentUser = user;
-                    errEl.classList.add('hidden');
-                    window.updateUI();
+                    currentUser = user;
+                    errDiv.classList.add('hidden');
+                    updateUI();
                 }
             } else {
-                errEl.innerText = "Email atau password salah!";
-                errEl.classList.remove('hidden');
+                errDiv.innerText = "Email atau password salah!";
+                errDiv.classList.remove('hidden');
             }
-        });
+        };
 
-        document.getElementById('register-form')?.addEventListener('submit', async (e) => {
+        window.handleRegister = async (e) => {
             e.preventDefault();
-            const btn = document.getElementById('btn-submit-reg');
-            btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Memproses...';
-            btn.disabled = true;
+            const role = document.getElementById('reg-role').value;
+            const name = document.getElementById('reg-name').value;
+            const email = document.getElementById('reg-email').value;
+            const pass = document.getElementById('reg-password').value;
+            const errDiv = document.getElementById('reg-error');
 
-            try {
-                const name = document.getElementById('reg-name').value;
-                const email = document.getElementById('reg-email').value;
-                const pass = document.getElementById('reg-password').value;
-                
-                // Cek email ganda
-                if(window.appState.profiles.find(p => p.email === email)) {
-                    alert("Email sudah terdaftar!");
+            if(usersData.find(u => u.email === email)) {
+                errDiv.innerText = "Email sudah terdaftar. Gunakan email lain.";
+                errDiv.classList.remove('hidden');
+                return;
+            }
+
+            let isApproved = false;
+            if(role === 'admin') {
+                const code = document.getElementById('reg-secret').value;
+                if(code !== 'GURU-TAHSIN-2026') {
+                    errDiv.innerText = "Kode Rahasia Ustadz salah!";
+                    errDiv.classList.remove('hidden');
                     return;
                 }
+                isApproved = true; // Admin otomatis ACC jika kode benar
+            }
 
-                await window.setDoc(window.doc(window.db, `${window.BASE_PATH}/profiles`, `santri_${Date.now()}`), {
-                    role: 'santri', displayName: name, email: email, password: pass,
-                    isApproved: false, // Menunggu ACC
-                    currentLevel: 'Jilid Dasar', totalHafalan: 0, progressPercentage: 0
-                });
+            const newId = `user_${Date.now()}`;
+            await setDoc(doc(db, `${BASE_PATH}/users`, newId), {
+                role, displayName: name, email, password: pass,
+                isApproved, currentLevel: 'Jilid 1', totalHafalan: 0, progressPercentage: 0,
+                createdAt: Date.now()
+            });
 
-                alert("Pendaftaran Berhasil! Silakan tunggu konfirmasi (ACC) dari Musyrif sebelum bisa Login.");
-                window.toggleAuthForm('login');
-                document.getElementById('register-form').reset();
-            } catch(err) { alert("Error: " + err.message); }
-            finally { btn.innerHTML = 'Daftar Sekarang'; btn.disabled = false; }
-        });
+            errDiv.classList.add('hidden');
+            alert(role === 'admin' ? "Pendaftaran berhasil. Silakan Login!" : "Pendaftaran berhasil. Silakan tunggu ACC dari Musyrif.");
+            window.toggleAuthForm('login');
+        };
 
         window.handleLogout = () => {
-            window.appState.currentUser = null;
+            currentUser = null;
             document.getElementById('login-form').reset();
-            window.updateUI();
+            updateUI();
         };
 
-        // Render Admin Views
-        function renderAdminContent() {
-            const area = document.getElementById('admin-content-area');
-            if(!area) return;
-            const tab = window.appState.adminTab;
-
-            if (tab === 'setoran') {
-                const subs = [...window.appState.submissions].sort((a, b) => b.createdAt - a.createdAt);
-                let listHtml = subs.length > 0 ? subs.map(sub => {
-                    const student = window.appState.profiles.find(p => p.id === sub.santriId);
-                    const isEval = sub.assessment?.status && sub.assessment.status !== 'pending';
-                    return `
-                        <li class="p-6 transition-colors border-b border-slate-100 last:border-0 hover:bg-slate-50">
-                            <div class="flex flex-col md:flex-row md:items-center justify-between gap-4">
-                                <div>
-                                    <div class="flex items-center gap-3 mb-1">
-                                        <h4 class="font-bold text-slate-800 text-lg">${student?.displayName || 'Tidak Dikenal'}</h4>
-                                        <span class="text-xs px-2.5 py-1 rounded-full font-bold ${isEval ? 'bg-emerald-100 text-emerald-700' : 'bg-amber-100 text-amber-700'}">${isEval ? 'Sudah Dinilai' : 'Perlu Penilaian'}</span>
-                                    </div>
-                                    <p class="font-medium text-slate-700">${sub.title}</p>
-                                    <p class="text-slate-500 text-sm italic mt-1">Dikirim via WhatsApp</p>
-                                </div>
-                                <button onclick="openEvalModal('${sub.id}')" class="px-5 py-2.5 rounded-xl font-semibold flex items-center gap-2 transition-all shadow-sm ${isEval ? 'bg-white border border-slate-200 text-slate-700' : 'bg-emerald-600 text-white shadow-emerald-600/20'}">
-                                    <i class="fas fa-check-circle"></i> ${isEval ? 'Lihat/Edit Nilai' : 'Beri Nilai & Feedback'}
-                                </button>
-                            </div>
-                        </li>`;
-                }).join('') : `<div class="p-12 text-center text-slate-500"><i class="fas fa-check-circle text-5xl text-slate-300 mb-3 block"></i><p>Tidak ada antrean setoran</p></div>`;
-
-                area.innerHTML = `<div class="bg-white rounded-2xl shadow-sm border border-slate-200 overflow-hidden"><div class="p-6 border-b border-slate-100"><h3 class="text-xl font-bold flex items-center gap-2"><i class="fab fa-whatsapp text-emerald-600"></i> Antrean Setoran (WA)</h3></div><ul class="divide-y divide-slate-100">${listHtml}</ul></div>`;
+        function updateUI() {
+            if(!currentUser) {
+                authView.classList.remove('hidden');
+                adminView.classList.add('hidden');
+                santriView.classList.add('hidden');
+                return;
+            }
+            authView.classList.add('hidden');
             
-            } else if (tab === 'santri') {
-                const santris = window.appState.profiles.filter(p => p.role === 'santri');
-                const rowsHtml = santris.map(s => `
-                    <tr class="border-b border-slate-100 hover:bg-slate-50">
-                        <td class="p-4">
-                            <div class="font-medium text-slate-800 flex items-center gap-2">
-                                ${s.displayName} 
-                                ${s.isApproved === false ? '<span class="text-[10px] bg-amber-100 text-amber-700 px-2 py-0.5 rounded font-bold">Menunggu ACC</span>' : ''}
-                            </div>
-                            <span class="text-xs text-slate-400 font-normal">${s.email}</span>
-                            <div class="text-[10px] text-slate-500 mt-1">${s.noHp ? `<i class="fab fa-whatsapp"></i> ${s.noHp}` : 'No HP -'} | ${s.jenisKelamin || 'JK -'}</div>
-                        </td>
-                        <td class="p-4 text-emerald-600 font-medium text-sm">${s.currentLevel}</td>
-                        <td class="p-4 text-slate-600 text-sm">${s.totalHafalan} Srt</td>
-                        <td class="p-4">
-                            <div class="flex items-center gap-2"><div class="w-16 h-1.5 bg-slate-200 rounded-full"><div class="h-full bg-emerald-500" style="width: ${s.progressPercentage}%"></div></div><span class="text-xs font-medium">${s.progressPercentage}%</span></div>
-                        </td>
-                        <td class="p-4 text-right">
-                            <div class="flex justify-end gap-1">
-                                ${s.isApproved === false ? `<button onclick="approveSantri('${s.id}')" title="Terima Santri" class="p-2 text-emerald-600 bg-emerald-50 hover:bg-emerald-100 rounded-lg"><i class="fas fa-check"></i></button>` : ''}
-                                <button onclick="openSantriModal('${s.id}')" title="Edit" class="p-2 text-blue-600 bg-blue-50 hover:bg-blue-100 rounded-lg"><i class="fas fa-edit"></i></button>
-                                <button onclick="deleteSantri('${s.id}')" title="Hapus" class="p-2 text-rose-600 bg-rose-50 hover:bg-rose-100 rounded-lg"><i class="fas fa-trash-alt"></i></button>
-                            </div>
-                        </td>
-                    </tr>`).join('');
+            if(currentUser.role === 'admin') {
+                adminView.classList.remove('hidden');
+                santriView.classList.add('hidden');
+                renderAdmin();
+            } else {
+                adminView.classList.add('hidden');
+                santriView.classList.remove('hidden');
+                renderSantri();
+            }
+        }
 
-                area.innerHTML = `
+        window.setAdminTab = (tab) => { adminTab = tab; renderAdmin(); };
+        window.setSantriTab = (tab) => { santriTab = tab; renderSantri(); };
+
+        function renderAdmin() {
+            ['setoran', 'santri', 'materi'].forEach(t => {
+                const el = document.getElementById(`tab-admin-${t}`);
+                if(t === adminTab) el.className = "pb-3 px-2 text-sm font-bold border-b-4 border-white text-white whitespace-nowrap";
+                else el.className = "pb-3 px-2 text-sm font-bold border-b-4 border-transparent text-emerald-200 hover:text-white whitespace-nowrap";
+            });
+
+            if(adminTab === 'santri') {
+                const santriList = usersData.filter(u => u.role === 'santri').sort((a,b) => (a.isApproved === b.isApproved) ? 0 : a.isApproved ? 1 : -1);
+                adminContent.innerHTML = `
                     <div class="bg-white rounded-2xl shadow-sm border border-slate-200 p-6">
                         <div class="flex justify-between items-center mb-6">
-                            <h3 class="text-xl font-bold flex items-center gap-2"><i class="fas fa-users text-emerald-600"></i> Manajemen Santri</h3>
-                            <button onclick="openSantriModal()" class="flex items-center gap-2 bg-emerald-100 text-emerald-700 hover:bg-emerald-200 px-4 py-2 rounded-xl font-medium"><i class="fas fa-user-plus"></i> Tambah</button>
+                            <h3 class="text-xl font-bold text-slate-800"><i class="fa-solid fa-users text-emerald-600 mr-2"></i> Manajemen Santri</h3>
+                            <button onclick="window.openSantriModal()" class="bg-emerald-100 text-emerald-700 hover:bg-emerald-200 px-4 py-2 rounded-xl font-medium text-sm transition-colors"><i class="fa-solid fa-user-plus mr-1"></i> Tambah Manual</button>
                         </div>
-                        <div class="overflow-x-auto"><table class="w-full text-left border-collapse"><thead><tr class="bg-slate-50 text-slate-500 border-b border-slate-200"><th class="p-4 font-medium">Santri & Kontak</th><th class="p-4 font-medium">Level</th><th class="p-4 font-medium">Hafalan</th><th class="p-4 font-medium">Progres</th><th class="p-4 text-right">Aksi</th></tr></thead><tbody>${rowsHtml}</tbody></table></div>
-                    </div>`;
-            } else if (tab === 'materi') {
-                const mods = window.appState.modules;
-                const cardsHtml = mods.length > 0 ? mods.map(m => `
-                    <div class="border border-slate-200 rounded-xl p-4 flex flex-col justify-between bg-slate-50">
-                        <div>
-                            <span class="text-xs font-bold text-emerald-700 bg-emerald-100 px-2 py-1 rounded-md mb-2 inline-block">${m.level}</span>
-                            <h4 class="font-bold text-lg text-slate-800 mb-1">${m.title}</h4>
-                            <p class="text-sm text-slate-600 line-clamp-2">${m.description}</p>
-                            ${m.fileUrl ? `<span class="mt-2 text-xs font-medium text-blue-600 flex items-center gap-1"><i class="fas fa-paperclip"></i> Lampiran</span>` : ''}
+                        <div class="overflow-x-auto">
+                            <table class="w-full text-left text-sm">
+                                <thead>
+                                    <tr class="bg-slate-50 text-slate-500 border-b border-slate-200">
+                                        <th class="p-4 font-medium rounded-tl-xl">Nama & Identitas</th>
+                                        <th class="p-4 font-medium">Status / Jilid</th>
+                                        <th class="p-4 font-medium">Progres</th>
+                                        <th class="p-4 font-medium text-right rounded-tr-xl">Aksi</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    ${santriList.length === 0 ? `<tr><td colspan="4" class="p-8 text-center text-slate-400">Belum ada data santri</td></tr>` : 
+                                    santriList.map(s => `
+                                        <tr class="border-b border-slate-100 hover:bg-slate-50">
+                                            <td class="p-4">
+                                                <div class="font-bold text-slate-800">${s.displayName}</div>
+                                                <div class="text-xs text-slate-500 mt-1">${s.email}</div>
+                                                ${s.phone ? `<div class="text-xs text-emerald-600 font-medium"><i class="fa-brands fa-whatsapp"></i> ${s.phone}</div>` : ''}
+                                                ${s.gender ? `<div class="text-xs text-slate-400 font-medium mt-1"><i class="fa-solid fa-person"></i> ${s.gender === 'L' ? 'Laki-laki' : 'Perempuan'}</div>` : ''}
+                                            </td>
+                                            <td class="p-4">
+                                                ${!s.isApproved 
+                                                    ? `<span class="bg-amber-100 text-amber-700 text-xs font-bold px-2 py-1 rounded-full"><i class="fa-solid fa-hourglass-half"></i> Menunggu ACC</span>` 
+                                                    : `<span class="text-emerald-700 font-bold">${s.currentLevel || '-'}</span><br><span class="text-xs text-slate-500">${s.totalHafalan || 0} Surat</span>`
+                                                }
+                                            </td>
+                                            <td class="p-4">
+                                                <div class="flex items-center gap-2 w-32">
+                                                    <div class="w-full h-2 bg-slate-200 rounded-full overflow-hidden"><div class="h-full bg-emerald-500 rounded-full" style="width: ${s.progressPercentage || 0}%"></div></div>
+                                                    <span class="text-xs font-bold text-slate-600">${s.progressPercentage || 0}%</span>
+                                                </div>
+                                            </td>
+                                            <td class="p-4 text-right">
+                                                ${!s.isApproved ? `<button onclick="window.approveSantri('${s.id}')" class="p-2 text-white bg-amber-500 hover:bg-amber-600 rounded-lg mr-1" title="Setujui Akun (ACC)"><i class="fa-solid fa-check"></i> ACC</button>` : ''}
+                                                <button onclick="window.openSantriModal('${s.id}')" class="p-2 text-blue-600 bg-blue-50 hover:bg-blue-100 rounded-lg mr-1" title="Edit"><i class="fa-solid fa-pen"></i></button>
+                                                <button onclick="window.deleteSantri('${s.id}')" class="p-2 text-rose-600 bg-rose-50 hover:bg-rose-100 rounded-lg" title="Hapus"><i class="fa-solid fa-trash"></i></button>
+                                            </td>
+                                        </tr>
+                                    `).join('')}
+                                </tbody>
+                            </table>
                         </div>
-                        <div class="flex justify-end gap-2 mt-4 pt-4 border-t border-slate-200">
-                            <button onclick="openModuleModal('${m.id}')" class="p-2 text-blue-600 bg-blue-100 hover:bg-blue-200 rounded-lg"><i class="fas fa-edit"></i></button>
-                            <button onclick="deleteModule('${m.id}')" class="p-2 text-rose-600 bg-rose-100 hover:bg-rose-200 rounded-lg"><i class="fas fa-trash-alt"></i></button>
+                    </div>
+                `;
+            } 
+            else if(adminTab === 'materi') {
+                const sortedModules = [...modulesData].sort((a,b) => b.createdAt - a.createdAt);
+                adminContent.innerHTML = `
+                    <div class="bg-white rounded-2xl shadow-sm border border-slate-200 p-6">
+                        <div class="flex justify-between items-center mb-6">
+                            <h3 class="text-xl font-bold text-slate-800"><i class="fa-solid fa-book-open text-emerald-600 mr-2"></i> Materi & Silabus</h3>
+                            <button onclick="window.openModuleModal()" class="bg-emerald-600 text-white hover:bg-emerald-700 px-4 py-2 rounded-xl font-medium text-sm shadow-sm transition-colors"><i class="fa-solid fa-plus mr-1"></i> Tambah Materi</button>
                         </div>
-                    </div>`).join('') : '<div class="col-span-2 text-center py-10 text-slate-500 border border-dashed rounded-xl">Belum ada materi.</div>';
-                
-                area.innerHTML = `<div class="bg-white rounded-2xl shadow-sm border border-slate-200 p-6"><div class="flex justify-between items-center mb-6"><h3 class="text-xl font-bold flex items-center gap-2"><i class="fas fa-book-open text-emerald-600"></i> Modul</h3><button onclick="openModuleModal()" class="flex items-center gap-2 bg-emerald-600 text-white px-4 py-2 rounded-xl font-medium"><i class="fas fa-plus"></i> Tambah</button></div><div class="grid grid-cols-1 md:grid-cols-2 gap-4">${cardsHtml}</div></div>`;
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                            ${sortedModules.length === 0 ? `<div class="col-span-2 p-12 text-center border-2 border-dashed border-slate-200 rounded-2xl text-slate-400">Belum ada materi.</div>` :
+                            sortedModules.map(m => `
+                                <div class="border border-slate-200 rounded-xl p-5 flex flex-col justify-between bg-slate-50 hover:shadow-md transition-shadow">
+                                    <div>
+                                        <span class="text-xs font-bold text-emerald-700 bg-emerald-100 px-2 py-1 rounded-md mb-2 inline-block">${m.level}</span>
+                                        <h4 class="font-bold text-lg text-slate-800 mb-1">${m.title}</h4>
+                                        <p class="text-sm text-slate-500 line-clamp-2">${m.description}</p>
+                                        ${m.fileUrl ? `<span class="mt-3 text-xs font-medium text-blue-600 bg-blue-50 px-2 py-1 rounded inline-block"><i class="fa-solid fa-paperclip"></i> Ada Lampiran</span>` : ''}
+                                    </div>
+                                    <div class="flex justify-end gap-2 mt-4 pt-4 border-t border-slate-200">
+                                        <button onclick="window.openModuleModal('${m.id}')" class="px-3 py-1.5 text-sm font-medium text-blue-600 bg-blue-100 hover:bg-blue-200 rounded-lg"><i class="fa-solid fa-pen"></i> Edit</button>
+                                        <button onclick="window.deleteModule('${m.id}')" class="px-3 py-1.5 text-sm font-medium text-rose-600 bg-rose-100 hover:bg-rose-200 rounded-lg"><i class="fa-solid fa-trash"></i></button>
+                                    </div>
+                                </div>
+                            `).join('')}
+                        </div>
+                    </div>
+                `;
+            }
+            else { 
+                const subs = [...submissionsData].sort((a,b) => b.createdAt - a.createdAt);
+                adminContent.innerHTML = `
+                    <div class="bg-white rounded-2xl shadow-sm border border-slate-200 p-6">
+                        <h3 class="text-xl font-bold text-slate-800 mb-6 border-b border-slate-100 pb-4"><i class="fa-solid fa-microphone-lines text-emerald-600 mr-2"></i> Antrean Setoran</h3>
+                        ${subs.length === 0 ? `<div class="p-12 text-center text-slate-400"><i class="fa-solid fa-check-circle text-4xl mb-3 opacity-50"></i><p>Belum ada setoran masuk.</p></div>` :
+                        `<ul class="divide-y divide-slate-100">
+                            ${subs.map(sub => {
+                                const student = usersData.find(u => u.id === sub.santriId);
+                                const isEval = sub.assessment?.status && sub.assessment.status !== 'pending';
+                                return `
+                                <li class="py-5 flex flex-col md:flex-row justify-between gap-4 items-start md:items-center">
+                                    <div>
+                                        <div class="flex items-center gap-3 mb-1">
+                                            <h4 class="font-bold text-slate-800 text-lg">${student?.displayName || 'Santri Terhapus'}</h4>
+                                            <span class="text-xs px-2.5 py-1 rounded-full font-bold ${isEval ? 'bg-emerald-100 text-emerald-700' : 'bg-amber-100 text-amber-700'}">${isEval ? 'Sudah Dinilai' : 'Perlu Penilaian'}</span>
+                                        </div>
+                                        <p class="text-slate-600 font-medium text-sm mb-1">${sub.title}</p>
+                                        <div class="text-xs text-slate-500 bg-slate-100 p-2 rounded-lg inline-block mt-2">
+                                            <i class="fa-brands fa-whatsapp text-green-500 text-sm mr-1"></i> Dikirim via WhatsApp
+                                        </div>
+                                    </div>
+                                    <button onclick="window.openEvalModal('${sub.id}')" class="px-5 py-2.5 rounded-xl font-bold flex items-center gap-2 text-sm transition-colors ${isEval ? 'bg-slate-100 text-slate-600 hover:bg-slate-200' : 'bg-emerald-600 text-white hover:bg-emerald-700 shadow-sm'}">
+                                        <i class="fa-solid fa-${isEval ? 'pen' : 'check'}"></i> ${isEval ? 'Ubah Nilai' : 'Beri Nilai'}
+                                    </button>
+                                </li>`
+                            }).join('')}
+                        </ul>`}
+                    </div>
+                `;
             }
         }
 
-        // Render Santri Views
-        function renderSantriContent() {
-            const area = document.getElementById('santri-content-area');
-            if(!area) return;
-            const tab = window.appState.santriTab;
-            const user = window.appState.currentUser;
+        function renderSantri() {
+            ['dashboard', 'materi', 'riwayat'].forEach(t => {
+                const elDesktop = document.getElementById(`tab-santri-${t}`);
+                if(elDesktop) elDesktop.className = `w-full flex items-center gap-3 px-4 py-3 rounded-xl font-bold transition-colors ${t === santriTab ? 'bg-emerald-50 text-emerald-700' : 'text-slate-600 hover:bg-slate-50 font-medium'}`;
+            });
 
-            if (tab === 'dashboard') {
-                area.innerHTML = `
-                    <div class="space-y-6">
-                        <div class="bg-gradient-to-r from-emerald-600 to-teal-600 rounded-3xl p-8 text-white shadow-lg relative overflow-hidden">
-                            <div class="relative z-10 flex flex-col md:flex-row md:items-center justify-between gap-6">
-                                <div><h2 class="text-3xl font-bold mb-2">Ahlan, ${user.displayName}</h2><p class="text-emerald-100 text-lg">Semoga istiqomah memperbaiki bacaan Al-Qur'an.</p>
-                                    <div class="mt-6 flex flex-wrap gap-3"><span class="bg-black/20 px-4 py-2 rounded-xl text-sm font-semibold flex items-center gap-2"><i class="fas fa-book-open"></i> Level: ${user.currentLevel || 'Dasar'}</span><span class="bg-black/20 px-4 py-2 rounded-xl text-sm font-semibold flex items-center gap-2"><i class="fas fa-check-circle"></i> Hafalan: ${user.totalHafalan || 0} Surat</span></div>
-                                </div>
-                                <div class="bg-white/10 backdrop-blur-md p-6 rounded-2xl border border-white/20 text-center w-full md:w-48">
-                                    <div class="text-4xl font-black mb-1">${user.progressPercentage || 0}%</div><div class="text-emerald-100 text-sm font-medium">Progres</div>
-                                    <div class="w-full bg-black/30 h-1.5 rounded-full mt-3 overflow-hidden"><div class="bg-white h-full rounded-full" style="width: ${user.progressPercentage || 0}%"></div></div>
+            if(santriTab === 'materi') {
+                const sortedModules = [...modulesData].sort((a,b) => b.createdAt - a.createdAt);
+                santriContent.innerHTML = `
+                    <h2 class="text-2xl font-bold text-slate-800 mb-6"><i class="fa-solid fa-book-open text-emerald-600 mr-2"></i> Modul Pembelajaran</h2>
+                    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                        ${sortedModules.map(m => `
+                            <div class="bg-white rounded-2xl p-6 shadow-sm border border-slate-100 hover:shadow-md transition-all flex flex-col h-full group">
+                                <span class="inline-block px-3 py-1 bg-emerald-100 text-emerald-800 text-xs font-bold rounded-full mb-3 w-max">${m.level}</span>
+                                <h3 class="font-bold text-lg text-slate-800 mb-2 group-hover:text-emerald-600 transition-colors">${m.title}</h3>
+                                <p class="text-slate-500 text-sm line-clamp-3 mb-4">${m.description}</p>
+                                <div class="mt-auto pt-4 border-t border-slate-100">
+                                    <button onclick="window.openLearningModal('${m.id}')" class="w-full py-2 bg-slate-50 hover:bg-emerald-50 text-emerald-700 font-bold rounded-xl text-sm transition-colors border border-slate-100 hover:border-emerald-200">
+                                        Mulai Belajar <i class="fa-solid fa-arrow-right ml-1"></i>
+                                    </button>
                                 </div>
                             </div>
-                        </div>
-                        <div class="flex flex-col sm:flex-row gap-4">
-                            <button onclick="openModal('modal-record')" class="flex-1 bg-white hover:bg-emerald-50 border-2 border-emerald-100 transition-all p-6 rounded-2xl flex flex-col items-center justify-center gap-3 group">
-                                <div class="bg-emerald-100 text-emerald-600 p-4 rounded-full group-hover:scale-110 group-hover:bg-emerald-600 group-hover:text-white transition-all"><i class="fab fa-whatsapp text-2xl"></i></div>
-                                <span class="font-bold text-slate-800 text-lg group-hover:text-emerald-700">Setor via WhatsApp</span>
-                            </button>
-                            <button onclick="setSantriTab('materi')" class="flex-1 bg-white hover:bg-emerald-50 border-2 border-slate-100 transition-all p-6 rounded-2xl flex flex-col items-center justify-center gap-3 group">
-                                <div class="bg-slate-100 text-slate-600 p-4 rounded-full group-hover:scale-110 group-hover:bg-emerald-600 group-hover:text-white transition-all"><i class="fas fa-book-open text-2xl"></i></div>
-                                <span class="font-bold text-slate-800 text-lg group-hover:text-emerald-700">Lanjutkan Belajar</span>
-                            </button>
-                        </div>
-                    </div>`;
-            } else if (tab === 'materi') {
-                const mods = window.appState.modules;
-                const cardsHtml = mods.length > 0 ? mods.map(m => `
-                    <div class="bg-white rounded-2xl p-6 shadow-sm border border-slate-100 flex flex-col h-full">
-                        <div class="mb-4"><span class="inline-block px-3 py-1 bg-emerald-100 text-emerald-800 text-xs font-bold rounded-full mb-3">${m.level}</span><h3 class="font-bold text-lg text-slate-800 mb-2">${m.title}</h3><p class="text-slate-500 text-sm line-clamp-2">${m.description}</p></div>
-                        <div class="mt-auto pt-4 border-t border-slate-100 flex items-center justify-between"><span class="text-xs text-slate-400"><i class="fas fa-clock"></i> Modul Aktif</span><button onclick="readModule('${m.id}')" class="text-emerald-600 font-semibold text-sm hover:text-emerald-700">Pelajari <i class="fas fa-play"></i></button></div>
-                    </div>`).join('') : '<div class="col-span-full text-center py-12 bg-white rounded-2xl border text-slate-500">Belum ada materi.</div>';
-                area.innerHTML = `<div class="space-y-6"><h2 class="text-2xl font-bold flex items-center gap-2"><i class="fas fa-book-open text-emerald-600"></i> Modul Pembelajaran</h2><div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">${cardsHtml}</div></div>`;
-            } else if (tab === 'riwayat') {
-                const subs = window.appState.submissions.filter(s => s.santriId === user.id).sort((a, b) => b.createdAt - a.createdAt);
-                const listHtml = subs.length > 0 ? subs.map(sub => {
-                    const isEval = sub.assessment?.status && sub.assessment.status !== 'pending';
-                    const isAppr = sub.assessment?.status === 'approved';
-                    const bClass = isEval ? (isAppr ? 'bg-emerald-100 text-emerald-700' : 'bg-rose-100 text-rose-700') : 'bg-amber-100 text-amber-700';
-                    return `
-                        <li class="p-6 border-b border-slate-100">
-                            <div class="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-4">
-                                <div><h4 class="font-bold text-slate-800 text-lg mb-1">${sub.title}</h4><p class="text-sm text-slate-500"><i class="fas fa-clock"></i> ${new Date(sub.createdAt).toLocaleString('id-ID')}</p></div>
-                                <span class="inline-flex px-3 py-1.5 rounded-full text-sm font-bold items-center gap-1.5 w-max ${bClass}">${isEval ? (isAppr ? '<i class="fas fa-check-circle"></i> Diterima' : '<i class="fas fa-times-circle"></i> Perlu Perbaikan') : '<i class="fas fa-clock"></i> Menunggu Penilaian'}</span>
+                        `).join('')}
+                    </div>
+                `;
+            } 
+            else if(santriTab === 'riwayat') {
+                const mySubs = submissionsData.filter(s => s.santriId === currentUser.id).sort((a,b) => b.createdAt - a.createdAt);
+                santriContent.innerHTML = `
+                    <h2 class="text-2xl font-bold text-slate-800 mb-6"><i class="fa-solid fa-clock-rotate-left text-emerald-600 mr-2"></i> Riwayat Setoran</h2>
+                    <div class="bg-white rounded-2xl shadow-sm border border-slate-100">
+                        ${mySubs.length === 0 ? `<div class="p-12 text-center text-slate-400">Belum ada riwayat setoran.</div>` :
+                        `<ul class="divide-y divide-slate-100">
+                            ${mySubs.map(s => {
+                                const isEval = s.assessment?.status && s.assessment.status !== 'pending';
+                                const isApproved = s.assessment?.status === 'approved';
+                                return `
+                                <li class="p-6">
+                                    <div class="flex flex-col md:flex-row justify-between gap-4 mb-3">
+                                        <div>
+                                            <h4 class="font-bold text-slate-800 text-lg">${s.title}</h4>
+                                            <p class="text-xs text-slate-500 mt-1">${new Date(s.createdAt).toLocaleString('id-ID')}</p>
+                                        </div>
+                                        <span class="inline-flex px-3 py-1.5 rounded-full text-xs font-bold items-center gap-1.5 h-max w-max ${isEval ? (isApproved ? 'bg-emerald-100 text-emerald-700' : 'bg-rose-100 text-rose-700') : 'bg-amber-100 text-amber-700'}">
+                                            <i class="fa-solid fa-${isEval ? (isApproved ? 'check' : 'xmark') : 'clock'}"></i>
+                                            ${isEval ? (isApproved ? 'Lulus / Diterima' : 'Perlu Perbaikan') : 'Menunggu Penilaian'}
+                                        </span>
+                                    </div>
+                                    ${s.notes ? `<div class="text-sm text-slate-600 italic bg-slate-50 p-3 rounded-lg border-l-2 border-slate-300">" ${s.notes} "</div>` : ''}
+                                    
+                                    ${isEval ? `
+                                        <div class="mt-4 bg-emerald-50 border border-emerald-100 p-4 rounded-xl">
+                                            <div class="flex items-center gap-3 mb-2">
+                                                <h5 class="font-bold text-emerald-800 text-sm"><i class="fa-solid fa-comment-dots mr-1"></i> Feedback Musyrif</h5>
+                                                ${s.assessment.score ? `<span class="text-xs font-bold text-white bg-emerald-600 px-2 py-0.5 rounded shadow-sm">Nilai: ${s.assessment.score}</span>` : ''}
+                                            </div>
+                                            <p class="text-sm text-emerald-900 whitespace-pre-wrap">${s.assessment.feedback || '-'}</p>
+                                        </div>
+                                    ` : ''}
+                                </li>`
+                            }).join('')}
+                        </ul>`}
+                    </div>
+                `;
+            }
+            else { 
+                santriContent.innerHTML = `
+                    <div class="bg-gradient-to-r from-emerald-600 to-teal-600 rounded-3xl p-8 text-white shadow-lg relative overflow-hidden mb-8">
+                        <div class="absolute top-0 right-0 opacity-10 transform translate-x-1/4 -translate-y-1/4"><i class="fa-solid fa-book-quran text-9xl"></i></div>
+                        <div class="relative z-10 flex flex-col md:flex-row md:items-center justify-between gap-6">
+                            <div>
+                                <h2 class="text-3xl font-bold mb-2">Ahlan wa Sahlan, ${currentUser.displayName}</h2>
+                                <p class="text-emerald-100">Semoga istiqomah memperbaiki bacaan Al-Qur'an.</p>
+                                <div class="mt-5 flex flex-wrap gap-3">
+                                    <span class="bg-black/20 backdrop-blur-md px-4 py-2 rounded-xl text-sm font-semibold"><i class="fa-solid fa-layer-group mr-1"></i> Level: ${currentUser.currentLevel || 'Dasar'}</span>
+                                    <span class="bg-black/20 backdrop-blur-md px-4 py-2 rounded-xl text-sm font-semibold"><i class="fa-solid fa-award mr-1"></i> Hafalan: ${currentUser.totalHafalan || 0} Surat</span>
+                                </div>
                             </div>
-                            <p class="text-sm text-slate-500 italic mb-2"><i class="fab fa-whatsapp"></i> Media: Rekaman dikirim via WA</p>
-                            ${sub.submissionData?.notesFromSantri ? `<div class="bg-slate-50 border-l-4 border-emerald-400 p-3"><p class="text-sm text-slate-700 italic">Catatan Anda: "${sub.submissionData.notesFromSantri}"</p></div>` : ''}
-                            ${isEval ? `<div class="mt-4 bg-emerald-50 border border-emerald-100 p-4 rounded-xl"><div class="flex items-center gap-3 mb-2"><h5 class="font-bold text-emerald-800"><i class="fas fa-shield-alt"></i> Feedback Musyrif</h5>${sub.assessment.score ? `<span class="text-xs font-bold bg-white border px-2.5 py-1 rounded-full">Nilai: ${sub.assessment.score}</span>` : ''}</div><p class="text-sm text-emerald-900 whitespace-pre-wrap">${sub.assessment.feedback || '-'}</p></div>` : ''}
-                        </li>`;
-                }).join('') : `<div class="text-center py-12 text-slate-500"><p>Belum ada riwayat setoran.</p></div>`;
-                area.innerHTML = `<div class="space-y-6"><h2 class="text-2xl font-bold flex items-center gap-2"><i class="fas fa-clock text-emerald-600"></i> Riwayat Setoran</h2><div class="bg-white rounded-2xl shadow-sm border overflow-hidden"><ul class="divide-y divide-slate-100">${listHtml}</ul></div></div>`;
+                            <div class="bg-white/10 backdrop-blur-md p-6 rounded-2xl border border-white/20 text-center min-w-[160px]">
+                                <div class="text-4xl font-black mb-1">${currentUser.progressPercentage || 0}%</div>
+                                <div class="text-emerald-100 text-xs font-medium uppercase tracking-wider">Progres Belajar</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                        <button onclick="window.openModal('record-modal')" class="bg-white hover:bg-emerald-50 border-2 border-emerald-100 hover:border-emerald-300 transition-all p-8 rounded-3xl flex flex-col items-center justify-center gap-4 group shadow-sm">
+                            <div class="w-16 h-16 bg-emerald-100 text-emerald-600 rounded-full flex items-center justify-center group-hover:scale-110 group-hover:bg-emerald-600 group-hover:text-white transition-all"><i class="fa-solid fa-microphone-lines text-2xl"></i></div>
+                            <span class="font-bold text-slate-800 text-lg group-hover:text-emerald-700">Setor Hafalan Baru</span>
+                        </button>
+                        <button onclick="window.setSantriTab('materi')" class="bg-white hover:bg-slate-50 border-2 border-slate-100 hover:border-slate-300 transition-all p-8 rounded-3xl flex flex-col items-center justify-center gap-4 group shadow-sm">
+                            <div class="w-16 h-16 bg-slate-100 text-slate-600 rounded-full flex items-center justify-center group-hover:scale-110 group-hover:bg-slate-600 group-hover:text-white transition-all"><i class="fa-solid fa-book-open text-2xl"></i></div>
+                            <span class="font-bold text-slate-800 text-lg group-hover:text-slate-700">Lanjutkan Belajar</span>
+                        </button>
+                    </div>
+                `;
             }
         }
 
-        // Modals & Form Actions
-        
-        // Form Profile (Santri & Admin)
-        window.openProfileModal = () => {
-            const user = window.appState.currentUser;
-            if(!user) return;
-            document.getElementById('profile-name').value = user.displayName || '';
-            document.getElementById('profile-email').value = user.email || '';
-            document.getElementById('profile-tempat-lahir').value = user.tempatLahir || '';
-            document.getElementById('profile-tanggal-lahir').value = user.tanggalLahir || '';
-            document.getElementById('profile-jk').value = user.jenisKelamin || '';
-            document.getElementById('profile-hp').value = user.noHp || '';
-            document.getElementById('profile-alamat').value = user.alamat || '';
-            document.getElementById('profile-password').value = user.password || '';
-            openModal('modal-profile');
-        };
-
-        document.getElementById('form-profile')?.addEventListener('submit', async (e) => {
-            e.preventDefault();
-            const btn = document.getElementById('btn-submit-profile');
-            const oText = btn.innerHTML;
-            btn.innerHTML = 'Menyimpan...'; btn.disabled = true;
-            try {
-                const user = window.appState.currentUser;
-                const updateData = {
-                    displayName: document.getElementById('profile-name').value,
-                    tempatLahir: document.getElementById('profile-tempat-lahir').value,
-                    tanggalLahir: document.getElementById('profile-tanggal-lahir').value,
-                    jenisKelamin: document.getElementById('profile-jk').value,
-                    noHp: document.getElementById('profile-hp').value,
-                    alamat: document.getElementById('profile-alamat').value,
-                    password: document.getElementById('profile-password').value
-                };
-                await window.updateDoc(window.doc(window.db, `${window.BASE_PATH}/profiles`, user.id), updateData);
-                Object.assign(user, updateData); // update local state
-                closeModal('modal-profile');
-                alert('Profil berhasil diperbarui!');
-                window.updateUI();
-            } catch(err) { alert(err.message); }
-            finally { btn.innerHTML = oText; btn.disabled = false; }
-        });
-
-        // Form Admin - Manage Santri
         window.openSantriModal = (id = null) => {
-            document.getElementById('form-santri').reset();
-            document.getElementById('santri-id').value = id || '';
-            document.getElementById('modal-santri-title').innerText = id ? 'Edit Data Santri' : 'Tambah Santri Baru';
-            
-            const authFields = document.getElementById('santri-auth-fields');
-            const emailInput = document.getElementById('santri-email');
-            const passInput = document.getElementById('santri-password');
-
-            if (id) {
-                const s = window.appState.profiles.find(p => p.id === id);
+            const form = document.getElementById('form-santri');
+            form.reset();
+            if(id) {
+                const s = usersData.find(u => u.id === id);
+                document.getElementById('santri-id').value = id;
                 document.getElementById('santri-name').value = s.displayName;
-                document.getElementById('santri-level').value = s.currentLevel;
-                document.getElementById('santri-hafalan').value = s.totalHafalan;
-                document.getElementById('santri-progress').value = s.progressPercentage;
-                authFields.classList.add('hidden');
-                emailInput.required = false; passInput.required = false;
+                document.getElementById('santri-level').value = s.currentLevel || '';
+                document.getElementById('santri-hafalan').value = s.totalHafalan || 0;
+                document.getElementById('santri-progress').value = s.progressPercentage || 0;
+                document.getElementById('santri-modal-title').innerText = "Edit Data Santri";
             } else {
-                authFields.classList.remove('hidden');
-                emailInput.required = true; passInput.required = true;
+                document.getElementById('santri-id').value = '';
+                document.getElementById('santri-modal-title').innerText = "Tambah Santri Manual";
             }
-            openModal('modal-santri-form');
+            window.openModal('santri-modal');
         };
 
-        document.getElementById('form-santri')?.addEventListener('submit', async (e) => {
+        window.saveSantri = async (e) => {
             e.preventDefault();
             const id = document.getElementById('santri-id').value;
             const data = {
@@ -830,160 +798,179 @@
                 totalHafalan: parseInt(document.getElementById('santri-hafalan').value),
                 progressPercentage: parseInt(document.getElementById('santri-progress').value)
             };
-            if (id) {
-                await window.updateDoc(window.doc(window.db, `${window.BASE_PATH}/profiles`, id), data);
+
+            if(id) {
+                await updateDoc(doc(db, `${BASE_PATH}/users`, id), data);
             } else {
                 data.role = 'santri';
-                data.email = document.getElementById('santri-email').value;
-                data.password = document.getElementById('santri-password').value;
-                data.isApproved = true; // Langsung ACC jika dibuat Ustadz
-                await window.setDoc(window.doc(window.db, `${window.BASE_PATH}/profiles`, `santri_${Date.now()}`), data);
+                data.email = `santri${Date.now()}@tahsin.com`;
+                data.password = 'password123';
+                data.isApproved = true;
+                data.createdAt = Date.now();
+                await setDoc(doc(db, `${BASE_PATH}/users`, `user_${Date.now()}`), data);
             }
-            closeModal('modal-santri-form');
-        });
+            window.closeModal('santri-modal');
+        };
 
         window.deleteSantri = async (id) => {
-            if(confirm('Yakin ingin menghapus akun santri ini secara permanen?')) {
-                await window.deleteDoc(window.doc(window.db, `${window.BASE_PATH}/profiles`, id));
+            if(confirm("Yakin ingin menghapus santri ini secara permanen?")) {
+                await deleteDoc(doc(db, `${BASE_PATH}/users`, id));
             }
         };
 
         window.approveSantri = async (id) => {
-            if(confirm('Terima santri ini agar bisa login?')) {
-                await window.updateDoc(window.doc(window.db, `${window.BASE_PATH}/profiles`, id), { isApproved: true });
+            if(confirm("Setujui akun santri ini?")) {
+                await updateDoc(doc(db, `${BASE_PATH}/users`, id), { isApproved: true });
             }
         };
 
-        // Form Admin - Manage Module
         window.openModuleModal = (id = null) => {
-            document.getElementById('form-module').reset();
-            document.getElementById('module-id').value = id || '';
-            document.getElementById('modal-module-title').innerText = id ? 'Edit Materi' : 'Tambah Materi';
-            document.getElementById('module-file-status').classList.add('hidden');
-            
-            if (id) {
-                const m = window.appState.modules.find(x => x.id === id);
+            const form = document.getElementById('form-module');
+            form.reset();
+            if(id) {
+                const m = modulesData.find(x => x.id === id);
+                document.getElementById('module-id').value = id;
                 document.getElementById('module-title').value = m.title;
                 document.getElementById('module-level').value = m.level;
                 document.getElementById('module-desc').value = m.description;
                 document.getElementById('module-content').value = m.content;
-                document.getElementById('module-existing-url').value = m.fileUrl || '';
-                document.getElementById('module-existing-type').value = m.fileType || '';
-                if(m.fileUrl) document.getElementById('module-file-status').classList.remove('hidden');
+                document.getElementById('module-file').value = m.fileUrl || '';
+                document.getElementById('module-modal-title').innerText = "Edit Materi";
+            } else {
+                document.getElementById('module-id').value = '';
+                document.getElementById('module-modal-title').innerText = "Tambah Materi Baru";
             }
-            openModal('modal-module-form');
+            window.openModal('module-modal');
         };
 
-        document.getElementById('form-module')?.addEventListener('submit', async (e) => {
+        window.saveModule = async (e) => {
             e.preventDefault();
             const id = document.getElementById('module-id').value;
-            const fileInput = document.getElementById('module-file');
-            
-            let fileUrl = document.getElementById('module-existing-url').value;
-            let fileType = document.getElementById('module-existing-type').value;
-
-            // Local blob simulation for PDF/Image
-            if (fileInput.files.length > 0) {
-                const file = fileInput.files[0];
-                fileUrl = URL.createObjectURL(file);
-                fileType = file.type;
-            }
-
             const data = {
                 title: document.getElementById('module-title').value,
                 level: document.getElementById('module-level').value,
                 description: document.getElementById('module-desc').value,
                 content: document.getElementById('module-content').value,
-                fileUrl: fileUrl, fileType: fileType, updatedAt: window.serverTimestamp()
+                fileUrl: document.getElementById('module-file').value,
+                updatedAt: Date.now()
             };
 
-            if (id) await window.updateDoc(window.doc(window.db, `${window.BASE_PATH}/modules`, id), data);
+            if(id) await updateDoc(doc(db, `${BASE_PATH}/modules`, id), data);
             else {
-                data.createdAt = window.serverTimestamp();
-                await window.setDoc(window.doc(window.db, `${window.BASE_PATH}/modules`, `module_${Date.now()}`), data);
+                data.createdAt = Date.now();
+                await setDoc(doc(db, `${BASE_PATH}/modules`, `mod_${Date.now()}`), data);
             }
-            closeModal('modal-module-form');
-        });
-
-        window.deleteModule = async (id) => {
-            if(confirm('Yakin hapus materi ini?')) await window.deleteDoc(window.doc(window.db, `${window.BASE_PATH}/modules`, id));
+            window.closeModal('module-modal');
         };
 
-        // Form Admin - Eval
+        window.deleteModule = async (id) => {
+            if(confirm("Yakin ingin menghapus materi ini?")) {
+                await deleteDoc(doc(db, `${BASE_PATH}/modules`, id));
+            }
+        };
+
         window.openEvalModal = (id) => {
-            const sub = window.appState.submissions.find(s => s.id === id);
-            document.getElementById('eval-sub-id').value = id;
+            const sub = submissionsData.find(s => s.id === id);
+            document.getElementById('eval-id').value = id;
             document.getElementById('eval-title').innerText = sub.title;
             document.getElementById('eval-status').value = sub.assessment?.status === 'pending' ? 'approved' : (sub.assessment?.status || 'approved');
             document.getElementById('eval-score').value = sub.assessment?.score || '';
             document.getElementById('eval-feedback').value = sub.assessment?.feedback || '';
-            openModal('modal-eval-form');
+            window.openModal('evaluate-modal');
         };
 
-        document.getElementById('form-eval')?.addEventListener('submit', async (e) => {
+        window.submitEvaluation = async (e) => {
             e.preventDefault();
-            const id = document.getElementById('eval-sub-id').value;
-            await window.updateDoc(window.doc(window.db, `${window.BASE_PATH}/submissions`, id), {
+            const id = document.getElementById('eval-id').value;
+            await updateDoc(doc(db, `${BASE_PATH}/submissions`, id), {
                 assessment: {
                     status: document.getElementById('eval-status').value,
                     score: document.getElementById('eval-score').value,
                     feedback: document.getElementById('eval-feedback').value,
-                    reviewedAt: window.serverTimestamp()
+                    reviewedAt: Date.now()
                 }
             });
-            closeModal('modal-eval-form');
-        });
-
-        // Santri - Read Module
-        window.readModule = (id) => {
-            const mod = window.appState.modules.find(m => m.id === id);
-            document.getElementById('read-module-level').innerText = mod.level;
-            document.getElementById('read-module-title').innerText = mod.title;
-            document.getElementById('read-module-content').innerText = mod.content;
-            
-            const cont = document.getElementById('read-module-attachment-container');
-            const area = document.getElementById('read-module-attachment-area');
-            
-            if (mod.fileUrl) {
-                cont.classList.remove('hidden');
-                if (mod.fileType?.includes('image')) area.innerHTML = `<img src="${mod.fileUrl}" class="max-w-full h-auto rounded-xl border">`;
-                else area.innerHTML = `<iframe src="${mod.fileUrl}" class="w-full h-[500px] rounded-xl border bg-slate-50"></iframe>`;
-            } else { cont.classList.add('hidden'); }
-            openModal('modal-read-module');
+            window.closeModal('evaluate-modal');
         };
 
-        // Santri - Submit WA
-        document.getElementById('form-record')?.addEventListener('submit', async (e) => {
+        window.openLearningModal = (id) => {
+            const m = modulesData.find(x => x.id === id);
+            document.getElementById('learn-level').innerText = m.level;
+            document.getElementById('learn-title').innerText = m.title;
+            document.getElementById('learn-content').innerText = m.content;
+            
+            const cont = document.getElementById('learn-attachment-container');
+            const img = document.getElementById('learn-image');
+            const pdf = document.getElementById('learn-pdf');
+            const lnk = document.getElementById('learn-link');
+            
+            img.classList.add('hidden'); pdf.classList.add('hidden'); lnk.classList.add('hidden');
+            
+            if(m.fileUrl) {
+                cont.classList.remove('hidden');
+                const url = m.fileUrl.toLowerCase();
+                if(url.match(/\.(jpeg|jpg|gif|png|webp)$/i)) {
+                    img.src = m.fileUrl; img.classList.remove('hidden');
+                } else if (url.match(/\.(pdf)$/i)) {
+                    pdf.src = m.fileUrl; pdf.classList.remove('hidden');
+                } else {
+                    lnk.href = m.fileUrl; lnk.classList.remove('hidden');
+                }
+            } else {
+                cont.classList.add('hidden');
+            }
+            window.openModal('learning-modal');
+        };
+
+        window.submitWhatsAppRecord = async (e) => {
             e.preventDefault();
-            const btn = document.getElementById('btn-submit-record');
-            btn.innerHTML = 'Memproses...'; btn.disabled = true;
+            const title = document.getElementById('record-title').value;
+            const notes = document.getElementById('record-notes').value;
+            
+            await setDoc(doc(db, `${BASE_PATH}/submissions`, `sub_${Date.now()}`), {
+                santriId: currentUser.id,
+                title: title,
+                notes: notes,
+                assessment: { status: 'pending' },
+                createdAt: Date.now()
+            });
 
-            try {
-                const title = document.getElementById('record-title').value;
-                const notes = document.getElementById('record-notes').value;
+            window.closeModal('record-modal');
+            window.setSantriTab('riwayat');
+            document.getElementById('form-record').reset();
 
-                await window.setDoc(window.doc(window.db, `${window.BASE_PATH}/submissions`, `sub_${Date.now()}`), {
-                    santriId: window.appState.currentUser.id,
-                    title: title,
-                    submissionData: { method: 'whatsapp', notesFromSantri: notes },
-                    assessment: { status: 'pending' },
-                    createdAt: Date.now()
-                });
+            const waNumber = "6281234567890"; // GANTI NOMOR WA USTADZ DI SINI
+            const textMsg = `Assalamu'alaikum Ustadz.\n\nSaya ${currentUser.displayName}\nIngin menyetorkan hafalan: *${title}*\nCatatan: ${notes || '-'}\n\nBerikut adalah rekaman suara saya:`;
+            window.open(`https://wa.me/${waNumber}?text=${encodeURIComponent(textMsg)}`, '_blank');
+        };
 
-                // Ganti nomor dengan nomor Ustadz yang sebenarnya (Gunakan 62, tanpa 0 atau +)
-                const noWaUstadz = "6281234567890"; 
-                let msg = `Assalamu'alaikum Ustadz, ini setoran dari *${window.appState.currentUser.displayName}*.\n\n*Materi:* ${title}\n`;
-                if(notes) msg += `*Catatan:* ${notes}\n`;
-                msg += `\nBerikut adalah Voice Note saya:`;
-                
-                closeModal('modal-record');
-                document.getElementById('form-record').reset();
-                window.setSantriTab('riwayat');
-                
-                window.open(`https://wa.me/${noWaUstadz}?text=${encodeURIComponent(msg)}`, '_blank');
-            } catch (err) { alert("Gagal: " + err.message); } 
-            finally { btn.innerHTML = '<i class="fab fa-whatsapp"></i> Lanjut ke WhatsApp'; btn.disabled = false; }
-        });
+        window.openProfileModal = () => {
+            document.getElementById('prof-email').value = currentUser.email;
+            document.getElementById('prof-name').value = currentUser.displayName || '';
+            document.getElementById('prof-phone').value = currentUser.phone || '';
+            document.getElementById('prof-gender').value = currentUser.gender || '';
+            document.getElementById('prof-ttl').value = currentUser.ttl || '';
+            document.getElementById('prof-address').value = currentUser.address || '';
+            document.getElementById('prof-password').value = '';
+            window.openModal('profile-modal');
+        };
+
+        window.saveProfile = async (e) => {
+            e.preventDefault();
+            const updates = {
+                displayName: document.getElementById('prof-name').value,
+                phone: document.getElementById('prof-phone').value,
+                gender: document.getElementById('prof-gender').value,
+                ttl: document.getElementById('prof-ttl').value,
+                address: document.getElementById('prof-address').value
+            };
+            const newPass = document.getElementById('prof-password').value;
+            if(newPass.trim() !== '') updates.password = newPass;
+
+            await updateDoc(doc(db, `${BASE_PATH}/users`, currentUser.id), updates);
+            window.closeModal('profile-modal');
+            alert("Profil berhasil diperbarui!");
+        };
 
     </script>
 </body>
