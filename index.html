@@ -16,6 +16,7 @@
 </head>
 <body class="text-slate-800 antialiased h-screen flex flex-col overflow-hidden">
 
+    <!-- VIEW: AUTENTIKASI (LOGIN & REGISTER) -->
     <div id="auth-view" class="h-full flex flex-col justify-center py-12 px-4 sm:px-6 lg:px-8 bg-cover bg-center overflow-y-auto" style="background-image: url('https://www.transparenttextures.com/patterns/arabesque.png'); background-color: #f8fafc;">
         <div class="sm:mx-auto sm:w-full sm:max-w-md z-10">
             <div class="w-20 h-20 mx-auto bg-emerald-600 rounded-2xl flex items-center justify-center shadow-lg transform rotate-3">
@@ -86,6 +87,7 @@
         </div>
     </div>
 
+    <!-- VIEW: PORTAL ADMIN / MUSYRIF -->
     <div id="admin-view" class="hidden h-full flex flex-col bg-slate-50">
         <header class="bg-emerald-700 text-white shadow-md z-30 flex-none">
             <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 flex justify-between items-center">
@@ -98,7 +100,7 @@
                     </div>
                 </div>
                 <div class="flex items-center gap-2 sm:gap-4">
-                    <button onclick="window.toggleFullscreen()" class="p-2 hover:bg-emerald-600 rounded-full transition-colors hidden sm:flex items-center gap-2 text-sm">
+                    <button onclick="window.toggleFullscreen()" class="p-2 hover:bg-emerald-600 rounded-full transition-colors hidden sm:flex items-center gap-2 text-sm" title="Layar Penuh">
                         <i class="fa-solid fa-expand"></i>
                     </button>
                     <button onclick="window.openProfileModal()" class="p-2 hover:bg-emerald-600 rounded-full transition-colors flex items-center gap-2">
@@ -118,6 +120,7 @@
         <main id="admin-content" class="flex-1 overflow-y-auto p-4 sm:p-8 max-w-7xl mx-auto w-full"></main>
     </div>
 
+    <!-- VIEW: PORTAL SANTRI -->
     <div id="santri-view" class="hidden h-full flex bg-slate-50 overflow-hidden">
         <!-- Sidebar Desktop -->
         <aside class="w-64 bg-white border-r border-slate-200 hidden md:flex flex-col z-20 flex-none">
@@ -142,11 +145,11 @@
             <div class="md:hidden bg-white border-b border-slate-200 p-4 flex justify-between items-center z-20 flex-none shadow-sm">
                 <h1 class="font-bold text-emerald-700 truncate mr-2">TAHSIN MFB</h1>
                 <div class="flex gap-1 overflow-x-auto hide-scroll">
-                    <button onclick="window.setSantriTab('dashboard')" class="p-2 text-emerald-600 bg-emerald-50 rounded-lg"><i class="fa-solid fa-user"></i></button>
-                    <button onclick="window.setSantriTab('materi')" class="p-2 text-slate-600 hover:bg-slate-50 rounded-lg"><i class="fa-solid fa-book-open"></i></button>
-                    <button onclick="window.setSantriTab('riwayat')" class="p-2 text-slate-600 hover:bg-slate-50 rounded-lg"><i class="fa-solid fa-clock-rotate-left"></i></button>
-                    <button onclick="window.openProfileModal()" class="p-2 text-slate-600 hover:bg-slate-50 rounded-lg"><i class="fa-solid fa-gear"></i></button>
-                    <button onclick="window.handleLogout()" class="p-2 text-rose-600 hover:bg-rose-50 rounded-lg"><i class="fa-solid fa-right-from-bracket"></i></button>
+                    <button onclick="window.setSantriTab('dashboard')" id="tab-santri-mobile-dashboard" class="p-2 text-emerald-600 bg-emerald-50 rounded-lg transition-colors"><i class="fa-solid fa-user"></i></button>
+                    <button onclick="window.setSantriTab('materi')" id="tab-santri-mobile-materi" class="p-2 text-slate-600 hover:bg-slate-50 rounded-lg transition-colors"><i class="fa-solid fa-book-open"></i></button>
+                    <button onclick="window.setSantriTab('riwayat')" id="tab-santri-mobile-riwayat" class="p-2 text-slate-600 hover:bg-slate-50 rounded-lg transition-colors"><i class="fa-solid fa-clock-rotate-left"></i></button>
+                    <button onclick="window.openProfileModal()" class="p-2 text-slate-600 hover:bg-slate-50 rounded-lg transition-colors"><i class="fa-solid fa-gear"></i></button>
+                    <button onclick="window.handleLogout()" class="p-2 text-rose-600 hover:bg-rose-50 rounded-lg transition-colors"><i class="fa-solid fa-right-from-bracket"></i></button>
                 </div>
             </div>
             
@@ -154,6 +157,7 @@
         </div>
     </div>
 
+    <!-- KUMPULAN MODAL -->
     <div id="modals">
         
         <!-- Modal Form Santri (Admin) -->
@@ -169,6 +173,10 @@
                         <label class="block text-sm font-medium text-slate-700 mb-1">Nama Lengkap</label>
                         <input type="text" id="santri-name" required class="w-full border border-slate-300 rounded-xl p-3 focus:ring-2 focus:ring-emerald-500 outline-none">
                     </div>
+                    <div>
+                        <label class="block text-sm font-medium text-slate-700 mb-1">Email Login</label>
+                        <input type="email" id="santri-email" required placeholder="nama@tahsin.com" class="w-full border border-slate-300 rounded-xl p-3 focus:ring-2 focus:ring-emerald-500 outline-none">
+                    </div>
                     <div class="grid grid-cols-2 gap-4">
                         <div>
                             <label class="block text-sm font-medium text-slate-700 mb-1">Level / Jilid</label>
@@ -183,7 +191,42 @@
                         <label class="block text-sm font-medium text-slate-700 mb-1">Persentase Progres (0-100)</label>
                         <input type="number" id="santri-progress" value="0" min="0" max="100" class="w-full border border-slate-300 rounded-xl p-3 focus:ring-2 focus:ring-emerald-500 outline-none">
                     </div>
+                    <div class="pt-2 border-t border-slate-100">
+                        <label id="santri-pass-label" class="block text-sm font-medium text-slate-700 mb-1">Password (Opsional)</label>
+                        <input type="text" id="santri-password" placeholder="Kosongkan jika tidak ingin diubah" class="w-full border border-slate-300 rounded-xl p-3 focus:ring-2 focus:ring-emerald-500 outline-none text-sm">
+                    </div>
                     <button type="submit" class="w-full bg-emerald-600 hover:bg-emerald-700 text-white py-3 rounded-xl font-bold mt-2 transition-colors">Simpan Data</button>
+                </form>
+            </div>
+        </div>
+
+        <!-- Modal Reset Password Santri (Admin) -->
+        <div id="reset-pass-modal" class="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 hidden items-center justify-center p-4">
+            <div class="bg-white rounded-3xl p-6 w-full max-w-md shadow-2xl">
+                <div class="flex justify-between items-center mb-4">
+                    <h4 class="text-xl font-bold text-slate-800"><i class="fa-solid fa-key text-amber-500 mr-2"></i> Reset Password Santri</h4>
+                    <button onclick="window.closeModal('reset-pass-modal')" class="p-2 text-slate-400 hover:bg-slate-100 rounded-full"><i class="fa-solid fa-xmark text-xl"></i></button>
+                </div>
+                <div class="bg-amber-50 border border-amber-200 rounded-2xl p-4 mb-5">
+                    <p class="text-xs text-amber-700 uppercase font-bold tracking-wider mb-1">Target Akun Santri</p>
+                    <p id="reset-santri-name" class="font-bold text-slate-800 text-base"></p>
+                    <p id="reset-santri-email" class="text-xs text-slate-500 mt-0.5"></p>
+                </div>
+                <form id="form-reset-pass" class="space-y-4" onsubmit="window.submitResetPassword(event)">
+                    <input type="hidden" id="reset-santri-id">
+                    <div>
+                        <label class="block text-sm font-medium text-slate-700 mb-1">Password Baru</label>
+                        <div class="flex gap-2">
+                            <input type="text" id="reset-new-password" required minlength="6" value="password123" class="w-full border border-slate-300 rounded-xl p-3 focus:ring-2 focus:ring-amber-500 outline-none font-mono text-sm">
+                            <button type="button" onclick="document.getElementById('reset-new-password').value = 'password123'" class="px-3 py-2 bg-slate-100 hover:bg-slate-200 text-slate-600 rounded-xl text-xs font-bold whitespace-nowrap transition-colors" title="Gunakan password standar">
+                                Default
+                            </button>
+                        </div>
+                        <p class="text-xs text-slate-400 mt-1.5">*Minimal 6 karakter. Beritahukan password baru ini kepada santri terkait.</p>
+                    </div>
+                    <button type="submit" class="w-full bg-amber-500 hover:bg-amber-600 text-white py-3 rounded-xl font-bold transition-colors shadow-md shadow-amber-500/20 flex items-center justify-center gap-2">
+                        <i class="fa-solid fa-check"></i> Simpan Password Baru
+                    </button>
                 </form>
             </div>
         </div>
@@ -311,7 +354,7 @@
                         <h4 class="font-bold text-slate-800 mb-4 flex items-center gap-2"><i class="fa-solid fa-paperclip text-emerald-600"></i> Lampiran Materi</h4>
                         <img id="learn-image" src="" alt="Lampiran Materi" class="max-w-full h-auto rounded-xl shadow-md border border-slate-200 hidden mx-auto">
                         <iframe id="learn-pdf" src="" class="w-full h-[600px] rounded-xl shadow-inner border border-slate-200 bg-slate-50 hidden"></iframe>
-                        <a id="learn-link" href="#" target="_blank" class="hidden inline-flex items-center gap-2 text-blue-600 hover:underline bg-blue-50 px-4 py-2 rounded-lg font-medium"><i class="fa-solid fa-up-right-from-square"></i> Buka Lampiran di Tab Baru</a>
+                        <a id="learn-link" href="#" target="_blank" rel="noopener noreferrer" class="hidden inline-flex items-center gap-2 text-blue-600 hover:underline bg-blue-50 px-4 py-2 rounded-lg font-medium"><i class="fa-solid fa-up-right-from-square"></i> Buka Lampiran di Tab Baru</a>
                     </div>
                 </div>
             </div>
@@ -358,7 +401,7 @@
                     </div>
                     <div class="pt-2 border-t border-slate-100">
                         <label class="block text-xs font-bold text-slate-500 uppercase tracking-wider mb-1">Password Baru (Opsional)</label>
-                        <input type="text" id="prof-password" placeholder="Biarkan kosong jika tidak ingin diubah" class="w-full border border-slate-300 rounded-xl p-3 focus:ring-2 focus:ring-emerald-500 outline-none text-slate-800">
+                        <input type="password" id="prof-password" minlength="6" placeholder="Biarkan kosong jika tidak ingin diubah" class="w-full border border-slate-300 rounded-xl p-3 focus:ring-2 focus:ring-emerald-500 outline-none text-slate-800">
                     </div>
                     
                     <button type="submit" class="w-full bg-emerald-600 hover:bg-emerald-700 text-white py-3.5 rounded-xl font-bold mt-4 transition-colors shadow-md">
@@ -372,7 +415,7 @@
 
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
-        import { getFirestore, collection, onSnapshot, doc, setDoc, updateDoc, deleteDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+        import { getFirestore, collection, onSnapshot, doc, setDoc, updateDoc, deleteDoc } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
         import { getAuth, signInAnonymously } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
 
         const firebaseConfig = {
@@ -388,6 +431,7 @@
         const db = getFirestore(app);
         const auth = getAuth(app);
         const BASE_PATH = "artifacts/tahsin_lms/public/data";
+        const SESSION_KEY = "tahsin_mfb_logged_user_id";
 
         // State Aplikasi
         let currentUser = null;
@@ -403,7 +447,21 @@
         const adminContent = document.getElementById('admin-content');
         const santriContent = document.getElementById('santri-content');
 
+        // Helper Sanitasi XSS (Cross-Site Scripting)
+        const escapeHTML = (str) => {
+            if (str === null || str === undefined) return '';
+            return String(str).replace(/[&<>'"]/g, tag => ({
+                '&': '&amp;',
+                '<': '&lt;',
+                '>': '&gt;',
+                "'": '&#39;',
+                '"': '&quot;'
+            }[tag]));
+        };
+
         window.toggleAuthForm = (type) => {
+            document.getElementById('login-error').classList.add('hidden');
+            document.getElementById('reg-error').classList.add('hidden');
             if(type === 'register') {
                 document.getElementById('login-form').classList.add('hidden');
                 document.getElementById('register-form').classList.remove('hidden');
@@ -420,8 +478,22 @@
             else container.classList.add('hidden');
         };
 
-        window.closeModal = (id) => document.getElementById(id).classList.add('hidden');
-        window.openModal = (id) => document.getElementById(id).classList.remove('hidden');
+        // Mengatur class 'hidden' dan 'flex' agar modal selalu berada di tengah layar
+        window.closeModal = (id) => {
+            const el = document.getElementById(id);
+            if(el) {
+                el.classList.add('hidden');
+                el.classList.remove('flex');
+            }
+        };
+
+        window.openModal = (id) => {
+            const el = document.getElementById(id);
+            if(el) {
+                el.classList.remove('hidden');
+                el.classList.add('flex');
+            }
+        };
 
         window.toggleFullscreen = () => {
             try {
@@ -433,16 +505,30 @@
         function initDataListeners() {
             onSnapshot(collection(db, `${BASE_PATH}/users`), (snap) => {
                 usersData = snap.docs.map(doc => ({id: doc.id, ...doc.data()}));
-                if(usersData.length === 0) seedInitialData();
-                else if(currentUser) {
-                    const freshUser = usersData.find(u => u.id === currentUser.id);
-                    if(freshUser) { currentUser = freshUser; updateUI(); }
+                if(usersData.length === 0) {
+                    seedInitialData();
+                } else {
+                    // Pulihkan sesi login dari localStorage saat halaman di-refresh
+                    const savedUserId = currentUser ? currentUser.id : localStorage.getItem(SESSION_KEY);
+                    if(savedUserId) {
+                        const freshUser = usersData.find(u => u.id === savedUserId);
+                        if(freshUser && (freshUser.role === 'admin' || freshUser.isApproved !== false)) {
+                            currentUser = freshUser;
+                            updateUI();
+                        } else {
+                            currentUser = null;
+                            localStorage.removeItem(SESSION_KEY);
+                            updateUI();
+                        }
+                    }
                 }
             });
+
             onSnapshot(collection(db, `${BASE_PATH}/modules`), (snap) => {
                 modulesData = snap.docs.map(doc => ({id: doc.id, ...doc.data()}));
                 if(currentUser) updateUI();
             });
+
             onSnapshot(collection(db, `${BASE_PATH}/submissions`), (snap) => {
                 submissionsData = snap.docs.map(doc => ({id: doc.id, ...doc.data()}));
                 if(currentUser) updateUI();
@@ -451,8 +537,12 @@
 
         async function seedInitialData() {
             await setDoc(doc(db, `${BASE_PATH}/users`, "admin_1"), {
-                role: 'admin', email: 'musyrif@tahsin.com', password: 'password123',
-                displayName: 'Ustadz Ahmad (Musyrif)', isApproved: true, createdAt: Date.now()
+                role: 'admin',
+                email: 'musyrif@tahsin.com',
+                password: 'password123',
+                displayName: 'Ustadz Ahmad (Musyrif)',
+                isApproved: true,
+                createdAt: Date.now()
             });
         }
 
@@ -466,17 +556,18 @@
 
         window.handleLogin = (e) => {
             e.preventDefault();
-            const email = document.getElementById('login-email').value;
+            const email = document.getElementById('login-email').value.trim();
             const pass = document.getElementById('login-password').value;
             const errDiv = document.getElementById('login-error');
             
-            const user = usersData.find(u => u.email === email && u.password === pass);
+            const user = usersData.find(u => (u.email || '').toLowerCase() === email.toLowerCase() && u.password === pass);
             if(user) {
                 if(user.role === 'santri' && user.isApproved === false) {
                     errDiv.innerHTML = "Akun Anda sedang <b>Menunggu ACC</b> dari Musyrif. Silakan hubungi Ustadz.";
                     errDiv.classList.remove('hidden');
                 } else {
                     currentUser = user;
+                    localStorage.setItem(SESSION_KEY, user.id);
                     errDiv.classList.add('hidden');
                     updateUI();
                 }
@@ -489,12 +580,12 @@
         window.handleRegister = async (e) => {
             e.preventDefault();
             const role = document.getElementById('reg-role').value;
-            const name = document.getElementById('reg-name').value;
-            const email = document.getElementById('reg-email').value;
+            const name = document.getElementById('reg-name').value.trim();
+            const email = document.getElementById('reg-email').value.trim();
             const pass = document.getElementById('reg-password').value;
             const errDiv = document.getElementById('reg-error');
 
-            if(usersData.find(u => u.email === email)) {
+            if(usersData.find(u => (u.email || '').toLowerCase() === email.toLowerCase())) {
                 errDiv.innerText = "Email sudah terdaftar. Gunakan email lain.";
                 errDiv.classList.remove('hidden');
                 return;
@@ -502,7 +593,7 @@
 
             let isApproved = false;
             if(role === 'admin') {
-                const code = document.getElementById('reg-secret').value;
+                const code = document.getElementById('reg-secret').value.trim();
                 if(code !== 'GURU-TAHSIN-2026') {
                     errDiv.innerText = "Kode Rahasia Ustadz salah!";
                     errDiv.classList.remove('hidden');
@@ -513,18 +604,27 @@
 
             const newId = `user_${Date.now()}`;
             await setDoc(doc(db, `${BASE_PATH}/users`, newId), {
-                role, displayName: name, email, password: pass,
-                isApproved, currentLevel: 'Jilid 1', totalHafalan: 0, progressPercentage: 0,
+                role,
+                displayName: name,
+                email,
+                password: pass,
+                isApproved,
+                currentLevel: 'Jilid 1',
+                totalHafalan: 0,
+                progressPercentage: 0,
                 createdAt: Date.now()
             });
 
             errDiv.classList.add('hidden');
+            document.getElementById('register-form').reset();
+            window.toggleSecretCode();
             alert(role === 'admin' ? "Pendaftaran berhasil. Silakan Login!" : "Pendaftaran berhasil. Silakan tunggu ACC dari Musyrif.");
             window.toggleAuthForm('login');
         };
 
         window.handleLogout = () => {
             currentUser = null;
+            localStorage.removeItem(SESSION_KEY);
             document.getElementById('login-form').reset();
             updateUI();
         };
@@ -555,12 +655,17 @@
         function renderAdmin() {
             ['setoran', 'santri', 'materi'].forEach(t => {
                 const el = document.getElementById(`tab-admin-${t}`);
-                if(t === adminTab) el.className = "pb-3 px-2 text-sm font-bold border-b-4 border-white text-white whitespace-nowrap";
-                else el.className = "pb-3 px-2 text-sm font-bold border-b-4 border-transparent text-emerald-200 hover:text-white whitespace-nowrap";
+                if(el) {
+                    if(t === adminTab) el.className = "pb-3 px-2 text-sm font-bold border-b-4 border-white text-white whitespace-nowrap";
+                    else el.className = "pb-3 px-2 text-sm font-bold border-b-4 border-transparent text-emerald-200 hover:text-white whitespace-nowrap";
+                }
             });
 
             if(adminTab === 'santri') {
-                const santriList = usersData.filter(u => u.role === 'santri').sort((a,b) => (a.isApproved === b.isApproved) ? 0 : a.isApproved ? 1 : -1);
+                const santriList = usersData
+                    .filter(u => u.role === 'santri')
+                    .sort((a,b) => (a.isApproved === b.isApproved) ? 0 : a.isApproved ? 1 : -1);
+                
                 adminContent.innerHTML = `
                     <div class="bg-white rounded-2xl shadow-sm border border-slate-200 p-6">
                         <div class="flex justify-between items-center mb-6">
@@ -579,33 +684,35 @@
                                 </thead>
                                 <tbody>
                                     ${santriList.length === 0 ? `<tr><td colspan="4" class="p-8 text-center text-slate-400">Belum ada data santri</td></tr>` : 
-                                    santriList.map(s => `
+                                    santriList.map(s => {
+                                        const progress = Math.min(100, Math.max(0, Number(s.progressPercentage) || 0));
+                                        return `
                                         <tr class="border-b border-slate-100 hover:bg-slate-50">
                                             <td class="p-4">
-                                                <div class="font-bold text-slate-800">${s.displayName}</div>
-                                                <div class="text-xs text-slate-500 mt-1">${s.email}</div>
-                                                ${s.phone ? `<div class="text-xs text-emerald-600 font-medium"><i class="fa-brands fa-whatsapp"></i> ${s.phone}</div>` : ''}
+                                                <div class="font-bold text-slate-800">${escapeHTML(s.displayName)}</div>
+                                                <div class="text-xs text-slate-500 mt-1">${escapeHTML(s.email)}</div>${s.phone ? `<div class="text-xs text-emerald-600 font-medium"><i class="fa-brands fa-whatsapp"></i> ${escapeHTML(s.phone)}</div>` : ''}
                                                 ${s.gender ? `<div class="text-xs text-slate-400 font-medium mt-1"><i class="fa-solid fa-person"></i> ${s.gender === 'L' ? 'Laki-laki' : 'Perempuan'}</div>` : ''}
                                             </td>
                                             <td class="p-4">
                                                 ${!s.isApproved 
                                                     ? `<span class="bg-amber-100 text-amber-700 text-xs font-bold px-2 py-1 rounded-full"><i class="fa-solid fa-hourglass-half"></i> Menunggu ACC</span>` 
-                                                    : `<span class="text-emerald-700 font-bold">${s.currentLevel || '-'}</span><br><span class="text-xs text-slate-500">${s.totalHafalan || 0} Surat</span>`
+                                                    : `<span class="text-emerald-700 font-bold">${escapeHTML(s.currentLevel || '-')}</span><br><span class="text-xs text-slate-500">${Number(s.totalHafalan) || 0} Surat</span>`
                                                 }
                                             </td>
                                             <td class="p-4">
                                                 <div class="flex items-center gap-2 w-32">
-                                                    <div class="w-full h-2 bg-slate-200 rounded-full overflow-hidden"><div class="h-full bg-emerald-500 rounded-full" style="width: ${s.progressPercentage || 0}%"></div></div>
-                                                    <span class="text-xs font-bold text-slate-600">${s.progressPercentage || 0}%</span>
+                                                    <div class="w-full h-2 bg-slate-200 rounded-full overflow-hidden"><div class="h-full bg-emerald-500 rounded-full" style="width: ${progress}%"></div></div>
+                                                    <span class="text-xs font-bold text-slate-600">${progress}%</span>
                                                 </div>
                                             </td>
-                                            <td class="p-4 text-right">
-                                                ${!s.isApproved ? `<button onclick="window.approveSantri('${s.id}')" class="p-2 text-white bg-amber-500 hover:bg-amber-600 rounded-lg mr-1" title="Setujui Akun (ACC)"><i class="fa-solid fa-check"></i> ACC</button>` : ''}
-                                                <button onclick="window.openSantriModal('${s.id}')" class="p-2 text-blue-600 bg-blue-50 hover:bg-blue-100 rounded-lg mr-1" title="Edit"><i class="fa-solid fa-pen"></i></button>
-                                                <button onclick="window.deleteSantri('${s.id}')" class="p-2 text-rose-600 bg-rose-50 hover:bg-rose-100 rounded-lg" title="Hapus"><i class="fa-solid fa-trash"></i></button>
+                                            <td class="p-4 text-right whitespace-nowrap">
+                                                ${!s.isApproved ? `<button onclick="window.approveSantri('${escapeHTML(s.id)}')" class="p-2 text-white bg-amber-500 hover:bg-amber-600 rounded-lg mr-1" title="Setujui Akun (ACC)"><i class="fa-solid fa-check"></i> ACC</button>` : ''}
+                                                <button onclick="window.openResetPassModal('${escapeHTML(s.id)}')" class="p-2 text-amber-600 bg-amber-50 hover:bg-amber-100 rounded-lg mr-1" title="Reset Password Santri"><i class="fa-solid fa-key"></i></button>
+                                                <button onclick="window.openSantriModal('${escapeHTML(s.id)}')" class="p-2 text-blue-600 bg-blue-50 hover:bg-blue-100 rounded-lg mr-1" title="Edit Data Santri"><i class="fa-solid fa-pen"></i></button>
+                                                <button onclick="window.deleteSantri('${escapeHTML(s.id)}')" class="p-2 text-rose-600 bg-rose-50 hover:bg-rose-100 rounded-lg" title="Hapus Santri"><i class="fa-solid fa-trash"></i></button>
                                             </td>
                                         </tr>
-                                    `).join('')}
+                                    `}).join('')}
                                 </tbody>
                             </table>
                         </div>
@@ -613,7 +720,7 @@
                 `;
             } 
             else if(adminTab === 'materi') {
-                const sortedModules = [...modulesData].sort((a,b) => b.createdAt - a.createdAt);
+                const sortedModules = [...modulesData].sort((a,b) => (b.createdAt || 0) - (a.createdAt || 0));
                 adminContent.innerHTML = `
                     <div class="bg-white rounded-2xl shadow-sm border border-slate-200 p-6">
                         <div class="flex justify-between items-center mb-6">
@@ -625,14 +732,13 @@
                             sortedModules.map(m => `
                                 <div class="border border-slate-200 rounded-xl p-5 flex flex-col justify-between bg-slate-50 hover:shadow-md transition-shadow">
                                     <div>
-                                        <span class="text-xs font-bold text-emerald-700 bg-emerald-100 px-2 py-1 rounded-md mb-2 inline-block">${m.level}</span>
-                                        <h4 class="font-bold text-lg text-slate-800 mb-1">${m.title}</h4>
-                                        <p class="text-sm text-slate-500 line-clamp-2">${m.description}</p>
-                                        ${m.fileUrl ? `<span class="mt-3 text-xs font-medium text-blue-600 bg-blue-50 px-2 py-1 rounded inline-block"><i class="fa-solid fa-paperclip"></i> Ada Lampiran</span>` : ''}
+                                        <span class="text-xs font-bold text-emerald-700 bg-emerald-100 px-2 py-1 rounded-md mb-2 inline-block">${escapeHTML(m.level)}</span>
+                                        <h4 class="font-bold text-lg text-slate-800 mb-1">${escapeHTML(m.title)}</h4>
+                                        <p class="text-sm text-slate-500 line-clamp-2">${escapeHTML(m.description)}</p>${m.fileUrl ? `<span class="mt-3 text-xs font-medium text-blue-600 bg-blue-50 px-2 py-1 rounded inline-block"><i class="fa-solid fa-paperclip"></i> Ada Lampiran</span>` : ''}
                                     </div>
                                     <div class="flex justify-end gap-2 mt-4 pt-4 border-t border-slate-200">
-                                        <button onclick="window.openModuleModal('${m.id}')" class="px-3 py-1.5 text-sm font-medium text-blue-600 bg-blue-100 hover:bg-blue-200 rounded-lg"><i class="fa-solid fa-pen"></i> Edit</button>
-                                        <button onclick="window.deleteModule('${m.id}')" class="px-3 py-1.5 text-sm font-medium text-rose-600 bg-rose-100 hover:bg-rose-200 rounded-lg"><i class="fa-solid fa-trash"></i></button>
+                                        <button onclick="window.openModuleModal('${escapeHTML(m.id)}')" class="px-3 py-1.5 text-sm font-medium text-blue-600 bg-blue-100 hover:bg-blue-200 rounded-lg"><i class="fa-solid fa-pen"></i> Edit</button>
+                                        <button onclick="window.deleteModule('${escapeHTML(m.id)}')" class="px-3 py-1.5 text-sm font-medium text-rose-600 bg-rose-100 hover:bg-rose-200 rounded-lg"><i class="fa-solid fa-trash"></i></button>
                                     </div>
                                 </div>
                             `).join('')}
@@ -641,7 +747,7 @@
                 `;
             }
             else { 
-                const subs = [...submissionsData].sort((a,b) => b.createdAt - a.createdAt);
+                const subs = [...submissionsData].sort((a,b) => (b.createdAt || 0) - (a.createdAt || 0));
                 adminContent.innerHTML = `
                     <div class="bg-white rounded-2xl shadow-sm border border-slate-200 p-6">
                         <h3 class="text-xl font-bold text-slate-800 mb-6 border-b border-slate-100 pb-4"><i class="fa-solid fa-microphone-lines text-emerald-600 mr-2"></i> Antrean Setoran</h3>
@@ -654,15 +760,16 @@
                                 <li class="py-5 flex flex-col md:flex-row justify-between gap-4 items-start md:items-center">
                                     <div>
                                         <div class="flex items-center gap-3 mb-1">
-                                            <h4 class="font-bold text-slate-800 text-lg">${student?.displayName || 'Santri Terhapus'}</h4>
+                                            <h4 class="font-bold text-slate-800 text-lg">${escapeHTML(student?.displayName || 'Santri Terhapus')}</h4>
                                             <span class="text-xs px-2.5 py-1 rounded-full font-bold ${isEval ? 'bg-emerald-100 text-emerald-700' : 'bg-amber-100 text-amber-700'}">${isEval ? 'Sudah Dinilai' : 'Perlu Penilaian'}</span>
                                         </div>
-                                        <p class="text-slate-600 font-medium text-sm mb-1">${sub.title}</p>
+                                        <p class="text-slate-600 font-medium text-sm mb-1">${escapeHTML(sub.title)}</p>
+                                        ${sub.notes ? `<p class="text-xs text-slate-500 italic mb-1">"${escapeHTML(sub.notes)}"</p>` : ''}
                                         <div class="text-xs text-slate-500 bg-slate-100 p-2 rounded-lg inline-block mt-2">
-                                            <i class="fa-brands fa-whatsapp text-green-500 text-sm mr-1"></i> Dikirim via WhatsApp
+                                            <i class="fa-brands fa-whatsapp text-green-500 text-sm mr-1"></i> Dikirim via WhatsApp • ${new Date(sub.createdAt).toLocaleString('id-ID')}
                                         </div>
                                     </div>
-                                    <button onclick="window.openEvalModal('${sub.id}')" class="px-5 py-2.5 rounded-xl font-bold flex items-center gap-2 text-sm transition-colors ${isEval ? 'bg-slate-100 text-slate-600 hover:bg-slate-200' : 'bg-emerald-600 text-white hover:bg-emerald-700 shadow-sm'}">
+                                    <button onclick="window.openEvalModal('${escapeHTML(sub.id)}')" class="px-5 py-2.5 rounded-xl font-bold flex items-center gap-2 text-sm transition-colors ${isEval ? 'bg-slate-100 text-slate-600 hover:bg-slate-200' : 'bg-emerald-600 text-white hover:bg-emerald-700 shadow-sm'}">
                                         <i class="fa-solid fa-${isEval ? 'pen' : 'check'}"></i> ${isEval ? 'Ubah Nilai' : 'Beri Nilai'}
                                     </button>
                                 </li>`
@@ -676,21 +783,28 @@
         function renderSantri() {
             ['dashboard', 'materi', 'riwayat'].forEach(t => {
                 const elDesktop = document.getElementById(`tab-santri-${t}`);
-                if(elDesktop) elDesktop.className = `w-full flex items-center gap-3 px-4 py-3 rounded-xl font-bold transition-colors ${t === santriTab ? 'bg-emerald-50 text-emerald-700' : 'text-slate-600 hover:bg-slate-50 font-medium'}`;
+                if(elDesktop) {
+                    elDesktop.className = `w-full flex items-center gap-3 px-4 py-3 rounded-xl font-bold transition-colors ${t === santriTab ? 'bg-emerald-50 text-emerald-700' : 'text-slate-600 hover:bg-slate-50 font-medium'}`;
+                }
+                const elMobile = document.getElementById(`tab-santri-mobile-${t}`);
+                if(elMobile) {
+                    elMobile.className = `p-2 rounded-lg transition-colors ${t === santriTab ? 'text-emerald-600 bg-emerald-50' : 'text-slate-600 hover:bg-slate-50'}`;
+                }
             });
 
             if(santriTab === 'materi') {
-                const sortedModules = [...modulesData].sort((a,b) => b.createdAt - a.createdAt);
+                const sortedModules = [...modulesData].sort((a,b) => (b.createdAt || 0) - (a.createdAt || 0));
                 santriContent.innerHTML = `
                     <h2 class="text-2xl font-bold text-slate-800 mb-6"><i class="fa-solid fa-book-open text-emerald-600 mr-2"></i> Modul Pembelajaran</h2>
                     <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                        ${sortedModules.map(m => `
+                        ${sortedModules.length === 0 ? `<div class="col-span-full p-12 text-center bg-white rounded-2xl border border-slate-100 text-slate-400">Belum ada modul pembelajaran yang tersedia.</div>` :
+                        sortedModules.map(m => `
                             <div class="bg-white rounded-2xl p-6 shadow-sm border border-slate-100 hover:shadow-md transition-all flex flex-col h-full group">
-                                <span class="inline-block px-3 py-1 bg-emerald-100 text-emerald-800 text-xs font-bold rounded-full mb-3 w-max">${m.level}</span>
-                                <h3 class="font-bold text-lg text-slate-800 mb-2 group-hover:text-emerald-600 transition-colors">${m.title}</h3>
-                                <p class="text-slate-500 text-sm line-clamp-3 mb-4">${m.description}</p>
+                                <span class="inline-block px-3 py-1 bg-emerald-100 text-emerald-800 text-xs font-bold rounded-full mb-3 w-max">${escapeHTML(m.level)}</span>
+                                <h3 class="font-bold text-lg text-slate-800 mb-2 group-hover:text-emerald-600 transition-colors">${escapeHTML(m.title)}</h3>
+                                <p class="text-slate-500 text-sm line-clamp-3 mb-4">${escapeHTML(m.description)}</p>
                                 <div class="mt-auto pt-4 border-t border-slate-100">
-                                    <button onclick="window.openLearningModal('${m.id}')" class="w-full py-2 bg-slate-50 hover:bg-emerald-50 text-emerald-700 font-bold rounded-xl text-sm transition-colors border border-slate-100 hover:border-emerald-200">
+                                    <button onclick="window.openLearningModal('${escapeHTML(m.id)}')" class="w-full py-2 bg-slate-50 hover:bg-emerald-50 text-emerald-700 font-bold rounded-xl text-sm transition-colors border border-slate-100 hover:border-emerald-200">
                                         Mulai Belajar <i class="fa-solid fa-arrow-right ml-1"></i>
                                     </button>
                                 </div>
@@ -700,7 +814,7 @@
                 `;
             } 
             else if(santriTab === 'riwayat') {
-                const mySubs = submissionsData.filter(s => s.santriId === currentUser.id).sort((a,b) => b.createdAt - a.createdAt);
+                const mySubs = submissionsData.filter(s => s.santriId === currentUser.id).sort((a,b) => (b.createdAt || 0) - (a.createdAt || 0));
                 santriContent.innerHTML = `
                     <h2 class="text-2xl font-bold text-slate-800 mb-6"><i class="fa-solid fa-clock-rotate-left text-emerald-600 mr-2"></i> Riwayat Setoran</h2>
                     <div class="bg-white rounded-2xl shadow-sm border border-slate-100">
@@ -713,7 +827,7 @@
                                 <li class="p-6">
                                     <div class="flex flex-col md:flex-row justify-between gap-4 mb-3">
                                         <div>
-                                            <h4 class="font-bold text-slate-800 text-lg">${s.title}</h4>
+                                            <h4 class="font-bold text-slate-800 text-lg">${escapeHTML(s.title)}</h4>
                                             <p class="text-xs text-slate-500 mt-1">${new Date(s.createdAt).toLocaleString('id-ID')}</p>
                                         </div>
                                         <span class="inline-flex px-3 py-1.5 rounded-full text-xs font-bold items-center gap-1.5 h-max w-max ${isEval ? (isApproved ? 'bg-emerald-100 text-emerald-700' : 'bg-rose-100 text-rose-700') : 'bg-amber-100 text-amber-700'}">
@@ -721,15 +835,15 @@
                                             ${isEval ? (isApproved ? 'Lulus / Diterima' : 'Perlu Perbaikan') : 'Menunggu Penilaian'}
                                         </span>
                                     </div>
-                                    ${s.notes ? `<div class="text-sm text-slate-600 italic bg-slate-50 p-3 rounded-lg border-l-2 border-slate-300">" ${s.notes} "</div>` : ''}
+                                    ${s.notes ? `<div class="text-sm text-slate-600 italic bg-slate-50 p-3 rounded-lg border-l-2 border-slate-300">" ${escapeHTML(s.notes)} "</div>` : ''}
                                     
                                     ${isEval ? `
                                         <div class="mt-4 bg-emerald-50 border border-emerald-100 p-4 rounded-xl">
                                             <div class="flex items-center gap-3 mb-2">
                                                 <h5 class="font-bold text-emerald-800 text-sm"><i class="fa-solid fa-comment-dots mr-1"></i> Feedback Musyrif</h5>
-                                                ${s.assessment.score ? `<span class="text-xs font-bold text-white bg-emerald-600 px-2 py-0.5 rounded shadow-sm">Nilai: ${s.assessment.score}</span>` : ''}
+                                                ${s.assessment.score ? `<span class="text-xs font-bold text-white bg-emerald-600 px-2 py-0.5 rounded shadow-sm">Nilai: ${escapeHTML(s.assessment.score)}</span>` : ''}
                                             </div>
-                                            <p class="text-sm text-emerald-900 whitespace-pre-wrap">${s.assessment.feedback || '-'}</p>
+                                            <p class="text-sm text-emerald-900 whitespace-pre-wrap">${escapeHTML(s.assessment.feedback || '-')}</p>
                                         </div>
                                     ` : ''}
                                 </li>`
@@ -739,20 +853,21 @@
                 `;
             }
             else { 
+                const progress = Math.min(100, Math.max(0, Number(currentUser.progressPercentage) || 0));
                 santriContent.innerHTML = `
                     <div class="bg-gradient-to-r from-emerald-600 to-teal-600 rounded-3xl p-8 text-white shadow-lg relative overflow-hidden mb-8">
                         <div class="absolute top-0 right-0 opacity-10 transform translate-x-1/4 -translate-y-1/4"><i class="fa-solid fa-book-quran text-9xl"></i></div>
                         <div class="relative z-10 flex flex-col md:flex-row md:items-center justify-between gap-6">
                             <div>
-                                <h2 class="text-3xl font-bold mb-2">Ahlan wa Sahlan, ${currentUser.displayName}</h2>
+                                <h2 class="text-3xl font-bold mb-2">Ahlan wa Sahlan, ${escapeHTML(currentUser.displayName)}</h2>
                                 <p class="text-emerald-100">Semoga istiqomah memperbaiki bacaan Al-Qur'an.</p>
                                 <div class="mt-5 flex flex-wrap gap-3">
-                                    <span class="bg-black/20 backdrop-blur-md px-4 py-2 rounded-xl text-sm font-semibold"><i class="fa-solid fa-layer-group mr-1"></i> Level: ${currentUser.currentLevel || 'Dasar'}</span>
-                                    <span class="bg-black/20 backdrop-blur-md px-4 py-2 rounded-xl text-sm font-semibold"><i class="fa-solid fa-award mr-1"></i> Hafalan: ${currentUser.totalHafalan || 0} Surat</span>
+                                    <span class="bg-black/20 backdrop-blur-md px-4 py-2 rounded-xl text-sm font-semibold"><i class="fa-solid fa-layer-group mr-1"></i> Level: ${escapeHTML(currentUser.currentLevel || 'Dasar')}</span>
+                                    <span class="bg-black/20 backdrop-blur-md px-4 py-2 rounded-xl text-sm font-semibold"><i class="fa-solid fa-award mr-1"></i> Hafalan: ${Number(currentUser.totalHafalan) || 0} Surat</span>
                                 </div>
                             </div>
                             <div class="bg-white/10 backdrop-blur-md p-6 rounded-2xl border border-white/20 text-center min-w-[160px]">
-                                <div class="text-4xl font-black mb-1">${currentUser.progressPercentage || 0}%</div>
+                                <div class="text-4xl font-black mb-1">${progress}%</div>
                                 <div class="text-emerald-100 text-xs font-medium uppercase tracking-wider">Progres Belajar</div>
                             </div>
                         </div>
@@ -774,16 +889,28 @@
         window.openSantriModal = (id = null) => {
             const form = document.getElementById('form-santri');
             form.reset();
+            const passInput = document.getElementById('santri-password');
+            const passLabel = document.getElementById('santri-pass-label');
+
             if(id) {
                 const s = usersData.find(u => u.id === id);
+                if(!s) return;
                 document.getElementById('santri-id').value = id;
-                document.getElementById('santri-name').value = s.displayName;
+                document.getElementById('santri-name').value = s.displayName || '';
+                document.getElementById('santri-email').value = s.email || '';
                 document.getElementById('santri-level').value = s.currentLevel || '';
                 document.getElementById('santri-hafalan').value = s.totalHafalan || 0;
                 document.getElementById('santri-progress').value = s.progressPercentage || 0;
+                passInput.value = '';
+                passInput.placeholder = "Kosongkan jika tidak ingin diubah";
+                passLabel.innerText = "Ubah Password (Opsional)";
                 document.getElementById('santri-modal-title').innerText = "Edit Data Santri";
             } else {
                 document.getElementById('santri-id').value = '';
+                document.getElementById('santri-email').value = `santri${Date.now()}@tahsin.com`;
+                passInput.value = 'password123';
+                passInput.placeholder = "Minimal 6 karakter";
+                passLabel.innerText = "Password Awal Santri";
                 document.getElementById('santri-modal-title').innerText = "Tambah Santri Manual";
             }
             window.openModal('santri-modal');
@@ -792,24 +919,74 @@
         window.saveSantri = async (e) => {
             e.preventDefault();
             const id = document.getElementById('santri-id').value;
+            const emailInput = document.getElementById('santri-email').value.trim();
+            const passInput = document.getElementById('santri-password').value;
+
+            // Cek duplikasi email jika membuat baru atau mengubah email
+            const duplicate = usersData.find(u => (u.email || '').toLowerCase() === emailInput.toLowerCase() && u.id !== id);
+            if(duplicate) {
+                alert("Email tersebut sudah digunakan oleh akun lain!");
+                return;
+            }
+
             const data = {
-                displayName: document.getElementById('santri-name').value,
-                currentLevel: document.getElementById('santri-level').value,
-                totalHafalan: parseInt(document.getElementById('santri-hafalan').value),
-                progressPercentage: parseInt(document.getElementById('santri-progress').value)
+                displayName: document.getElementById('santri-name').value.trim(),
+                email: emailInput,
+                currentLevel: document.getElementById('santri-level').value.trim(),
+                totalHafalan: parseInt(document.getElementById('santri-hafalan').value) || 0,
+                progressPercentage: parseInt(document.getElementById('santri-progress').value) || 0
             };
+
+            if(passInput.trim() !== '') {
+                if(passInput.trim().length < 6) {
+                    alert("Password minimal 6 karakter!");
+                    return;
+                }
+                data.password = passInput.trim();
+            }
 
             if(id) {
                 await updateDoc(doc(db, `${BASE_PATH}/users`, id), data);
             } else {
                 data.role = 'santri';
-                data.email = `santri${Date.now()}@tahsin.com`;
-                data.password = 'password123';
+                if(!data.password) data.password = 'password123';
                 data.isApproved = true;
                 data.createdAt = Date.now();
                 await setDoc(doc(db, `${BASE_PATH}/users`, `user_${Date.now()}`), data);
             }
             window.closeModal('santri-modal');
+        };
+
+        // Fungsi Buka Modal Reset Password Santri
+        window.openResetPassModal = (id) => {
+            const s = usersData.find(u => u.id === id);
+            if(!s) return;
+            document.getElementById('reset-santri-id').value = s.id;
+            document.getElementById('reset-santri-name').innerText = s.displayName || 'Tanpa Nama';
+            document.getElementById('reset-santri-email').innerText = s.email || '-';
+            document.getElementById('reset-new-password').value = 'password123';
+            window.openModal('reset-pass-modal');
+        };
+
+        // Fungsi Simpan Reset Password Santri
+        window.submitResetPassword = async (e) => {
+            e.preventDefault();
+            const id = document.getElementById('reset-santri-id').value;
+            const newPassword = document.getElementById('reset-new-password').value.trim();
+            const s = usersData.find(u => u.id === id);
+
+            if(newPassword.length < 6) {
+                alert("Password baru minimal harus 6 karakter!");
+                return;
+            }
+
+            await updateDoc(doc(db, `${BASE_PATH}/users`, id), {
+                password: newPassword,
+                updatedAt: Date.now()
+            });
+
+            window.closeModal('reset-pass-modal');
+            alert(`Password untuk santri "${s ? s.displayName : ''}" berhasil direset menjadi: ${newPassword}`);
         };
 
         window.deleteSantri = async (id) => {
@@ -829,11 +1006,12 @@
             form.reset();
             if(id) {
                 const m = modulesData.find(x => x.id === id);
+                if(!m) return;
                 document.getElementById('module-id').value = id;
-                document.getElementById('module-title').value = m.title;
-                document.getElementById('module-level').value = m.level;
-                document.getElementById('module-desc').value = m.description;
-                document.getElementById('module-content').value = m.content;
+                document.getElementById('module-title').value = m.title || '';
+                document.getElementById('module-level').value = m.level || '';
+                document.getElementById('module-desc').value = m.description || '';
+                document.getElementById('module-content').value = m.content || '';
                 document.getElementById('module-file').value = m.fileUrl || '';
                 document.getElementById('module-modal-title').innerText = "Edit Materi";
             } else {
@@ -847,16 +1025,17 @@
             e.preventDefault();
             const id = document.getElementById('module-id').value;
             const data = {
-                title: document.getElementById('module-title').value,
-                level: document.getElementById('module-level').value,
-                description: document.getElementById('module-desc').value,
+                title: document.getElementById('module-title').value.trim(),
+                level: document.getElementById('module-level').value.trim(),
+                description: document.getElementById('module-desc').value.trim(),
                 content: document.getElementById('module-content').value,
-                fileUrl: document.getElementById('module-file').value,
+                fileUrl: document.getElementById('module-file').value.trim(),
                 updatedAt: Date.now()
             };
 
-            if(id) await updateDoc(doc(db, `${BASE_PATH}/modules`, id), data);
-            else {
+            if(id) {
+                await updateDoc(doc(db, `${BASE_PATH}/modules`, id), data);
+            } else {
                 data.createdAt = Date.now();
                 await setDoc(doc(db, `${BASE_PATH}/modules`, `mod_${Date.now()}`), data);
             }
@@ -871,8 +1050,9 @@
 
         window.openEvalModal = (id) => {
             const sub = submissionsData.find(s => s.id === id);
+            if(!sub) return;
             document.getElementById('eval-id').value = id;
-            document.getElementById('eval-title').innerText = sub.title;
+            document.getElementById('eval-title').innerText = sub.title || '';
             document.getElementById('eval-status').value = sub.assessment?.status === 'pending' ? 'approved' : (sub.assessment?.status || 'approved');
             document.getElementById('eval-score').value = sub.assessment?.score || '';
             document.getElementById('eval-feedback').value = sub.assessment?.feedback || '';
@@ -886,7 +1066,7 @@
                 assessment: {
                     status: document.getElementById('eval-status').value,
                     score: document.getElementById('eval-score').value,
-                    feedback: document.getElementById('eval-feedback').value,
+                    feedback: document.getElementById('eval-feedback').value.trim(),
                     reviewedAt: Date.now()
                 }
             });
@@ -895,26 +1075,32 @@
 
         window.openLearningModal = (id) => {
             const m = modulesData.find(x => x.id === id);
-            document.getElementById('learn-level').innerText = m.level;
-            document.getElementById('learn-title').innerText = m.title;
-            document.getElementById('learn-content').innerText = m.content;
+            if(!m) return;
+            document.getElementById('learn-level').innerText = m.level || '';
+            document.getElementById('learn-title').innerText = m.title || '';
+            document.getElementById('learn-content').innerText = m.content || '';
             
             const cont = document.getElementById('learn-attachment-container');
             const img = document.getElementById('learn-image');
             const pdf = document.getElementById('learn-pdf');
             const lnk = document.getElementById('learn-link');
             
-            img.classList.add('hidden'); pdf.classList.add('hidden'); lnk.classList.add('hidden');
+            img.classList.add('hidden');
+            pdf.classList.add('hidden');
+            lnk.classList.add('hidden');
             
             if(m.fileUrl) {
                 cont.classList.remove('hidden');
                 const url = m.fileUrl.toLowerCase();
                 if(url.match(/\.(jpeg|jpg|gif|png|webp)$/i)) {
-                    img.src = m.fileUrl; img.classList.remove('hidden');
+                    img.src = m.fileUrl;
+                    img.classList.remove('hidden');
                 } else if (url.match(/\.(pdf)$/i)) {
-                    pdf.src = m.fileUrl; pdf.classList.remove('hidden');
+                    pdf.src = m.fileUrl;
+                    pdf.classList.remove('hidden');
                 } else {
-                    lnk.href = m.fileUrl; lnk.classList.remove('hidden');
+                    lnk.href = m.fileUrl;
+                    lnk.classList.remove('hidden');
                 }
             } else {
                 cont.classList.add('hidden');
@@ -924,8 +1110,8 @@
 
         window.submitWhatsAppRecord = async (e) => {
             e.preventDefault();
-            const title = document.getElementById('record-title').value;
-            const notes = document.getElementById('record-notes').value;
+            const title = document.getElementById('record-title').value.trim();
+            const notes = document.getElementById('record-notes').value.trim();
             
             await setDoc(doc(db, `${BASE_PATH}/submissions`, `sub_${Date.now()}`), {
                 santriId: currentUser.id,
@@ -939,13 +1125,14 @@
             window.setSantriTab('riwayat');
             document.getElementById('form-record').reset();
 
-            const waNumber = "6282116952982"; // Nomor WA Ustadz yang baru
+            const waNumber = "6282116952982"; // Nomor WA Ustadz
             const textMsg = `Assalamu'alaikum Ustadz.\n\nSaya ${currentUser.displayName}\nIngin menyetorkan hafalan: *${title}*\nCatatan: ${notes || '-'}\n\nBerikut adalah rekaman suara saya:`;
             window.open(`https://wa.me/${waNumber}?text=${encodeURIComponent(textMsg)}`, '_blank');
         };
 
         window.openProfileModal = () => {
-            document.getElementById('prof-email').value = currentUser.email;
+            if(!currentUser) return;
+            document.getElementById('prof-email').value = currentUser.email || '';
             document.getElementById('prof-name').value = currentUser.displayName || '';
             document.getElementById('prof-phone').value = currentUser.phone || '';
             document.getElementById('prof-gender').value = currentUser.gender || '';
@@ -958,11 +1145,11 @@
         window.saveProfile = async (e) => {
             e.preventDefault();
             const updates = {
-                displayName: document.getElementById('prof-name').value,
-                phone: document.getElementById('prof-phone').value,
+                displayName: document.getElementById('prof-name').value.trim(),
+                phone: document.getElementById('prof-phone').value.trim(),
                 gender: document.getElementById('prof-gender').value,
-                ttl: document.getElementById('prof-ttl').value,
-                address: document.getElementById('prof-address').value
+                ttl: document.getElementById('prof-ttl').value.trim(),
+                address: document.getElementById('prof-address').value.trim()
             };
             const newPass = document.getElementById('prof-password').value;
             if(newPass.trim() !== '') updates.password = newPass;
